@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "53044701658",
+    "firebase_url": "https://deliverylavalle.firebaseio.com",
+    "project_id": "deliverylavalle",
+    "storage_bucket": "deliverylavalle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53044701658:android:24639d4cef1eee203838e3",
+        "android_client_info": {
+          "package_name": "com.axelfernandez.deliverylavalle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53044701658-ghbnnsi2rto6o0ffedc6c10so8kig8mq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.axelfernandez.deliverylavalle",
+            "certificate_hash": "5c9ec9538a52187bb462ad29173ece859729aec9"
+          }
+        },
+        {
+          "client_id": "53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAOsoCYtrP6BzMNPtmih5_1hNBrXJgmW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

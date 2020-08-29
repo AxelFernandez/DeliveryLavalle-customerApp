@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_login"
+    app:startDestination="@id/login">
+    <activity
+        android:id="@+id/mainActivity2"
+        android:name="com.axelfernandez.deliverylavalle.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/login"
+        android:name="com.axelfernandez.deliverylavalle.ui.login.Login"
+        android:label="login_fragment"
+        tools:layout="@layout/login_fragment" >
+        <action
+            android:id="@+id/action_login_to_cellPhoneFragment"
+            app:destination="@id/cellPhoneFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/login" />
+    </fragment>
+    <fragment
+        android:id="@+id/cellPhoneFragment"
+        android:name="com.axelfernandez.deliverylavalle.ui.cellphone.CellPhoneFragment"
+        android:label="cell_phone_fragment"
+        tools:layout="@layout/cell_phone_fragment" >
+        <argument
+            android:name="clientId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_cellPhoneFragment_to_addressFragment"
+            app:destination="@id/addressFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/cellPhoneFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.axelfernandez.deliverylavalle.ui.address.AddressFragment"
+        android:label="address_fragment"
+        tools:layout="@layout/address_fragment" />
+</navigation>
