@@ -1,7 +1,9 @@
 package com.axelfernandez.deliverylavalle.ui.address
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.axelfernandez.deliverylavalle.HomeActivity
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.models.Address
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
@@ -70,32 +73,13 @@ class AddressFragment : Fragment() {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
                     phoneLocation = "%s,%s".format(location.latitude, location.longitude)
-                    var snackbar: Snackbar = Snackbar.make(
-                        v,
-                        "Geolocalizacion recuperada correctamente",
-                        Snackbar.LENGTH_LONG
-                    )
-                    snackbar.view.setBackgroundColor(
-                        ContextCompat.getColor(
-                            v.context,
-                            R.color.orange
-                        )
-                    )
-                    snackbar.view.setPadding(0, 0, 0, 30)
-                    snackbar.show()
+                    ViewUtil.setSnackBar(v,R.color.orange,"Localizacion recuperada correctamente")
                     v.get_location.setImageResource(R.drawable.ic_baseline_check_circle_24)
                 }
 
             }.addOnFailureListener {
                 Log.e("LOCATION", it.message!!)
-                var snackbar: Snackbar = Snackbar.make(
-                    v,
-                    "Habilita el permiso de Geolocalizacion para esto",
-                    Snackbar.LENGTH_LONG
-                )
-                snackbar.view.setBackgroundColor(ContextCompat.getColor(v.context, R.color.red))
-                snackbar.view.setPadding(0, 0, 0, 30)
-                snackbar.show()
+                ViewUtil.checkPermission(context = requireActivity());
             }
         })
         viewModel.notifyPost().observe(viewLifecycleOwner, Observer {
@@ -106,8 +90,10 @@ class AddressFragment : Fragment() {
                     editor?.putBoolean(getString(R.string.is_login_ready),true)
                     editor?.apply()
                     ViewUtil.setSnackBar(v,R.color.orange,"Direccion Guardada Correctamente")
-                    //val intent = Intent(context, HomeActivity::class.java)
-                    //startActivity(intent)
+                    val intent = Intent(context, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    activity?.finish()
 
             }else{
                 ViewUtil.setSnackBar(v,R.color.red,"Ops! Hubo un problema, intenta luego nuevamente")

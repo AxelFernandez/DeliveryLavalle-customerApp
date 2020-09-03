@@ -12,6 +12,7 @@ data class User(
 
 data class UserResponse(
     val is_new :Boolean,
+    val completeRegistry : Boolean,
     val clientId :String,
     val username :String,
     val access_token :String,

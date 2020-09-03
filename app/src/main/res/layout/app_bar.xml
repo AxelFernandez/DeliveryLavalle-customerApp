@@ -6,6 +6,7 @@
     >
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
         android:layout_height="?actionBarSize">
 
         <LinearLayout
@@ -25,7 +26,6 @@
                 android:textSize="24dp" />
             <TextView
                 android:id="@+id/app_bar_2"
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24dp"

@@ -9,12 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.ViewUtils
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import com.axelfernandez.deliverylavalle.*
 import com.axelfernandez.deliverylavalle.api.Api
 import com.axelfernandez.deliverylavalle.api.RetrofitFactory
 import com.axelfernandez.deliverylavalle.models.UserResponse
+import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -23,6 +25,7 @@ import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar.view.*
@@ -83,7 +86,8 @@ class Login : Fragment() {
                 retrofit.loginWithGoogle(viewModel.createUser(account))
                     .enqueue(object: Callback<UserResponse> {
                         override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                            TODO("Not yet implemented")
+                            ViewUtil.setSnackBar(requireView(),R.color.red,"Hay problemas de conexion con el servidor, intenta nuevamente")
+                            view?.login_progress_bar?.visibility = View.GONE
                         }
                         override fun onResponse(
                             call: Call<UserResponse>,
@@ -99,10 +103,16 @@ class Login : Fragment() {
                             editor?.putString(getString(R.string.picture),account.photoUrl.toString().split('=').get(0))
                             editor?.apply()
                             var bundle = bundleOf("clientId" to response?.clientId)
-                            view!!.findNavController().navigate(R.id.action_login_to_cellPhoneFragment,bundle)
-                            //startActivity(intent)
-
-
+                            if(response?.is_new!! || response.completeRegistry){
+                                view!!.findNavController().navigate(R.id.action_login_to_cellPhoneFragment,bundle)
+                            }else{
+                                editor?.putBoolean(getString(R.string.is_login_ready),true)
+                                editor?.apply()
+                                val intent = Intent(context, HomeActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
+                                activity?.finish()
+                            }
                         }
 
                     })
@@ -110,7 +120,6 @@ class Login : Fragment() {
 
             } catch (e: ApiException) {
 
-                Toast.makeText(context, "Google sign in failed:(", Toast.LENGTH_LONG).show()
             }
         }
 

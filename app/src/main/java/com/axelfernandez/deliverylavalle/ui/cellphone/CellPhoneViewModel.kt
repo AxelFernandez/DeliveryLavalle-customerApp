@@ -47,9 +47,6 @@ class CellPhoneViewModel() : ViewModel() {
         return clientRepository.returnData()
     }
 
-    fun clean(){
-        clientRepository.clean()
-    }
 
 }
 

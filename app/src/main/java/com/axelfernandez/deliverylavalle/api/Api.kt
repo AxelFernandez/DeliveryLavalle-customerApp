@@ -1,9 +1,6 @@
 package com.axelfernandez.deliverylavalle.api
 
-import com.axelfernandez.deliverylavalle.models.Address
-import com.axelfernandez.deliverylavalle.models.AddressResponse
-import com.axelfernandez.deliverylavalle.models.User
-import com.axelfernandez.deliverylavalle.models.UserResponse
+import com.axelfernandez.deliverylavalle.models.*
 import retrofit2.Call;
 import retrofit2.http.*
 
@@ -27,4 +24,13 @@ interface Api {
     @Headers("Content-Type: application/json")
     @POST("address")
     fun postAddress(@Body address: Address, @Header("Authorization") token: String):Call<AddressResponse>
+
+
+    //Company
+    @GET("company_category")
+    fun getCompanyCategories(@Header("Authorization") token: String):Call<List<CompanyCategoryResponse>>
+
+    @POST("company")
+    fun getCompany(@Header("Authorization") token: String, @Body location: Location):Call<List<Company>>
+
 }

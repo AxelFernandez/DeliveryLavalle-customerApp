@@ -35,9 +35,6 @@ class ClientRepository (
 
     }
 
-    fun clean(){
-        data.value = null
-    }
     fun returnData():LiveData<User>{
         return data
     }

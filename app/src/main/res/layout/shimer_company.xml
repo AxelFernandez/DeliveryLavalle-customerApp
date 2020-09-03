@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.shimmer.ShimmerFrameLayout
+    android:id="@+id/shimmer_company"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/company_item_cardview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:elevation="4dp">
+
+                <ImageView
+                    android:id="@+id/company_item_image"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:textColor="@color/grey"
+                    android:background="@color/grey"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="140dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="20sp"
+                        android:fontFamily="sans-serif-black"
+                        android:textColor="@color/grey"
+                        android:background="@color/grey"
+                        android:text="Una rotizeria re copada con nombre largo"
+                        />
+                    <TextView
+                        android:id="@+id/company_item_subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15sp"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/grey"
+                        android:background="@color/grey"
+                        android:text="Venta de pollos asados y metanfetamina como nunca en la ciudad"
+                        />
+
+
+
+                </LinearLayout>
+
+
+
+
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
+
+
+    </LinearLayout>
+</com.facebook.shimmer.ShimmerFrameLayout>
