@@ -76,10 +76,10 @@ class HomeViewModel : ViewModel() {
 
     }
 
-    fun getLocationAndGetCompany(activity: Activity,token: String){
+    fun getLocationAndGetCompany(activity: Activity,token: String, category : String?){
         var fusedLocationClient : FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            var location = Location(location.latitude.toString(),location.longitude.toString())
+            var location = Location(location.latitude.toString(),location.longitude.toString(), category)
             Log.e("LOCATION", "Get location successful!")
             getCompany(token,location)
 

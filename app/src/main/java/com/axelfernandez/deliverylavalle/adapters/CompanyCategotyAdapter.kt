@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -13,15 +14,14 @@ import com.axelfernandez.deliverylavalle.models.CompanyCategoryResponse
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.category_company_item.view.*
 
-class CompanyCategotyAdapter() :RecyclerView.Adapter<CompanyCategotyAdapter.CompanyCategoryViewHolder>() {
+class CompanyCategotyAdapter(
+    var category: List<CompanyCategoryResponse>  = ArrayList(),
+    var context:Context,
+    val itemClickListener: (CompanyCategoryResponse) -> Unit
 
-    var category: List<CompanyCategoryResponse>  = ArrayList()
-    lateinit var context:Context
+) :RecyclerView.Adapter<CompanyCategotyAdapter.CompanyCategoryViewHolder>() {
 
-    fun CompanyCategoryAdapter(context: Context, category: List<CompanyCategoryResponse>){
-        this.category = category
-        this.context = context
-    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyCategoryViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -34,17 +34,20 @@ class CompanyCategotyAdapter() :RecyclerView.Adapter<CompanyCategotyAdapter.Comp
 
     override fun onBindViewHolder(holder: CompanyCategoryViewHolder, position: Int) {
         var item : CompanyCategoryResponse = category[position]
-        holder.bind(item,context)
+        holder.bind(item,context, itemClickListener)
     }
     class CompanyCategoryViewHolder (itemView : View): ViewHolder(itemView){
          var description : TextView= itemView.findViewById(R.id.item_company_category_description) as TextView
-         var photo : ImageView? =  itemView.findViewById(R.id.item_company_category_photo) as ImageView
+         var photo : ImageView =  itemView.findViewById(R.id.item_company_category_photo) as ImageView
+         var linearLayout : LinearLayout =  itemView.findViewById(R.id.item_company_category_frame) as LinearLayout
 
 
 
-        fun bind(categoty : CompanyCategoryResponse, context: Context){
-            description?.text = categoty.description
+        fun bind(categoty : CompanyCategoryResponse, context: Context,
+                 itemClickListener: (CompanyCategoryResponse) -> Unit)= with(itemView){
+            description.text = categoty.description
             Picasso.with(context).load(categoty.photo).into(photo)
+            linearLayout.setOnClickListener { itemClickListener(categoty) }
         }
     }
 

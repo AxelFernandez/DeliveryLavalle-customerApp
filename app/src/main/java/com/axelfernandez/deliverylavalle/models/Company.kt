@@ -19,5 +19,6 @@ data class CompanyCategoryResponse(
 //This class is for request the near company
 data class Location(
     val lat :String,
-    val long :String
+    val long :String,
+    val category :String?
 )

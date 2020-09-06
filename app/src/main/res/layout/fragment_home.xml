@@ -40,20 +40,19 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/text_view_feed_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textSize="20sp"
             android:textColor="@color/colorPrimaryDark"
             android:fontFamily="sans-serif-black"
-            android:text="Emprendedores cerca tuyo"
+            android:text="@string/company_near_feed"
             />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/company_rv"
             android:layout_width="match_parent"
             android:nestedScrollingEnabled="false"
-
-            android:layout_marginLeft="20dp"
             android:layout_height="wrap_content"/>
 
         <include layout="@layout/shimer_company"/>

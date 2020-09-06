@@ -47,4 +47,6 @@
     <string name="title_activity_splash">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="company_near_feed">Emprendedores cerca tuyo</string>
+    <string name="company_near_category">Emprendedores de %s</string>
 </resources>

@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.marginBottom
 import androidx.lifecycle.MutableLiveData
 import com.axelfernandez.deliverylavalle.R
-import com.axelfernandez.deliverylavalle.models.Location
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar

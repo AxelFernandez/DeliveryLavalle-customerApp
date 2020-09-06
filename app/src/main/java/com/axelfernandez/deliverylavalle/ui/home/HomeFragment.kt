@@ -3,12 +3,14 @@ package com.axelfernandez.deliverylavalle.ui.home
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,10 +19,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.adapters.CompanyAdapter
 import com.axelfernandez.deliverylavalle.adapters.CompanyCategotyAdapter
+import com.axelfernandez.deliverylavalle.models.CompanyCategoryResponse
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.app_bar.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.shimer_company.view.*
+import java.time.Duration
 
 
 class HomeFragment : Fragment() {
@@ -29,8 +34,9 @@ class HomeFragment : Fragment() {
     private lateinit var root: View
     lateinit var categoryRv : RecyclerView
     lateinit var companyRv : RecyclerView
-    val categoriesAdapter : CompanyCategotyAdapter = CompanyCategotyAdapter()
+    lateinit var categoriesAdapter : CompanyCategotyAdapter
     val companyAdapter : CompanyAdapter = CompanyAdapter()
+    var accessToken : String = ""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -66,26 +72,32 @@ class HomeFragment : Fragment() {
             Picasso.with(context).load(it).into(banner_image)
         })
         var hasBeenCalled : Boolean = false
+
         homeViewModel.returnToken().observe(viewLifecycleOwner, Observer {
             if (!hasBeenCalled) {
                 homeViewModel.getCategoty(it.access_token)
-                homeViewModel.getLocationAndGetCompany(requireActivity(), it.access_token)
+                homeViewModel.getLocationAndGetCompany(requireActivity(), it.access_token,null)
+                accessToken = it.access_token
                 hasBeenCalled = true
             }
         })
         homeViewModel.returnCompany().observe(viewLifecycleOwner, Observer{
-            if(it.isNotEmpty()) {
-                val animation: LayoutAnimationController =
-                    AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_fall_down)
-                companyRv.layoutAnimation = animation
-                companyRv.setHasFixedSize(true)
-                companyRv.layoutManager = LinearLayoutManager(requireContext())
-                companyAdapter.CompanyAdapter(requireContext(), it)
-                companyRv.adapter = companyAdapter
-            }else{
+            val animation: LayoutAnimationController =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_fall_down)
+            companyRv.layoutAnimation = animation
+            companyRv.setHasFixedSize(true)
+            companyRv.layoutManager = LinearLayoutManager(requireContext())
+            companyAdapter.CompanyAdapter(requireContext(), it)
+            companyRv.adapter = companyAdapter
+            if(it.isEmpty()) {
                 root.no_company_found_feed.visibility = VISIBLE
+            }else{
+                root.no_company_found_feed.visibility = GONE
+
             }
             loadingCompany.visibility = View.GONE
+            companyRv.visibility = View.VISIBLE
+
 
 
         })
@@ -93,14 +105,25 @@ class HomeFragment : Fragment() {
         homeViewModel.returnCategory().observe(viewLifecycleOwner, Observer {
             categoryRv.setHasFixedSize(true)
             categoryRv.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
-            categoriesAdapter.CompanyCategoryAdapter(requireContext(),it)
+            categoriesAdapter = CompanyCategotyAdapter(it,requireContext()) {onClickActionItemList(it)}
             categoryRv.adapter = categoriesAdapter
             loadingCategories.visibility = View.GONE
+
 
         })
 
 
         homeViewModel.initial(requireContext())
     }
+    fun onClickActionItemList(item: CompanyCategoryResponse) {
+        root.text_view_feed_company.text = getString(R.string.company_near_category).format(item.description)
+        homeViewModel.getLocationAndGetCompany(requireActivity(), accessToken, item.description)
+        root.shimmer_company.visibility = View.VISIBLE
+        companyRv.visibility = View.GONE
+        root.no_company_found_feed.visibility = GONE
+        companyAdapter.notifyDataSetChanged()
+
+    }
+
 
 }

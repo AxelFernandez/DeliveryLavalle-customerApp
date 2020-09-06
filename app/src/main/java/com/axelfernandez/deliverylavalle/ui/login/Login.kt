@@ -125,14 +125,6 @@ class Login : Fragment() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        val user = null
-        if (user != null) {
-            //startActivity(HomeActivity.getLaunchIntent(this))
-        }
-    }
-
 
 
 }
