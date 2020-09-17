@@ -6,9 +6,8 @@ data class Company(
     val description :String,
     val photo :String,
     val address :String,
-    val deliveryMethod :List<String>,
-    val paymentMethod :List<String>,
-    val category :String
+    val methods :List<String>,
+    val category :String?
 )
 
 data class CompanyCategoryResponse(

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.facebook.shimmer.ShimmerFrameLayout
-    android:id="@+id/shimmer_company"
+    android:id="@+id/shimmer_product"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -8,12 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <include layout="@layout/shimer_company_item"/>
-        <include layout="@layout/shimer_company_item"/>
-        <include layout="@layout/shimer_company_item"/>
-        <include layout="@layout/shimer_company_item"/>
-        <include layout="@layout/shimer_company_item"/>
-        <include layout="@layout/shimer_company_item"/>
+        <include layout="@layout/shimer_item_product"/>
+        <include layout="@layout/shimer_item_product"/>
+        <include layout="@layout/shimer_item_product"/>
+        <include layout="@layout/shimer_item_product"/>
+        <include layout="@layout/shimer_item_product"/>
+
 
 
     </LinearLayout>

@@ -7,6 +7,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:background="@color/colorPrimary"
+        android:backgroundTint="@color/colorPrimary"
         android:layout_height="?actionBarSize">
 
         <LinearLayout
@@ -21,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:fontFamily="sans-serif-black"
-                tool:text="@string/delivery"
+                android:text="@string/delivery"
                 android:textColor="@color/green"
                 android:textSize="24dp" />
             <TextView
@@ -31,7 +32,7 @@
                 android:textSize="24dp"
                 android:fontFamily="sans-serif-black"
                 android:layout_gravity="center_vertical"
-                tool:text="@string/lavalle"/>
+                android:text="@string/lavalle"/>
 
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>

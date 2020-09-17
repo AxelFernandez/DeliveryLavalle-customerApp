@@ -33,4 +33,12 @@ interface Api {
     @POST("company")
     fun getCompany(@Header("Authorization") token: String, @Body location: Location):Call<List<Company>>
 
+
+    //Detail Product
+    @POST("product")
+    fun getProductByCompanyId(@Header("Authorization") token: String, @Body id: String):Call<List<Product>>
+
+    @POST("company_detail")
+    fun getCompanyById(@Header("Authorization") token: String, @Body id: String):Call<Company>
+
 }

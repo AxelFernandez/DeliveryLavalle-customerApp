@@ -14,6 +14,7 @@ class CompanyRepository (
     ){
         val data = MutableLiveData<List<CompanyCategoryResponse>>()
         val company = MutableLiveData<List<Company>>()
+        val companyDetail = MutableLiveData<Company>()
 
 
         fun getCategory(token :String): MutableLiveData<List<CompanyCategoryResponse>> {
@@ -52,5 +53,22 @@ class CompanyRepository (
         return company
     }
 
+
+    fun getCompanyById(token : String,id : String): MutableLiveData<Company>{
+        api.getCompanyById("Bearer %s".format(token),id).enqueue(object : Callback<Company>{
+            override fun onFailure(call: Call<Company>, t: Throwable) {
+                companyDetail.value = null
+            }
+
+            override fun onResponse(call: Call<Company>, response: Response<Company>) {
+                companyDetail.value = response.body()
+            }
+        })
+        return companyDetail
+    }
+
+    fun returnCompanyDetail(): MutableLiveData<Company> {
+        return companyDetail
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.axelfernandez.deliverylavalle.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,16 +15,21 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.axelfernandez.deliverylavalle.HomeActivity
+import com.axelfernandez.deliverylavalle.OrderActivity
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.adapters.CompanyAdapter
 import com.axelfernandez.deliverylavalle.adapters.CompanyCategotyAdapter
+import com.axelfernandez.deliverylavalle.models.Company
 import com.axelfernandez.deliverylavalle.models.CompanyCategoryResponse
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.app_bar.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.no_company_found.view.*
 import kotlinx.android.synthetic.main.shimer_company.view.*
 import java.time.Duration
 
@@ -35,8 +41,9 @@ class HomeFragment : Fragment() {
     lateinit var categoryRv : RecyclerView
     lateinit var companyRv : RecyclerView
     lateinit var categoriesAdapter : CompanyCategotyAdapter
-    val companyAdapter : CompanyAdapter = CompanyAdapter()
+    lateinit var companyAdapter : CompanyAdapter
     var accessToken : String = ""
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,6 +68,8 @@ class HomeFragment : Fragment() {
         val loadingCategories = root.findViewById(R.id.shimmer_view_container) as ShimmerFrameLayout
         val loadingCompany = root.findViewById(R.id.shimmer_company) as ShimmerFrameLayout
         loadingCategories.startShimmer()
+        root.not_found_title.text = getString(R.string.not_found_title_company)
+        root.not_found_subtitle.text = getString(R.string.not_found_subtitle_company)
 
         homeViewModel.banner_title_vm.observe(viewLifecycleOwner, Observer {
             banner_title.text = it
@@ -87,7 +96,7 @@ class HomeFragment : Fragment() {
             companyRv.layoutAnimation = animation
             companyRv.setHasFixedSize(true)
             companyRv.layoutManager = LinearLayoutManager(requireContext())
-            companyAdapter.CompanyAdapter(requireContext(), it)
+            companyAdapter = CompanyAdapter(it, requireContext()){companyOnClickListener(it)}
             companyRv.adapter = companyAdapter
             if(it.isEmpty()) {
                 root.no_company_found_feed.visibility = VISIBLE
@@ -124,6 +133,10 @@ class HomeFragment : Fragment() {
         companyAdapter.notifyDataSetChanged()
 
     }
-
+    fun companyOnClickListener(item: Company){
+        val intent = Intent(context, OrderActivity::class.java)
+        intent.putExtra(getString(R.string.company_id),item.id)
+        startActivity(intent)
+    }
 
 }

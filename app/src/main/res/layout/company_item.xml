@@ -45,38 +45,14 @@
                 tools:text="Venta de pollos asados y metanfetamina como nunca en la ciudad"
                 />
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
-                <ImageView
-                    android:id="@+id/company_item_delivery_method_delivery"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginEnd="10dp"
-                    android:visibility="gone"
-                    android:src="@drawable/delivery_method_delivery"/>
-                <ImageView
-                    android:id="@+id/company_item_delivery_method_local"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginEnd="10dp"
-                    android:visibility="gone"
-                    android:src="@drawable/delivery_method_local"/>
-                <ImageView
-                    android:id="@+id/company_item_payment_method_credit_card"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginEnd="10dp"
-                    android:visibility="gone"
-                    android:src="@drawable/credit_card"/>
-                <ImageView
-                    android:id="@+id/company_item_payment_method_cash"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginEnd="10dp"
-                    android:visibility="gone"
-                    android:src="@drawable/cash"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/methods_rv"/>
             </LinearLayout>
 
 

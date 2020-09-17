@@ -31,16 +31,17 @@
                 android:textSize="20sp"
                 android:fontFamily="sans-serif-black"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="Ops! No encontramos delivery en tu zona"
+                android:id="@+id/not_found_title"
+                tools:text="@string/not_found_title_company"
                 />
             <TextView
-                android:id="@+id/company_item_subtitle"
+                android:id="@+id/not_found_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textSize="15sp"
                 android:layout_marginBottom="10dp"
-                android:text="No hay nadie que ofrezca sus productos en donde estás, si conoces a alguien, invítalo!"
+                tools:text="@string/not_found_subtitle_company"
                 />
 
 

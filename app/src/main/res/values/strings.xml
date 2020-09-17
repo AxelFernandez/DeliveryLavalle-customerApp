@@ -49,4 +49,12 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="company_near_feed">Emprendedores cerca tuyo</string>
     <string name="company_near_category">Emprendedores de %s</string>
+    <string name="company_id">idCompany</string>
+    <string name="products_of">Productos de %s</string>
+    <string name="not_found_title_company">Ops! No encontramos delivery en tu zona</string>
+    <string name="not_found_subtitle_company">No hay nadie que ofrezca sus productos en donde estás, si conoces a alguien, invítalo!</string>
+    <string name="product_of">Productos de %s</string>
+    <string name="method_and_payment_detail">Métodos de Pago que acepta este emprendedor</string>
+    <string name="price">Precio</string>
+    <string name="quantity">Cantidad</string>
 </resources>
