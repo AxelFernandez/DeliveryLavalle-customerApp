@@ -68,6 +68,7 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.shawnlin:number-picker:2.4.10'
     implementation 'com.github.andremion:counterfab:1.2.2'
+    implementation 'com.github.Chrisvin:EasyReveal:1.2'
 
 
     testImplementation 'junit:junit:4.12'

@@ -57,4 +57,5 @@
     <string name="method_and_payment_detail">Métodos de Pago que acepta este emprendedor</string>
     <string name="price">Precio</string>
     <string name="quantity">Cantidad</string>
+    <string name="category_of">Categorias de %s</string>
 </resources>

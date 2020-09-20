@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.axelfernandez.deliverylavalle.api.Api
 import com.axelfernandez.deliverylavalle.models.Product
+import com.axelfernandez.deliverylavalle.models.ProductCategory
+import com.axelfernandez.deliverylavalle.models.ProductRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,10 +15,11 @@ class ProductRepository(
 
 ){
     val data = MutableLiveData<List<Product>>()
+    val productCategory = MutableLiveData<List<ProductCategory>>()
 
 
-    fun getProduct(token :String,id: String): MutableLiveData<List<Product>> {
-        api.getProductByCompanyId("Bearer %s".format(token), id).enqueue(object :
+    fun getProduct(token :String,productRequest: ProductRequest): MutableLiveData<List<Product>> {
+        api.getProductByCompanyId("Bearer %s".format(token), productRequest).enqueue(object :
             Callback<List<Product>> {
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
                 data.value = null
@@ -34,5 +37,20 @@ class ProductRepository(
         return data
     }
 
+    fun getProductCategoryByCompany(token :String,companyId: String): MutableLiveData<List<ProductCategory>> {
+        api.getProductCategoriesByCompanyId("Bearer %s".format(token), companyId).enqueue(object :
+            Callback<List<ProductCategory>> {
+            override fun onFailure(call: Call<List<ProductCategory>>, t: Throwable) {
+                productCategory.value = null
+            }
+            override fun onResponse(call: Call<List<ProductCategory>>, response: Response<List<ProductCategory>>) {
+                productCategory.value = response.body()
+            }
+        })
+        return productCategory
+    }
 
+    fun returnProductCategory(): LiveData<List<ProductCategory>> {
+        return productCategory
+    }
 }

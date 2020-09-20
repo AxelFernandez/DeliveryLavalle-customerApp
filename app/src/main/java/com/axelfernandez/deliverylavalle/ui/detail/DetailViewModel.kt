@@ -8,9 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.andremion.counterfab.CounterFab
 import com.axelfernandez.deliverylavalle.api.Api
 import com.axelfernandez.deliverylavalle.api.RetrofitFactory
-import com.axelfernandez.deliverylavalle.models.Company
-import com.axelfernandez.deliverylavalle.models.Product
-import com.axelfernandez.deliverylavalle.models.UserResponse
+import com.axelfernandez.deliverylavalle.models.*
 import com.axelfernandez.deliverylavalle.repository.CompanyRepository
 import com.axelfernandez.deliverylavalle.repository.LoginRepository
 import com.axelfernandez.deliverylavalle.repository.ProductRepository
@@ -38,8 +36,16 @@ class DetailViewModel : ViewModel() {
         return login.returnData()
     }
 
-    fun getProductByCompanyId(token:String, id :String){
-        productRepository.getProduct(token, id)
+    fun getProductCategoryByCompanyId(token:String, companyId: String){
+        productRepository.getProductCategoryByCompany(token, companyId)
+    }
+
+    fun returnProductsCategory(): LiveData<List<ProductCategory>> {
+        return productRepository.returnProductCategory()
+    }
+
+    fun getProductByCompanyId(token:String, productRequest: ProductRequest){
+        productRepository.getProduct(token, productRequest)
     }
 
     fun returnProducts(): LiveData<List<Product>> {
