@@ -51,7 +51,7 @@ class ProductsAdapter (
             Picasso.with(context).load(product.photo).into(imageView)
             title.text = product.name
             subtitle.text = product.description
-            price.text = "$%s".format(product.price)
+            price.text = context.resources.getString(R.string.order_detail_price, product.price)
             button.setOnClickListener {
                 addToCartOnClickListener(product,picker.value)
             }

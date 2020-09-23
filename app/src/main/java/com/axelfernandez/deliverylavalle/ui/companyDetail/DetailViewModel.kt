@@ -1,11 +1,8 @@
-package com.axelfernandez.deliverylavalle.ui.detail
+package com.axelfernandez.deliverylavalle.ui.companyDetail
 
-import android.R
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.andremion.counterfab.CounterFab
 import com.axelfernandez.deliverylavalle.api.Api
 import com.axelfernandez.deliverylavalle.api.RetrofitFactory
 import com.axelfernandez.deliverylavalle.models.*
@@ -13,8 +10,6 @@ import com.axelfernandez.deliverylavalle.repository.CompanyRepository
 import com.axelfernandez.deliverylavalle.repository.LoginRepository
 import com.axelfernandez.deliverylavalle.repository.ProductRepository
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.remoteconfig.ktx.remoteConfig
 import javax.inject.Inject
 
 

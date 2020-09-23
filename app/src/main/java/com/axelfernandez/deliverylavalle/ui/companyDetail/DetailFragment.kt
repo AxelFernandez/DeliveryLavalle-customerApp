@@ -1,11 +1,8 @@
-package com.axelfernandez.deliverylavalle.ui.detail
+package com.axelfernandez.deliverylavalle.ui.companyDetail
 
-import android.annotation.TargetApi
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -38,7 +35,7 @@ class DetailFragment : Fragment() {
     private lateinit var viewModel: DetailViewModel
     private lateinit var methodsRv : RecyclerView
     private lateinit var productRv : RecyclerView
-    private lateinit var category_rv : RecyclerView
+    private lateinit var categoryRv : RecyclerView
     private lateinit var token :String
     private lateinit var idCompany :String
     private var orders : ArrayList<Product> = ArrayList()
@@ -61,7 +58,7 @@ class DetailFragment : Fragment() {
 
         methodsRv = v.findViewById(R.id.payment_and_delivery_rv) as RecyclerView
         productRv = v.findViewById(R.id.product_rv) as RecyclerView
-        category_rv = v.findViewById(R.id.category_rv) as RecyclerView
+        categoryRv = v.findViewById(R.id.category_rv) as RecyclerView
 
         viewModel.returnToken().observe(viewLifecycleOwner, Observer {
             token = it.access_token
@@ -85,14 +82,14 @@ class DetailFragment : Fragment() {
         })
         counterFab.setOnClickListener{
             var bundle: Bundle = Bundle()
-            bundle.putParcelableArrayList("orders",orders)
-            bundle.putString("company",idCompany)
+            bundle.putParcelableArrayList(getString(R.string.arguments_orders),orders)
+            bundle.putString(getString(R.string.arguments_company),idCompany)
             it.findNavController().navigate(R.id.action_detailFragment_to_orderDetailFragment,bundle)
         }
 
         viewModel.returnProductsCategory().observe(viewLifecycleOwner, Observer {
-            category_rv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
-            category_rv.adapter = ProductCategoryAdapter(it,requireContext()){itemCategoryClickListener(it)}
+            categoryRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
+            categoryRv.adapter = ProductCategoryAdapter(it,requireContext()){itemCategoryClickListener(it)}
 
 
         })

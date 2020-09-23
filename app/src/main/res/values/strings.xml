@@ -58,4 +58,9 @@
     <string name="price">Precio</string>
     <string name="quantity">Cantidad</string>
     <string name="category_of">Categorias de %s</string>
+    <string name="arguments_orders">orders</string>
+    <string name="arguments_company">company</string>
+    <string name="order_detail_quantity">X %s</string>
+    <string name="order_detail_price">$%s</string>
+    <string name="total">Total:</string>
 </resources>
