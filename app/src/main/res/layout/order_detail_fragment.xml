@@ -12,6 +12,7 @@
 
 
         <include layout="@layout/app_bar"/>
+        <include layout="@layout/order_detail_company_item"/>
 
         <TextView
             android:id="@+id/order_detail_text_view_company_name"
@@ -23,13 +24,17 @@
             android:fontFamily="sans-serif-black"
             android:text="Mi Pedido:"/>
 
-        <include layout="@layout/order_detail_company_item"/>
+        <include
+            android:visibility="gone"
+            android:id="@+id/order_detail_order_empty"
+            layout="@layout/order_empty"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_order_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <LinearLayout
+        <View
+            android:id="@+id/order_detail_line_separator"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
@@ -37,6 +42,7 @@
             android:layout_height="1dp"
             android:background="@color/colorPrimaryDark"/>
         <LinearLayout
+            android:id="@+id/order_detail_layout_total"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
@@ -64,11 +70,12 @@
 
     </LinearLayout>
     <Button
+        android:id="@+id/order_detail_continue_button"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Continuar Pedido"
+        android:text="@string/continue_order"
         android:textColor="@color/colorPrimary"
         android:background="@color/green"/>
 </FrameLayout>

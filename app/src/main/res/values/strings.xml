@@ -63,4 +63,6 @@
     <string name="order_detail_quantity">X %s</string>
     <string name="order_detail_price">$%s</string>
     <string name="total">Total:</string>
+    <string name="continue_order">Continuar Pedido</string>
+    <string name="description_order_empty">Ops! Al parecer tu pedido está vacio, ¡Vuelve y ordena algo!</string>
 </resources>
