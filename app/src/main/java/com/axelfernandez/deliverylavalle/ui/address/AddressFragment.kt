@@ -1,27 +1,28 @@
 package com.axelfernandez.deliverylavalle.ui.address
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toolbar
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import com.axelfernandez.deliverylavalle.HomeActivity
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.models.Address
+import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.address_fragment.view.*
 import kotlinx.android.synthetic.main.app_bar.view.*
 
@@ -35,6 +36,7 @@ class AddressFragment : Fragment() {
     private lateinit var v: View
     private lateinit var viewModel: AddressViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var address: Address
     private var phoneLocation: String = ""
 
     override fun onCreateView(
@@ -49,8 +51,20 @@ class AddressFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(AddressViewModel::class.java)
         viewModel.init(v.context)
+        val mustReturn = arguments?.getBoolean(getString(R.string.argument_must_return),false)?:false
         v.app_bar_1.text = "Agregar "
         v.app_bar_2.text = "Dirección"
+        val toolbar = v.findViewById(R.id.toolbar) as Toolbar
+        if (mustReturn){
+            toolbar.inflateMenu(R.menu.trash_menu)
+            toolbar.setOnMenuItemClickListener {
+                if (it.itemId == R.id.trash_icon){
+                    it.isCheckable
+
+                }
+                return@setOnMenuItemClickListener true
+            }
+        }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(v.context!!)
         v.get_location.setOnClickListener(View.OnClickListener {
             if (ActivityCompat.checkSelfPermission(
@@ -84,20 +98,22 @@ class AddressFragment : Fragment() {
         })
         viewModel.notifyPost().observe(viewLifecycleOwner, Observer {
             if(it != null){
-
-
-                    var editor = activity?.getSharedPreferences("userSession", Context.MODE_PRIVATE)?.edit()
-                    editor?.putBoolean(getString(R.string.is_login_ready),true)
-                    editor?.apply()
-                    ViewUtil.setSnackBar(v,R.color.orange,"Direccion Guardada Correctamente")
+                var editor = activity?.getSharedPreferences("userSession", Context.MODE_PRIVATE)?.edit()
+                editor?.putBoolean(getString(R.string.is_login_ready),true)
+                editor?.apply()
+                ViewUtil.setSnackBar(v,R.color.orange,"Direccion Guardada Correctamente")
+                address.id = it.addressId
+                LoginUtils.saveDefaultAddress(requireContext(),address)
+                if(mustReturn){
+                    v.findNavController().popBackStack()
+                }else{
                     val intent = Intent(context, HomeActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     activity?.finish()
-
+                }
             }else{
                 ViewUtil.setSnackBar(v,R.color.red,"Ops! Hubo un problema, intenta luego nuevamente")
-
             }
 
         })
@@ -119,13 +135,15 @@ class AddressFragment : Fragment() {
 
     }
 
-    fun continuePost() {
-        var address: Address = Address(
+    private fun continuePost() {
+        address = Address(
             street = v.street.text.toString(), number = v.number.text.toString(),
             district = v.district.text.toString(),
             floor = v.floor.text.toString(),
             reference = v.reference.text.toString(),
-            location = phoneLocation)
+            location = phoneLocation,
+            id = null
+        )
         viewModel.postAddress(address)
     }
 

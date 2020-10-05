@@ -9,14 +9,21 @@
         android:layout_gravity="center"
         android:src="@drawable/orderempty"/>
     <TextView
-        android:id="@+id/order_detail_text_view_company_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_marginTop="10dp"
+    android:textSize="18sp"
+    android:textColor="@color/colorPrimaryDark"
+    android:fontFamily="sans-serif"
+    android:text="@string/description_order_empty"/>
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_margin="10dp"
-        android:textSize="24sp"
-        android:textColor="@color/colorPrimaryDark"
-        android:fontFamily="sans-serif-black"
-        android:text="@string/description_order_empty"/>
+        android:textSize="18sp"
+        android:fontFamily="sans-serif"
+        android:text="@string/description_order_empty_subtitle"/>
 </LinearLayout>

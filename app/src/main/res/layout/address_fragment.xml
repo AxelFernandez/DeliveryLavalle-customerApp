@@ -113,7 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:text="Añade tu geolocalizacion (Opcional)"/>
+        android:text="Añade tu Ubicacion (Opcional)"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"

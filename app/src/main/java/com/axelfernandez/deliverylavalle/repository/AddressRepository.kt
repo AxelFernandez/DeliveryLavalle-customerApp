@@ -36,8 +36,8 @@ class AddressRepository(
         return addressResponseLiveData
     }
 
-    fun getAllAddress(): MutableLiveData<List<Address>> {
-        api.getAddress().enqueue(object : Callback<List<Address>> {
+    fun getAllAddress(token: String): MutableLiveData<List<Address>> {
+        api.getAddress("Bearer %s".format(token)).enqueue(object : Callback<List<Address>> {
             override fun onFailure(call: Call<List<Address>>, t: Throwable) {
                 addressLiveData.value = null
             }

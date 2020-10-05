@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import android.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelfernandez.deliverylavalle.R
@@ -24,17 +26,10 @@ import kotlinx.android.synthetic.main.order_detail_fragment.view.*
 class OrderDetailFragment : Fragment() {
 
 
-    var runnable : Runnable = Runnable {
-        val cx: Int = v.getRight()
-        val cy: Int = v.getBottom()
-        val finalRadius: Int = Math.max(v.getWidth(), v.getHeight())
-        val animator = ViewAnimationUtils.createCircularReveal(v, cx, cy, 0f, finalRadius.toFloat())
-        animator.duration = 300
-        animator.start()
-    }
 
     lateinit var v : View
     private lateinit var productRv : RecyclerView
+    lateinit var idCompany: String
 
     companion object {
         fun newInstance() =
@@ -54,20 +49,21 @@ class OrderDetailFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        v.post(runnable);
-
+        var total :Int = 0
+        val productsDetails : ArrayList<ProductDetail> = ArrayList()
         var bundle : Bundle = arguments?:return
         viewModel = ViewModelProviders.of(this).get(OrderDetailViewModel::class.java)
         viewModel.initial(requireContext(),bundle)
+        idCompany = bundle.getString(getString(R.string.arguments_company),"null")
         productRv = v.findViewById(R.id.rv_order_detail) as RecyclerView
-
+        val toolbar = v.findViewById(R.id.toolbar) as Toolbar
+        toolbar.setNavigationIcon(R.drawable.ic_back_button)
+        toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
         viewModel.returnToken().observe(viewLifecycleOwner, Observer {
-            viewModel.getCompanyById(it.access_token,bundle.getString(getString(R.string.arguments_company),"null"))
+            viewModel.getCompanyById(it.access_token,idCompany)
 
         })
         viewModel.gropuped.observe(viewLifecycleOwner, Observer {
-            val productsDetails : ArrayList<ProductDetail> = ArrayList()
-            var total :Int = 0
             it.iterator().forEach {item ->
                 var subtotal :Int = 0
                 item.value.forEach { product ->
@@ -96,12 +92,14 @@ class OrderDetailFragment : Fragment() {
             v.order_detail_company_title.text = it.name
             Picasso.with(context).load(it.photo).into(v.order_detail_image_company)
         })
-
+        v.order_detail_continue_button.setOnClickListener {
+            val bundleToNav = Bundle()
+            bundleToNav.putParcelableArrayList(getString(R.string.arguments_orders), productsDetails)
+            bundleToNav.putInt(getString(R.string.arguments_total), total)
+            bundleToNav.putString(getString(R.string.arguments_company), idCompany)
+            findNavController().navigate(R.id.orderSelectPaymentAndAddress, bundle)
+        }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        v.removeCallbacks(runnable);
-    }
 
 }

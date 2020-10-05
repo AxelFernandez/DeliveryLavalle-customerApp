@@ -18,8 +18,9 @@ interface Api {
     @POST("client")
     fun updatePhone(@Body userData: User, @Header("Authorization") token: String):Call<User>
 
+    @Headers("Content-Type: application/json")
     @GET("address")
-    fun getAddress():Call<List<Address>>
+    fun getAddress(@Header("Authorization") token: String):Call<List<Address>>
 
     @Headers("Content-Type: application/json")
     @POST("address")

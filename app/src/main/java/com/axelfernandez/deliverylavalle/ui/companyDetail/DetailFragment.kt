@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -53,10 +54,13 @@ class DetailFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(DetailViewModel::class.java)
         viewModel.initial(requireContext())
         idCompany = requireActivity().intent.getStringExtra(getString(R.string.company_id))?:return
+
         val counterFab = v.findViewById(R.id.counter_fab) as CounterFab
 
-
-        methodsRv = v.findViewById(R.id.payment_and_delivery_rv) as RecyclerView
+        val toolbar = v.findViewById(R.id.toolbar) as Toolbar
+        toolbar.setNavigationIcon(R.drawable.ic_back_button)
+        toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
+        methodsRv = v.findViewById(R.id.method_available) as RecyclerView
         productRv = v.findViewById(R.id.product_rv) as RecyclerView
         categoryRv = v.findViewById(R.id.category_rv) as RecyclerView
 

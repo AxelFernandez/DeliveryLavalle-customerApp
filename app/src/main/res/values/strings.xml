@@ -64,5 +64,12 @@
     <string name="order_detail_price">$%s</string>
     <string name="total">Total:</string>
     <string name="continue_order">Continuar Pedido</string>
-    <string name="description_order_empty">Ops! Al parecer tu pedido está vacio, ¡Vuelve y ordena algo!</string>
+    <string name="description_order_empty">Ops! Al parecer tu pedido está vacio</string>
+    <string name="description_order_empty_subtitle">¡Vuelve y ordena algo!</string>
+    <string name="arguments_total">Total</string>
+    <string name="address_delivery">Direccion de Entrega</string>
+    <string name="payment_method">Método de Pago</string>
+    <string name="item_street_and_number">%s %s</string>
+    <string name="argument_must_return">argument_must_return</string>
+    <string name="delete">Eliminar</string>
 </resources>

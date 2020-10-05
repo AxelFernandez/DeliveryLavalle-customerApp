@@ -58,7 +58,7 @@
                         android:text="@string/method_and_payment_detail"
                         />
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/payment_and_delivery_rv"
+                        android:id="@+id/method_available"
                         android:layout_marginLeft="10dp"
                         android:layout_marginBottom="15dp"
                         android:layout_width="match_parent"

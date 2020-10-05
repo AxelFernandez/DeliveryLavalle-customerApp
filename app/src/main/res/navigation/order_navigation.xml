@@ -14,6 +14,10 @@
             android:name="companyId"
             app:argType="string" />
         <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/action_detailFragment_to_orderDetailFragment"
             app:destination="@id/orderDetailFragment" />
     </fragment>
@@ -21,5 +25,47 @@
         android:id="@+id/orderDetailFragment"
         android:name="com.axelfernandez.deliverylavalle.ui.orderDetail.OrderDetailFragment"
         android:label="order_detail_fragment"
-        tools:layout="@layout/order_detail_fragment" />
+        tools:layout="@layout/order_detail_fragment" >
+        <action
+            android:id="@+id/action_orderDetailFragment_to_orderSelectPaymentAndAddress"
+            app:destination="@id/orderSelectPaymentAndAddress"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/orderDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderSelectPaymentAndAddress"
+        android:name="com.axelfernandez.deliverylavalle.ui.OrderSelectPayment.OrderSelectPaymentAndAddress"
+        android:label="order_select_payment_and_adress_fragment"
+        tools:layout="@layout/order_select_payment_and_adress_fragment" >
+        <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            android:id="@+id/action_orderSelectPaymentAndAddress_to_addressList"
+            app:destination="@id/addressList"
+            app:popUpTo="@id/orderSelectPaymentAndAddress" />
+    </fragment>
+    <fragment
+        android:id="@+id/addressList"
+        android:name="com.axelfernandez.deliverylavalle.ui.addressList.AddressList"
+        android:label="address_list_fragment"
+        tools:layout="@layout/address_list_fragment" >
+        <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            android:id="@+id/action_addressList_to_addressFragment2"
+            app:destination="@id/addressFragment2"
+            app:popUpTo="@id/addressList" />
+    </fragment>
+    <fragment
+        android:id="@+id/addressFragment2"
+        android:name="com.axelfernandez.deliverylavalle.ui.address.AddressFragment"
+        android:label="address_fragment"
+        tools:layout="@layout/address_fragment" />
 </navigation>

@@ -24,9 +24,9 @@ data class ProductRequest(
 data class ProductCategory(
     val description: String
 )
-
+@Parcelize
 data class ProductDetail(
     val quantity: String,
     val description: String,
     val subtotal: String
-)
+) : Parcelable

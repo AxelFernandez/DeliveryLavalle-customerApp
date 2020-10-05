@@ -35,8 +35,8 @@ class AddressViewModel : ViewModel() {
         return login.returnData() //return token
     }
 
-    fun soliciteAddress() {
-         addressRepository.getAllAddress()
+    fun soliciteAddress(token:String) {
+         addressRepository.getAllAddress(token)
     }
 
     fun notifyAddres():LiveData<List<Address>>{
