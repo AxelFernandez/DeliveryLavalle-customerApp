@@ -25,8 +25,6 @@ import kotlinx.android.synthetic.main.order_detail_fragment.view.*
 
 class OrderDetailFragment : Fragment() {
 
-
-
     lateinit var v : View
     private lateinit var productRv : RecyclerView
     lateinit var idCompany: String
@@ -51,7 +49,7 @@ class OrderDetailFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         var total :Int = 0
         val productsDetails : ArrayList<ProductDetail> = ArrayList()
-        var bundle : Bundle = arguments?:return
+        val bundle : Bundle = arguments?:return
         viewModel = ViewModelProviders.of(this).get(OrderDetailViewModel::class.java)
         viewModel.initial(requireContext(),bundle)
         idCompany = bundle.getString(getString(R.string.arguments_company),"null")

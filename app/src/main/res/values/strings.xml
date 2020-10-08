@@ -69,7 +69,9 @@
     <string name="arguments_total">Total</string>
     <string name="address_delivery">Direccion de Entrega</string>
     <string name="payment_method">Método de Pago</string>
-    <string name="item_street_and_number">%s %s</string>
+    <string name="item_street_and_number">Calle: %s %s</string>
+    <string name="item_district">Distrito: %s</string>
+    <string name="item_reference">Referencia: %s</string>
     <string name="argument_must_return">argument_must_return</string>
     <string name="delete">Eliminar</string>
 </resources>

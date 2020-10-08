@@ -1,26 +1,23 @@
 package com.axelfernandez.deliverylavalle.ui.OrderSelectPayment
 
-import android.graphics.Color
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.renderscript.Byte3
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toolbar
-import androidx.lifecycle.Observer
+import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.adapters.AddressAdapter
-import com.axelfernandez.deliverylavalle.adapters.PaymentDetailAdapter
 import com.axelfernandez.deliverylavalle.models.Address
 import com.axelfernandez.deliverylavalle.ui.address.AddressViewModel
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
-import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.item_delivery_address.view.*
 
 class OrderSelectPaymentAndAddress : Fragment() {
 
@@ -53,7 +50,9 @@ class OrderSelectPaymentAndAddress : Fragment() {
         methodsRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
         listOfAddress = ArrayList()
         listOfAddress.add(address)
-        methodsRv.adapter = AddressAdapter(listOfAddress,requireContext()){onItemClickListener(it)}
+        methodsRv.adapter = AddressAdapter(listOfAddress,requireContext(),{onItemClickListener(it)}, {{}},false)
+
+
 
 
     }

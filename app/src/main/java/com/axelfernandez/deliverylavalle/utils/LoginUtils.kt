@@ -64,6 +64,18 @@ class LoginUtils {
 
             )
         }
+        fun removeAddress(context: Context){
+            var editor :SharedPreferences.Editor = context.getSharedPreferences("userSession", Context.MODE_PRIVATE).edit()
+            editor.remove("street")
+            editor.remove("number")
+            editor.remove("district")
+            editor.remove("floor")
+            editor.remove("location")
+            editor.remove("reference")
+            editor.remove("id")
+            editor.apply()
+
+        }
     }
 }
 

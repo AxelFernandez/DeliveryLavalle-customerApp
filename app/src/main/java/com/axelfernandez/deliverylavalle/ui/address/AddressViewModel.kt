@@ -52,7 +52,13 @@ class AddressViewModel : ViewModel() {
         addressRepository.postAddress(address = address, token = token.access_token)
     }
 
+    fun deleteAddress(address: Address, token: String){
+        addressRepository.deleteAddress(token, address)
+    }
 
+    fun notifyCorrectDeleted():LiveData<String>{
+        return addressRepository.addressDeleted
+    }
 
 
 }

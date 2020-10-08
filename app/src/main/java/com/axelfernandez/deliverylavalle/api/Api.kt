@@ -26,6 +26,10 @@ interface Api {
     @POST("address")
     fun postAddress(@Body address: Address, @Header("Authorization") token: String):Call<AddressResponse>
 
+    @Headers("Content-Type: application/json")
+    @POST("address_delete")
+    fun postAddressDelete(@Body address: Address, @Header("Authorization") token: String):Call<String>
+
 
     //Company
     @GET("company_category")

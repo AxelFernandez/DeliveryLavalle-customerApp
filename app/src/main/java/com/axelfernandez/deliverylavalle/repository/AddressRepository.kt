@@ -14,6 +14,7 @@ import javax.inject.Singleton
 class AddressRepository(
     private val api : Api
 ){
+    val addressDeleted = MutableLiveData<String>()
     val addressLiveData = MutableLiveData<List<Address>>()
     val addressResponseLiveData = MutableLiveData<AddressResponse>()
 
@@ -53,5 +54,23 @@ class AddressRepository(
     fun notifyAddress(): LiveData<List<Address>>{
         return addressLiveData
 
+    }
+
+    fun deleteAddress(token: String,address: Address): MutableLiveData<String> {
+        api.postAddressDelete(address, "Bearer %s".format(token)).enqueue(object : Callback<String> {
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                addressDeleted.value = null
+            }
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.code() ==200){
+                    addressDeleted.value = response.body()
+                }
+            }
+        })
+        return addressDeleted
+    }
+
+    fun notifyAddressDeleted(): LiveData<String>{
+        return addressDeleted
     }
 }
