@@ -39,6 +39,9 @@ interface Api {
     fun getCompany(@Header("Authorization") token: String, @Body location: Location):Call<List<Company>>
 
 
+    @POST("payment_method")
+    fun getPaymentMethodByCompanyId(@Header("Authorization") token: String, @Body company: String):Call<PaymentMethods>
+
     //Detail Product
     @POST("product")
     fun getProductByCompanyId(@Header("Authorization") token: String, @Body id: ProductRequest):Call<List<Product>>

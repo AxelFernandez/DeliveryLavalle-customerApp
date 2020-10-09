@@ -14,6 +14,9 @@ data class CompanyCategoryResponse(
     val description :String,
     val photo :String
 )
+data class PaymentMethods(
+    val methods :List<String>
+)
 
 //This class is for request the near company
 data class Location(

@@ -30,9 +30,11 @@
         android:textColor="@color/colorPrimaryDark"
         android:fontFamily="sans-serif-black"
         android:text="@string/payment_method"/>
-    <androidx.recyclerview.widget.RecyclerView
+    <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+    </RadioGroup>
 
 </LinearLayout>
     <Button
