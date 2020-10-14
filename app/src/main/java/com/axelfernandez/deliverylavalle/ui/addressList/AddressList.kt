@@ -20,6 +20,7 @@ import com.axelfernandez.deliverylavalle.ui.address.AddressViewModel
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import kotlinx.android.synthetic.main.address_list_fragment.view.*
+import kotlinx.android.synthetic.main.app_bar.view.*
 import kotlinx.android.synthetic.main.item_delivery_address.view.*
 
 class AddressList : Fragment() {
@@ -46,6 +47,8 @@ class AddressList : Fragment() {
         addresListRv = v.findViewById(R.id.rv_addresses) as RecyclerView
         viewModel = ViewModelProviders.of(this).get(AddressViewModel::class.java)
         viewModel.init(requireContext())
+        v.app_bar_1.text = "Selecciona "
+        v.app_bar_2.text = "Una Direccion"
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })

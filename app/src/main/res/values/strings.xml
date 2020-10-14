@@ -60,6 +60,8 @@
     <string name="category_of">Categorias de %s</string>
     <string name="arguments_orders">orders</string>
     <string name="arguments_company">company</string>
+    <string name="arguments_address">address</string>
+    <string name="arguments_method">method</string>
     <string name="order_detail_quantity">X %s</string>
     <string name="order_detail_price">$%s</string>
     <string name="total">Total:</string>
@@ -74,4 +76,5 @@
     <string name="item_reference">Referencia: %s</string>
     <string name="argument_must_return">argument_must_return</string>
     <string name="delete">Eliminar</string>
+    <string name="phishing_text_1">Recibiras un Link de pago del vendedor luego, para evitar estafas te recomendamos pagar en cuanto tengas el producto en tus manos</string>
 </resources>
