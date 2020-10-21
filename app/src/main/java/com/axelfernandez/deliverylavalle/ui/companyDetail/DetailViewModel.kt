@@ -15,8 +15,7 @@ import javax.inject.Inject
 
 class DetailViewModel : ViewModel() {
 
-    @Inject
-    private val login = LoginRepository(RetrofitFactory.buildService(Api::class.java))
+
     @Inject
     private val productRepository = ProductRepository(RetrofitFactory.buildService(Api::class.java))
     @Inject
@@ -24,12 +23,7 @@ class DetailViewModel : ViewModel() {
 
 
 
-    fun initial(context: Context){
-        login.getToken(LoginUtils.getUserFromSharedPreferences(context = context))
-    }
-    fun returnToken(): LiveData<UserResponse> {
-        return login.returnData()
-    }
+
 
     fun getProductCategoryByCompanyId(token:String, companyId: String){
         productRepository.getProductCategoryByCompany(token, companyId)

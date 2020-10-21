@@ -11,12 +11,19 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import com.axelfernandez.deliverylavalle.api.Api
+import com.axelfernandez.deliverylavalle.api.RetrofitFactory
+import com.axelfernandez.deliverylavalle.models.User
+import com.axelfernandez.deliverylavalle.repository.LoginRepository
+import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import javax.inject.Inject
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -26,7 +33,8 @@ class Splash : AppCompatActivity() {
     private lateinit var fullscreenContent: TextView
     private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler()
-
+    @Inject
+    val login = LoginRepository(RetrofitFactory.buildService(Api::class.java))
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
@@ -97,10 +105,16 @@ class Splash : AppCompatActivity() {
                     Log.e("TAG", "Can't Connect to Firebase")
                 }
                 if(is_login_ready){
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                    finish()
+                    login.getToken(LoginUtils.getUserFromSharedPreferences(this))
+                    login.returnData().observe(this, Observer {
+                        val user : User = LoginUtils.getUserFromSharedPreferences(this)
+                        user.token = it.access_token
+                        LoginUtils.putUserToSharedPreferences(this,user)
+                        val intent = Intent(this, HomeActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        finish()
+                    })
                 }else{
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)

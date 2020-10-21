@@ -50,7 +50,6 @@ class AddressFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(AddressViewModel::class.java)
-        viewModel.init(v.context)
         val mustReturn = arguments?.getBoolean(getString(R.string.argument_must_return),false)?:false
         v.app_bar_1.text = "Agregar "
         v.app_bar_2.text = "Dirección"
@@ -144,7 +143,8 @@ class AddressFragment : Fragment() {
             location = phoneLocation,
             id = null
         )
-        viewModel.postAddress(address)
+        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
+        viewModel.postAddress(address,user.token)
     }
 
 }

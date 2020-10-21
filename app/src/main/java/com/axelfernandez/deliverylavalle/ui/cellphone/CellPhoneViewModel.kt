@@ -18,20 +18,12 @@ import javax.inject.Inject
 
 class CellPhoneViewModel() : ViewModel() {
 
-    @Inject
-    val login = LoginRepository(RetrofitFactory.buildService(Api::class.java))
+
     @Inject
     val clientRepository = ClientRepository(RetrofitFactory.buildService(Api::class.java))
 
 
 
-    fun init(context: Context) {
-        login.getToken(LoginUtils.getUserFromSharedPreferences(context)) //Start API Call and Update object
-    }
-
-    fun returnToken(): LiveData<UserResponse>{
-        return login.returnData() //return token
-    }
 
     fun getUserData(context: Context): User{
         return LoginUtils.getUserFromSharedPreferences(context)

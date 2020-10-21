@@ -20,6 +20,7 @@ import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.adapters.AddressAdapter
 import com.axelfernandez.deliverylavalle.models.Address
 import com.axelfernandez.deliverylavalle.models.PaymentMethods
+import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.ui.address.AddressViewModel
 import com.axelfernandez.deliverylavalle.ui.companyDetail.DetailViewModel
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
@@ -28,21 +29,24 @@ import kotlinx.android.synthetic.main.app_bar.view.*
 import kotlinx.android.synthetic.main.item_delivery_address.view.*
 import kotlinx.android.synthetic.main.order_select_payment_and_adress_fragment.*
 import kotlinx.android.synthetic.main.order_select_payment_and_adress_fragment.view.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 class OrderSelectPaymentAndAddress : Fragment() {
 
     companion object {
         fun newInstance() =
             OrderSelectPaymentAndAddress()
+        var atomicBoolean = AtomicBoolean()
+
     }
+
 
     private lateinit var methodsRv: RecyclerView
     private lateinit var paymentMethods: PaymentMethods
     private lateinit var viewModel: AddressViewModel
-    private lateinit var viewModelComapny: OrderSelectPaymentAndAddressViewModel
-    lateinit var v: View
-    lateinit var listOfAddress: ArrayList<Address>
-    private var isCalled = false
+    private lateinit var viewModelCompany: OrderSelectPaymentAndAddressViewModel
+    private lateinit var v: View
+    private lateinit var listOfAddress: ArrayList<Address>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,27 +59,25 @@ class OrderSelectPaymentAndAddress : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity?:return).get(AddressViewModel::class.java)
-        viewModelComapny = ViewModelProviders.of(activity?:return).get(OrderSelectPaymentAndAddressViewModel::class.java)
+        viewModelCompany = ViewModelProviders.of(activity?:return).get(OrderSelectPaymentAndAddressViewModel::class.java)
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
+        val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
         val bundle = arguments?:return
         val companyId = bundle.getString(getString(R.string.arguments_company))?:return
-        viewModel.init(requireContext())
         val address = LoginUtils.getDefaultAddress(requireContext())
         methodsRv = v.findViewById(R.id.payment_and_delivery_rv) as RecyclerView
         methodsRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
         listOfAddress = ArrayList()
         listOfAddress.add(address)
         methodsRv.adapter = AddressAdapter(listOfAddress,requireContext(),{onItemClickListener(it)}, {{}},false)
-        viewModel.returnToken().observe(viewLifecycleOwner, Observer {
-            if (!isCalled){
-                viewModelComapny.solicitPaymentMethod(it.access_token,companyId)
-                isCalled = true
-            }
-        })
+        var atomicBoolean = AtomicBoolean()
+        if (atomicBoolean.compareAndSet(false, true)){
+            viewModelCompany.solicitPaymentMethod(user.token, companyId)
+        }
 
-        viewModelComapny.returnPaymentMethod().observe(viewLifecycleOwner, Observer {
+        viewModelCompany.returnPaymentMethod().observe(viewLifecycleOwner, Observer {
             paymentMethods = it
             it.methods.forEachIndexed(){index,item->
                 val radioButton1 = RadioButton(requireContext())
@@ -94,7 +96,6 @@ class OrderSelectPaymentAndAddress : Fragment() {
 
             arguments?.putParcelable(getString(R.string.arguments_address),LoginUtils.getDefaultAddress(requireContext()))
             arguments?.putString(getString(R.string.arguments_method),paymentMethods.methods[radioGroup.checkedRadioButtonId])
-
 
 
         }

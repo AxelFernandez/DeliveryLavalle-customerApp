@@ -25,6 +25,8 @@ import com.axelfernandez.deliverylavalle.adapters.CompanyAdapter
 import com.axelfernandez.deliverylavalle.adapters.CompanyCategotyAdapter
 import com.axelfernandez.deliverylavalle.models.Company
 import com.axelfernandez.deliverylavalle.models.CompanyCategoryResponse
+import com.axelfernandez.deliverylavalle.models.User
+import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.app_bar.view.*
@@ -58,9 +60,10 @@ class HomeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val banner_title: TextView = root.findViewById(R.id.banner_title)
-        val banner_subtitle: TextView = root.findViewById(R.id.banner_subtitle)
-        val banner_image: ImageView = root.findViewById(R.id.banner_image)
+        val bannerTitle: TextView = root.findViewById(R.id.banner_title)
+        val bannerSubtitle: TextView = root.findViewById(R.id.banner_subtitle)
+        val bannerImage: ImageView = root.findViewById(R.id.banner_image)
+        val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
         categoryRv = root.findViewById(R.id.company_category_rv) as RecyclerView
         companyRv = root.findViewById(R.id.company_rv) as RecyclerView
         root.app_bar_1.text = "Comercios "
@@ -70,26 +73,22 @@ class HomeFragment : Fragment() {
         loadingCategories.startShimmer()
         root.not_found_title.text = getString(R.string.not_found_title_company)
         root.not_found_subtitle.text = getString(R.string.not_found_subtitle_company)
+        homeViewModel.getCategoty(user.token)
+        homeViewModel.getLocationAndGetCompany(requireActivity(), user.token,null)
 
         homeViewModel.banner_title_vm.observe(viewLifecycleOwner, Observer {
-            banner_title.text = it
+            bannerTitle.text = it
         })
         homeViewModel.banner_subtitle_vm.observe(viewLifecycleOwner, Observer {
-            banner_subtitle.text = it
+            bannerSubtitle.text = it
         })
         homeViewModel.banner_image_vm.observe(viewLifecycleOwner, Observer {
-            Picasso.with(context).load(it).into(banner_image)
+            Picasso.with(context).load(it).into(bannerImage)
         })
-        var hasBeenCalled : Boolean = false
+        homeViewModel.getCategoty(user.token)
+        homeViewModel.getLocationAndGetCompany(requireActivity(), user.token,null)
+        accessToken = user.token
 
-        homeViewModel.returnToken().observe(viewLifecycleOwner, Observer {
-            if (!hasBeenCalled) {
-                homeViewModel.getCategoty(it.access_token)
-                homeViewModel.getLocationAndGetCompany(requireActivity(), it.access_token,null)
-                accessToken = it.access_token
-                hasBeenCalled = true
-            }
-        })
         homeViewModel.returnCompany().observe(viewLifecycleOwner, Observer{
             val animation: LayoutAnimationController =
                 AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_fall_down)
@@ -120,9 +119,6 @@ class HomeFragment : Fragment() {
 
 
         })
-
-
-        homeViewModel.initial(requireContext())
     }
     fun onClickActionItemList(item: CompanyCategoryResponse) {
         root.text_view_feed_company.text = getString(R.string.company_near_category).format(item.description)

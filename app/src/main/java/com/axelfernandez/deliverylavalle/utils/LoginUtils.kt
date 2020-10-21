@@ -23,7 +23,9 @@ class LoginUtils {
                 clientId = sharedPreferences.getString(context.getString(R.string.client_id),null).toString(),
                 photo = sharedPreferences.getString(context.getString(R.string.picture),null).toString(),
                 phone = sharedPreferences.getString(context.getString(R.string.phone),null).toString(),
-                username = sharedPreferences.getString(context.getString(R.string.username),null).toString()
+                username = sharedPreferences.getString(context.getString(R.string.username),null).toString(),
+                token = sharedPreferences.getString(context.getString(R.string.token),null).toString()
+
             )
         }
         fun putUserToSharedPreferences(context: Context, new_user: User){
@@ -35,6 +37,7 @@ class LoginUtils {
             editor.putString("picture",new_user.photo)
             editor.putString("phone",new_user.phone)
             editor.putString("username",new_user.username)
+            editor.putString("token",new_user.token)
             editor.apply()
 
 

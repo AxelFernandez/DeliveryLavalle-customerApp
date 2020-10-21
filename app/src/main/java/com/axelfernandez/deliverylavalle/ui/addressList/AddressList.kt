@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.adapters.AddressAdapter
 import com.axelfernandez.deliverylavalle.models.Address
+import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.ui.address.AddressViewModel
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
@@ -46,16 +47,16 @@ class AddressList : Fragment() {
         super.onActivityCreated(savedInstanceState)
         addresListRv = v.findViewById(R.id.rv_addresses) as RecyclerView
         viewModel = ViewModelProviders.of(this).get(AddressViewModel::class.java)
-        viewModel.init(requireContext())
+        val user: User = LoginUtils.getUserFromSharedPreferences(requireContext())
         v.app_bar_1.text = "Selecciona "
         v.app_bar_2.text = "Una Direccion"
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
-        viewModel.returnToken().observe(viewLifecycleOwner, Observer {
-            viewModel.soliciteAddress(it.access_token)
-            token = it.access_token
-        })
+
+        viewModel.soliciteAddress(user.token)
+        token = user.token
+
         viewModel.notifyAddres().observe(viewLifecycleOwner, Observer {
             addresListRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
             addresListRv.adapter = AddressAdapter(it,requireContext(), {onItemClickListener(it)}, {deleteOnItemClickListener(it)})

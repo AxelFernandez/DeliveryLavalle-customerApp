@@ -18,6 +18,8 @@ import com.axelfernandez.deliverylavalle.adapters.OrderDetailAdapter
 import com.axelfernandez.deliverylavalle.adapters.ProductsAdapter
 import com.axelfernandez.deliverylavalle.models.Product
 import com.axelfernandez.deliverylavalle.models.ProductDetail
+import com.axelfernandez.deliverylavalle.models.User
+import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.order_detail_company_item.view.*
 import kotlinx.android.synthetic.main.order_detail_fragment.view.*
@@ -50,6 +52,7 @@ class OrderDetailFragment : Fragment() {
         var total :Int = 0
         val productsDetails : ArrayList<ProductDetail> = ArrayList()
         val bundle : Bundle = arguments?:return
+        val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
         viewModel = ViewModelProviders.of(this).get(OrderDetailViewModel::class.java)
         viewModel.initial(requireContext(),bundle)
         idCompany = bundle.getString(getString(R.string.arguments_company),"null")
@@ -57,10 +60,8 @@ class OrderDetailFragment : Fragment() {
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
-        viewModel.returnToken().observe(viewLifecycleOwner, Observer {
-            viewModel.getCompanyById(it.access_token,idCompany)
 
-        })
+        viewModel.getCompanyById(user.token,idCompany)
         viewModel.gropuped.observe(viewLifecycleOwner, Observer {
             it.iterator().forEach {item ->
                 var subtotal :Int = 0

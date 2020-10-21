@@ -28,8 +28,7 @@ import kotlin.math.log
 
 class HomeViewModel : ViewModel() {
 
-    @Inject
-    val login = LoginRepository(RetrofitFactory.buildService(Api::class.java))
+
     @Inject
     val companyCategoryResponse = CompanyRepository(RetrofitFactory.buildService(Api::class.java))
 
@@ -50,12 +49,7 @@ class HomeViewModel : ViewModel() {
     }
     val banner_image_vm: LiveData<String> = banner_image
 
-    fun initial(context: Context){
-        login.getToken(LoginUtils.getUserFromSharedPreferences(context = context))
-    }
-    fun returnToken(): LiveData<UserResponse> {
-        return login.returnData()
-    }
+
 
     fun getCategoty(token:String){
         companyCategoryResponse.getCategory(token)

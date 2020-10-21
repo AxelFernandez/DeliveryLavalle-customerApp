@@ -20,20 +20,12 @@ import javax.inject.Inject
 
 class AddressViewModel : ViewModel() {
 
-    @Inject
-    val login = LoginRepository(RetrofitFactory.buildService(Api::class.java))
+
     @Inject
     val addressRepository = AddressRepository(RetrofitFactory.buildService(Api::class.java))
 
 
 
-    fun init(context: Context) {
-        login.getToken(LoginUtils.getUserFromSharedPreferences(context)) //Start API Call and Update object
-    }
-
-    fun returnToken(): LiveData<UserResponse> {
-        return login.returnData() //return token
-    }
 
     fun soliciteAddress(token:String) {
          addressRepository.getAllAddress(token)
@@ -47,9 +39,8 @@ class AddressViewModel : ViewModel() {
         return addressRepository.notifyPost()
     }
 
-    fun postAddress(address: Address){
-        var token = returnToken().value!!
-        addressRepository.postAddress(address = address, token = token.access_token)
+    fun postAddress(address: Address, token:String){
+        addressRepository.postAddress(address = address, token = token)
     }
 
     fun deleteAddress(address: Address, token: String){

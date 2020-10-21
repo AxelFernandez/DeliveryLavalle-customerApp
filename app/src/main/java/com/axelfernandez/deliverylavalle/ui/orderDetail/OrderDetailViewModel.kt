@@ -21,9 +21,6 @@ class OrderDetailViewModel : ViewModel() {
 
 
     @Inject
-    private val login = LoginRepository(RetrofitFactory.buildService(Api::class.java))
-
-    @Inject
     private val companyRepository = CompanyRepository(RetrofitFactory.buildService(Api::class.java))
 
     private val _gropuped = MutableLiveData<Map<String,List<Product>>>()
@@ -31,15 +28,11 @@ class OrderDetailViewModel : ViewModel() {
 
 
     fun initial(context: Context,bundle: Bundle){
-        login.getToken(LoginUtils.getUserFromSharedPreferences(context = context))
-
         var array: ArrayList<Product>? = bundle.get("orders") as ArrayList<Product>?
         _gropuped.value =  array?.groupBy { it.name }
 
     }
-    fun returnToken(): LiveData<UserResponse> {
-        return login.returnData()
-    }
+
 
     fun getCompanyById(token:String, id :String){
         companyRepository.getCompanyById(token, id)

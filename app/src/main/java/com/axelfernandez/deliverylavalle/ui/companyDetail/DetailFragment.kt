@@ -20,6 +20,8 @@ import com.axelfernandez.deliverylavalle.adapters.ProductsAdapter
 import com.axelfernandez.deliverylavalle.models.Product
 import com.axelfernandez.deliverylavalle.models.ProductCategory
 import com.axelfernandez.deliverylavalle.models.ProductRequest
+import com.axelfernandez.deliverylavalle.models.User
+import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.detail_fragment.*
 import kotlinx.android.synthetic.main.detail_fragment.view.*
@@ -52,8 +54,8 @@ class DetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(DetailViewModel::class.java)
-        viewModel.initial(requireContext())
         idCompany = requireActivity().intent.getStringExtra(getString(R.string.company_id))?:return
+        val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
 
         val counterFab = v.findViewById(R.id.counter_fab) as CounterFab
 
@@ -63,13 +65,10 @@ class DetailFragment : Fragment() {
         methodsRv = v.findViewById(R.id.method_available) as RecyclerView
         productRv = v.findViewById(R.id.product_rv) as RecyclerView
         categoryRv = v.findViewById(R.id.category_rv) as RecyclerView
-
-        viewModel.returnToken().observe(viewLifecycleOwner, Observer {
-            token = it.access_token
-            viewModel.getCompanyById(token, idCompany)
-            viewModel.getProductByCompanyId(token,ProductRequest(idCompany,null))
-            viewModel.getProductCategoryByCompanyId(token,idCompany)
-        })
+        token = user.token
+        viewModel.getCompanyById(token, idCompany)
+        viewModel.getProductByCompanyId(token,ProductRequest(idCompany,null))
+        viewModel.getProductCategoryByCompanyId(token,idCompany)
         viewModel.returnCompany().observe(viewLifecycleOwner, Observer {
             v.text_view_company_name.text = it.name
             v.text_view_company_description.text = it.description
@@ -94,8 +93,6 @@ class DetailFragment : Fragment() {
         viewModel.returnProductsCategory().observe(viewLifecycleOwner, Observer {
             categoryRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
             categoryRv.adapter = ProductCategoryAdapter(it,requireContext()){itemCategoryClickListener(it)}
-
-
         })
 
     }

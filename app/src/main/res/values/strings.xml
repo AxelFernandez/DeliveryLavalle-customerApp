@@ -77,4 +77,5 @@
     <string name="argument_must_return">argument_must_return</string>
     <string name="delete">Eliminar</string>
     <string name="phishing_text_1">Recibiras un Link de pago del vendedor luego, para evitar estafas te recomendamos pagar en cuanto tengas el producto en tus manos</string>
+    <string name="token">token</string>
 </resources>

@@ -7,7 +7,8 @@ data class User(
     val familyName: String,
     val photo: String,
     var clientId: String?,
-    var phone: String?
+    var phone: String?,
+    var token: String
     )
 
 data class UserResponse(

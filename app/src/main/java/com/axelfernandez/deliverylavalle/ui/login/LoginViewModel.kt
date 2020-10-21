@@ -15,7 +15,8 @@ class LoginViewModel : ViewModel() {
             photo = account.photoUrl.toString().split('=').get(0),
             clientId = null,
             username = null,
-            phone = null
+            phone = null,
+            token = ""
         )
 
 

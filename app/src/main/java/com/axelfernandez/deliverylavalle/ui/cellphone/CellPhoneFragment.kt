@@ -16,6 +16,7 @@ import androidx.navigation.findNavController
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.models.UserResponse
+import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
@@ -49,10 +50,10 @@ class CellPhoneFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CellPhoneViewModel::class.java)
-        var user = viewModel.getUserData(v.context)
+        val user = viewModel.getUserData(v.context)
         v.app_bar_1.text = "Bienvenido "
         must_redirect = false
-        var field :EditText = v.findViewById(R.id.cellphone_field)
+        val field :EditText = v.findViewById(R.id.cellphone_field)
         v.tilo_cellphone.helperText= getString(R.string.required)
         v.app_bar_2.text = "%s %s".format(user.givenName,user.familyName)
         v.phone_email.text = "Email: %s".format(user.email)
@@ -80,7 +81,7 @@ class CellPhoneFragment : Fragment() {
                 }
 
             })
-        viewModel.getClientUpdated()?.observe(viewLifecycleOwner, Observer { it->
+        viewModel.getClientUpdated().observe(viewLifecycleOwner, Observer { it->
             if(it != null){
                 if(must_redirect) {
                     ViewUtil.setSnackBar(v, R.color.orange, "Teléfono Guardado Correctamente")
@@ -99,11 +100,10 @@ class CellPhoneFragment : Fragment() {
             }else{
                 must_redirect = true
                 viewModel.startUpdatePhone(v.context,field.text.toString(),
-                viewModel.returnToken()?.value?.access_token!!)
+                viewModel.getUserData(requireContext()).token)
 
             }
         })
-        viewModel.init(v.context)
     }
 
 

@@ -95,13 +95,15 @@ class Login : Fragment() {
                         ) {
                             val response : UserResponse? = response.body()
 
-                            var editor = activity?.getSharedPreferences("userSession", Context.MODE_PRIVATE)?.edit()
+                            val editor = activity?.getSharedPreferences("userSession", Context.MODE_PRIVATE)?.edit()
                             editor?.putString(getString(R.string.email),account.email)
                             editor?.putString(getString(R.string.given_name),account.givenName)
                             editor?.putString(getString(R.string.family_name),account.familyName)
                             editor?.putString(getString(R.string.client_id),response?.clientId)
+                            editor?.putString(getString(R.string.token),response?.access_token)
                             editor?.putString(getString(R.string.picture),account.photoUrl.toString().split('=').get(0))
                             editor?.apply()
+
                             var bundle = bundleOf("clientId" to response?.clientId)
                             if(response?.is_new!! || response.completeRegistry){
                                 view!!.findNavController().navigate(R.id.action_login_to_cellPhoneFragment,bundle)
