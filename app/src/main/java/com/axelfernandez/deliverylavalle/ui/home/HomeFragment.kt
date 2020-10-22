@@ -26,6 +26,7 @@ import com.axelfernandez.deliverylavalle.adapters.CompanyCategotyAdapter
 import com.axelfernandez.deliverylavalle.models.Company
 import com.axelfernandez.deliverylavalle.models.CompanyCategoryResponse
 import com.axelfernandez.deliverylavalle.models.User
+import com.axelfernandez.deliverylavalle.ui.OrderSelectPayment.OrderSelectPaymentAndAddress
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.squareup.picasso.Picasso
@@ -34,6 +35,7 @@ import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.no_company_found.view.*
 import kotlinx.android.synthetic.main.shimer_company.view.*
 import java.time.Duration
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 class HomeFragment : Fragment() {
@@ -45,6 +47,13 @@ class HomeFragment : Fragment() {
     lateinit var categoriesAdapter : CompanyCategotyAdapter
     lateinit var companyAdapter : CompanyAdapter
     var accessToken : String = ""
+
+    companion object {
+        fun newInstance() =
+            HomeFragment()
+        var atomicBoolean = AtomicBoolean(false)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,8 +82,6 @@ class HomeFragment : Fragment() {
         loadingCategories.startShimmer()
         root.not_found_title.text = getString(R.string.not_found_title_company)
         root.not_found_subtitle.text = getString(R.string.not_found_subtitle_company)
-        homeViewModel.getCategoty(user.token)
-        homeViewModel.getLocationAndGetCompany(requireActivity(), user.token,null)
 
         homeViewModel.banner_title_vm.observe(viewLifecycleOwner, Observer {
             bannerTitle.text = it
@@ -85,8 +92,9 @@ class HomeFragment : Fragment() {
         homeViewModel.banner_image_vm.observe(viewLifecycleOwner, Observer {
             Picasso.with(context).load(it).into(bannerImage)
         })
+
         homeViewModel.getCategoty(user.token)
-        homeViewModel.getLocationAndGetCompany(requireActivity(), user.token,null)
+        homeViewModel.getLocationAndGetCompany(requireActivity(), user.token, null)
         accessToken = user.token
 
         homeViewModel.returnCompany().observe(viewLifecycleOwner, Observer{
@@ -105,8 +113,6 @@ class HomeFragment : Fragment() {
             }
             loadingCompany.visibility = View.GONE
             companyRv.visibility = View.VISIBLE
-
-
 
         })
 

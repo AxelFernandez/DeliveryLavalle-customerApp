@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.confirmation.ConfirmationFragment">
+
+    <include layout="@layout/app_bar"/>
+    <ScrollView
+        android:layout_marginTop="?actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="?actionBarSize">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:textSize="24sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:fontFamily="sans-serif-black"
+                android:text="@string/confirm_title"/>
+            <TextView
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-black"
+                android:text="@string/confirm_subtitle"/>
+
+            <include layout="@layout/order_detail_company_item" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textSize="24sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:fontFamily="sans-serif-black"
+                android:text="@string/address_delivery"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/payment_and_delivery_rv"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <include layout="@layout/banner_phishing"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-black"
+                android:text="@string/payment_method"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-black"
+                tools:text="Mercado Pago"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textSize="24sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:fontFamily="sans-serif-black"
+                android:text="@string/products"/>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_order_detail"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <View
+                android:id="@+id/order_detail_line_separator"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimaryDark"/>
+            <LinearLayout
+                android:id="@+id/order_detail_layout_total"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textSize="24sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/total"
+                    android:layout_width="0dp" />
+                <TextView
+                    android:id="@+id/order_detail_total"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textSize="24sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:fontFamily="sans-serif-black"
+                    tools:text="$850"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+    <Button
+        android:id="@+id/order_confirmation_button"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/continue_order"
+        android:textColor="@color/colorPrimary"
+        android:background="@color/green"/>
+</FrameLayout>

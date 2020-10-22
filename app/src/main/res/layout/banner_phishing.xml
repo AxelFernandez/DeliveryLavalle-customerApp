@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/warning">
 <ImageView
     android:layout_margin="10dp"
@@ -11,12 +11,13 @@
     android:layout_gravity="center_vertical"
     android:src="@drawable/ic_baseline_info_24"/>
     <TextView
+        android:id="@+id/phishing_text"
         android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
         android:textColor="@color/black_overlay"
-        android:text="@string/phishing_text_1"
+        tools:text="@string/phishing_text_1"
         />
 
 </LinearLayout>

@@ -14,6 +14,7 @@ import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelfernandez.deliverylavalle.R
@@ -24,8 +25,10 @@ import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.ui.address.AddressViewModel
 import com.axelfernandez.deliverylavalle.ui.companyDetail.DetailViewModel
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
+import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar.view.*
+import kotlinx.android.synthetic.main.banner_phishing.view.*
 import kotlinx.android.synthetic.main.item_delivery_address.view.*
 import kotlinx.android.synthetic.main.order_select_payment_and_adress_fragment.*
 import kotlinx.android.synthetic.main.order_select_payment_and_adress_fragment.view.*
@@ -36,11 +39,9 @@ class OrderSelectPaymentAndAddress : Fragment() {
     companion object {
         fun newInstance() =
             OrderSelectPaymentAndAddress()
-        var atomicBoolean = AtomicBoolean()
+        var atomicBoolean = AtomicBoolean(false)
 
     }
-
-
     private lateinit var methodsRv: RecyclerView
     private lateinit var paymentMethods: PaymentMethods
     private lateinit var viewModel: AddressViewModel
@@ -63,6 +64,7 @@ class OrderSelectPaymentAndAddress : Fragment() {
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
+        v.phishing_text.text = getString(R.string.phishing_text_1)
         val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
         val bundle = arguments?:return
         val companyId = bundle.getString(getString(R.string.arguments_company))?:return
@@ -72,7 +74,7 @@ class OrderSelectPaymentAndAddress : Fragment() {
         listOfAddress = ArrayList()
         listOfAddress.add(address)
         methodsRv.adapter = AddressAdapter(listOfAddress,requireContext(),{onItemClickListener(it)}, {{}},false)
-        var atomicBoolean = AtomicBoolean()
+
         if (atomicBoolean.compareAndSet(false, true)){
             viewModelCompany.solicitPaymentMethod(user.token, companyId)
         }
@@ -93,10 +95,14 @@ class OrderSelectPaymentAndAddress : Fragment() {
             }
         }
         v.order_detail_continue_button.setOnClickListener {
-
-            arguments?.putParcelable(getString(R.string.arguments_address),LoginUtils.getDefaultAddress(requireContext()))
-            arguments?.putString(getString(R.string.arguments_method),paymentMethods.methods[radioGroup.checkedRadioButtonId])
-
+            if (radioGroup.checkedRadioButtonId == -1){
+                ViewUtil.setSnackBar(v,R.color.red,"Debes seleccionar un metodo de pago")
+                return@setOnClickListener
+            }
+            val arguments = arguments?:return@setOnClickListener
+            arguments.putParcelable(getString(R.string.arguments_address),LoginUtils.getDefaultAddress(requireContext()))
+            arguments.putString(getString(R.string.arguments_method),paymentMethods.methods[radioGroup.checkedRadioButtonId])
+            findNavController().navigate(R.id.action_orderSelectPaymentAndAddress_to_confirmationFragment, arguments)
 
         }
     }

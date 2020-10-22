@@ -78,4 +78,7 @@
     <string name="delete">Eliminar</string>
     <string name="phishing_text_1">Recibiras un Link de pago del vendedor luego, para evitar estafas te recomendamos pagar en cuanto tengas el producto en tus manos</string>
     <string name="token">token</string>
+    <string name="confirm_title">Confirma tu pedido</string>
+    <string name="confirm_subtitle">Revisalo bien!</string>
+    <string name="products">Productos</string>
 </resources>

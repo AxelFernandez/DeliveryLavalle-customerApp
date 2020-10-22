@@ -48,6 +48,10 @@
             android:id="@+id/action_orderSelectPaymentAndAddress_to_addressList"
             app:destination="@id/addressList"
             app:popUpTo="@id/orderSelectPaymentAndAddress" />
+        <action
+            android:id="@+id/action_orderSelectPaymentAndAddress_to_confirmationFragment"
+            app:destination="@id/confirmationFragment"
+            app:popUpTo="@id/orderSelectPaymentAndAddress" />
     </fragment>
     <fragment
         android:id="@+id/addressList"
@@ -68,4 +72,9 @@
         android:name="com.axelfernandez.deliverylavalle.ui.address.AddressFragment"
         android:label="address_fragment"
         tools:layout="@layout/address_fragment" />
+    <fragment
+        android:id="@+id/confirmationFragment"
+        android:name="com.axelfernandez.deliverylavalle.ui.confirmation.ConfirmationFragment"
+        android:label="confirmation_fragment"
+        tools:layout="@layout/confirmation_fragment" />
 </navigation>
