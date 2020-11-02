@@ -51,11 +51,17 @@ class CellPhoneFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CellPhoneViewModel::class.java)
         val user = viewModel.getUserData(v.context)
+        val arguments = arguments?:return
+        val fromSettings = arguments.getBoolean(getString(R.string.from_settings),false)
         v.app_bar_1.text = "Bienvenido "
+        v.app_bar_2.text = "%s %s".format(user.givenName,user.familyName)
+        if (fromSettings){
+            v.app_bar_1.text = "Actualiza "
+            v.app_bar_2.text = "tu numero"
+        }
         must_redirect = false
         val field :EditText = v.findViewById(R.id.cellphone_field)
         v.tilo_cellphone.helperText= getString(R.string.required)
-        v.app_bar_2.text = "%s %s".format(user.givenName,user.familyName)
         v.phone_email.text = "Email: %s".format(user.email)
         v.phone_name.text = "Nombre: %s".format(user.givenName)
         v.phone_last_name.text = "Apellido: %s".format(user.familyName)
@@ -85,7 +91,11 @@ class CellPhoneFragment : Fragment() {
             if(it != null){
                 if(must_redirect) {
                     ViewUtil.setSnackBar(v, R.color.orange, "Teléfono Guardado Correctamente")
-                    v.findNavController().navigate(R.id.action_cellPhoneFragment_to_addressFragment)
+                    if (fromSettings){
+                       v.findNavController().popBackStack()
+                    }else{
+                        v.findNavController().navigate(R.id.action_cellPhoneFragment_to_addressFragment)
+                    }
                 }
             }else{
                 ViewUtil.setSnackBar(v,R.color.red,"Ops! Hubo un problema, intenta luego nuevamente")

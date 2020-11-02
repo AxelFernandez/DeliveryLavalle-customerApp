@@ -79,6 +79,11 @@ class LoginUtils {
             editor.apply()
 
         }
+        fun removeUserData(context: Context){
+            var editor :SharedPreferences.Editor = context.getSharedPreferences("userSession", Context.MODE_PRIVATE).edit()
+            editor.clear().apply()
+
+        }
     }
 }
 

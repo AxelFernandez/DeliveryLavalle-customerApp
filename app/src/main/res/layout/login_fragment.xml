@@ -56,6 +56,13 @@
         android:padding="8dp"
         android:layout_gravity="center"
         />
+
+    <TextView
+        android:id="@+id/terms_and_conditions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/terms_and_conditions" />
     <ProgressBar
         android:id="@+id/login_progress_bar"
         android:visibility="gone"

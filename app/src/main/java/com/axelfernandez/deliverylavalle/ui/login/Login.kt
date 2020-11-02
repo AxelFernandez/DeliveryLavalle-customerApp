@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -57,6 +58,8 @@ class Login : Fragment() {
         v.google_button_sigin.setOnClickListener{
             signIn()
         }
+        v.terms_and_conditions.movementMethod = LinkMovementMethod.getInstance();
+
 
 
         return v

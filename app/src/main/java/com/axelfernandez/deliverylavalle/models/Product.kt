@@ -26,6 +26,7 @@ data class ProductCategory(
 )
 @Parcelize
 data class ProductDetail(
+    val id :String,
     val quantity: String,
     val description: String,
     val subtotal: String

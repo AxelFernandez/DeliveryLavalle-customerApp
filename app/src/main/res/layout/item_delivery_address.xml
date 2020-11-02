@@ -42,6 +42,7 @@
                 tools:text="Referencia: La unica casa en toda la calle" />
         </LinearLayout>
         <FrameLayout
+            android:id="@+id/frame_arrow"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent">

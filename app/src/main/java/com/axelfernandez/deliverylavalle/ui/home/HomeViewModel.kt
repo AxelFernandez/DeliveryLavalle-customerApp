@@ -3,9 +3,11 @@ package com.axelfernandez.deliverylavalle.ui.home
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.api.Api
 import com.axelfernandez.deliverylavalle.api.RetrofitFactory
 import com.axelfernandez.deliverylavalle.models.Company
@@ -19,10 +21,12 @@ import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 import kotlin.math.log
 
@@ -70,7 +74,7 @@ class HomeViewModel : ViewModel() {
 
     }
 
-    fun getLocationAndGetCompany(activity: Activity,token: String, category : String?){
+    fun getLocationAndGetCompany(activity: Activity,token: String, category : String?,v : View){
         var fusedLocationClient : FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             var location = Location(location.latitude.toString(),location.longitude.toString(), category)
@@ -80,6 +84,8 @@ class HomeViewModel : ViewModel() {
         }.addOnFailureListener {
             Log.e("LOCATION", it.message!!)
             ViewUtil.checkPermission(context = activity);
+            ViewUtil.setSnackBar(v, R.color.orange,"No hay Permisos para acceder a la Ubicacion, revisalos!")
+            return@addOnFailureListener
         }
 
     }

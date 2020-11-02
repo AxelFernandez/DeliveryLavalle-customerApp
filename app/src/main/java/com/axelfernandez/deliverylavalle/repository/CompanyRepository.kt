@@ -16,6 +16,7 @@ class CompanyRepository (
         val company = MutableLiveData<List<Company>>()
         val companyDetail = MutableLiveData<Company>()
         val paymentMethods = MutableLiveData<PaymentMethods>()
+        val deliveryMethods = MutableLiveData<PaymentMethods>()
 
 
         fun getCategory(token :String): MutableLiveData<List<CompanyCategoryResponse>> {
@@ -25,7 +26,6 @@ class CompanyRepository (
                 }
                 override fun onResponse(call: Call<List<CompanyCategoryResponse>>, response: Response<List<CompanyCategoryResponse>>) {
                     data.value = response.body()
-
                 }
             })
             return data
@@ -90,4 +90,20 @@ class CompanyRepository (
         return paymentMethods
     }
 
+    fun getDeliveryMethodByCompanyId(token : String,id : String): MutableLiveData<PaymentMethods>{
+        api.getDeliveryMethodByCompanyId("Bearer %s".format(token),id).enqueue(object : Callback<PaymentMethods>{
+            override fun onFailure(call: Call<PaymentMethods>, t: Throwable) {
+                deliveryMethods.value = null
+            }
+
+            override fun onResponse(call: Call<PaymentMethods>, response: Response<PaymentMethods>) {
+                deliveryMethods.value = response.body()
+            }
+        })
+        return deliveryMethods
+    }
+
+    fun returnDeliveryMethod(): MutableLiveData<PaymentMethods> {
+        return deliveryMethods
+    }
 }

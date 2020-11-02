@@ -11,14 +11,11 @@ import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.axelfernandez.deliverylavalle.HomeActivity
 import com.axelfernandez.deliverylavalle.OrderActivity
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.adapters.CompanyAdapter
@@ -26,7 +23,6 @@ import com.axelfernandez.deliverylavalle.adapters.CompanyCategotyAdapter
 import com.axelfernandez.deliverylavalle.models.Company
 import com.axelfernandez.deliverylavalle.models.CompanyCategoryResponse
 import com.axelfernandez.deliverylavalle.models.User
-import com.axelfernandez.deliverylavalle.ui.OrderSelectPayment.OrderSelectPaymentAndAddress
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.squareup.picasso.Picasso
@@ -34,7 +30,6 @@ import kotlinx.android.synthetic.main.app_bar.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.no_company_found.view.*
 import kotlinx.android.synthetic.main.shimer_company.view.*
-import java.time.Duration
 import java.util.concurrent.atomic.AtomicBoolean
 
 
@@ -73,6 +68,7 @@ class HomeFragment : Fragment() {
         val bannerSubtitle: TextView = root.findViewById(R.id.banner_subtitle)
         val bannerImage: ImageView = root.findViewById(R.id.banner_image)
         val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
+        val view = view?:return
         categoryRv = root.findViewById(R.id.company_category_rv) as RecyclerView
         companyRv = root.findViewById(R.id.company_rv) as RecyclerView
         root.app_bar_1.text = "Comercios "
@@ -94,7 +90,7 @@ class HomeFragment : Fragment() {
         })
 
         homeViewModel.getCategoty(user.token)
-        homeViewModel.getLocationAndGetCompany(requireActivity(), user.token, null)
+        homeViewModel.getLocationAndGetCompany(requireActivity(), user.token, null,view)
         accessToken = user.token
 
         homeViewModel.returnCompany().observe(viewLifecycleOwner, Observer{
@@ -128,11 +124,11 @@ class HomeFragment : Fragment() {
     }
     fun onClickActionItemList(item: CompanyCategoryResponse) {
         root.text_view_feed_company.text = getString(R.string.company_near_category).format(item.description)
-        homeViewModel.getLocationAndGetCompany(requireActivity(), accessToken, item.description)
+        homeViewModel.getLocationAndGetCompany(requireActivity(), accessToken, item.description,view?:return)
         root.shimmer_company.visibility = View.VISIBLE
         companyRv.visibility = View.GONE
         root.no_company_found_feed.visibility = GONE
-        companyAdapter.notifyDataSetChanged()
+        //companyAdapter.notifyDataSetChanged()
 
     }
     fun companyOnClickListener(item: Company){

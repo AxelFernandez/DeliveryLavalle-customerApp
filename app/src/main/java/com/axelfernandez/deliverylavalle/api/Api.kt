@@ -42,6 +42,9 @@ interface Api {
     @POST("payment_method")
     fun getPaymentMethodByCompanyId(@Header("Authorization") token: String, @Body company: String):Call<PaymentMethods>
 
+    @POST("delivery_method")
+    fun getDeliveryMethodByCompanyId(@Header("Authorization") token: String, @Body company: String):Call<PaymentMethods>
+
     //Detail Product
     @POST("product")
     fun getProductByCompanyId(@Header("Authorization") token: String, @Body id: ProductRequest):Call<List<Product>>
@@ -51,5 +54,20 @@ interface Api {
 
     @POST("company_detail")
     fun getCompanyById(@Header("Authorization") token: String, @Body id: String):Call<Company>
+
+
+    //Orders
+    @POST("order")
+    fun postOrder(@Header("Authorization") token: String, @Body order: OrderPost):Call<OrderResponse>
+
+    @GET("order")
+    fun getOrders(@Header("Authorization") token: String):Call<List<Order>>
+
+    @POST("order_by_id")
+    fun getOrdersById(@Header("Authorization") token: String, @Body orderId: String):Call<Order>
+
+    @POST("meli_link")
+    fun getMeLiLink(@Header("Authorization") token: String, @Body orderId: String):Call<MeliLink>
+
 
 }

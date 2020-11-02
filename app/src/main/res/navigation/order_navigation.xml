@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/orderSelectPaymentAndAddress"
-        android:name="com.axelfernandez.deliverylavalle.ui.OrderSelectPayment.OrderSelectPaymentAndAddress"
+        android:name="com.axelfernandez.deliverylavalle.ui.orderSelectPayment.OrderSelectPaymentAndAddress"
         android:label="order_select_payment_and_adress_fragment"
         tools:layout="@layout/order_select_payment_and_adress_fragment" >
         <action
@@ -76,5 +76,16 @@
         android:id="@+id/confirmationFragment"
         android:name="com.axelfernandez.deliverylavalle.ui.confirmation.ConfirmationFragment"
         android:label="confirmation_fragment"
-        tools:layout="@layout/confirmation_fragment" />
+        tools:layout="@layout/confirmation_fragment" >
+        <action
+            android:id="@+id/action_confirmationFragment_to_orderDecidedFragment"
+            app:destination="@id/orderDecidedFragment"
+            app:popUpTo="@id/mobile_navigation"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderDecidedFragment"
+        android:name="com.axelfernandez.deliverylavalle.ui.orderDecided.OrderDecidedFragment"
+        android:label="order_decided_fragment"
+        tools:layout="@layout/order_decided_fragment" />
 </navigation>

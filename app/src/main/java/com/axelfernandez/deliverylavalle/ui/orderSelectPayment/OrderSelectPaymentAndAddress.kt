@@ -1,4 +1,4 @@
-package com.axelfernandez.deliverylavalle.ui.OrderSelectPayment
+package com.axelfernandez.deliverylavalle.ui.orderSelectPayment
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -6,11 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.Toolbar
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -20,16 +17,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.adapters.AddressAdapter
 import com.axelfernandez.deliverylavalle.models.Address
+import com.axelfernandez.deliverylavalle.models.Company
 import com.axelfernandez.deliverylavalle.models.PaymentMethods
 import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.ui.address.AddressViewModel
 import com.axelfernandez.deliverylavalle.ui.companyDetail.DetailViewModel
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.app_bar.view.*
+import kotlinx.android.synthetic.main.banner_local_delivery.view.*
 import kotlinx.android.synthetic.main.banner_phishing.view.*
-import kotlinx.android.synthetic.main.item_delivery_address.view.*
 import kotlinx.android.synthetic.main.order_select_payment_and_adress_fragment.*
 import kotlinx.android.synthetic.main.order_select_payment_and_adress_fragment.view.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -39,15 +35,18 @@ class OrderSelectPaymentAndAddress : Fragment() {
     companion object {
         fun newInstance() =
             OrderSelectPaymentAndAddress()
-        var atomicBoolean = AtomicBoolean(false)
 
     }
+    private var atomicBoolean = AtomicBoolean(false)
+    private var atomicDeliveryBoolean = AtomicBoolean(false)
     private lateinit var methodsRv: RecyclerView
     private lateinit var paymentMethods: PaymentMethods
     private lateinit var viewModel: AddressViewModel
-    private lateinit var viewModelCompany: OrderSelectPaymentAndAddressViewModel
+    private lateinit var viewModelMethods: OrderSelectPaymentAndAddressViewModel
+    private lateinit var viewModelCompany: DetailViewModel
     private lateinit var v: View
     private lateinit var listOfAddress: ArrayList<Address>
+    private lateinit var company: Company
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,8 +58,9 @@ class OrderSelectPaymentAndAddress : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity?:return).get(AddressViewModel::class.java)
-        viewModelCompany = ViewModelProviders.of(activity?:return).get(OrderSelectPaymentAndAddressViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(AddressViewModel::class.java)
+        viewModelMethods = ViewModelProviders.of(this).get(OrderSelectPaymentAndAddressViewModel::class.java)
+        viewModelCompany = ViewModelProviders.of(this).get(DetailViewModel::class.java)
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
@@ -69,6 +69,7 @@ class OrderSelectPaymentAndAddress : Fragment() {
         val bundle = arguments?:return
         val companyId = bundle.getString(getString(R.string.arguments_company))?:return
         val address = LoginUtils.getDefaultAddress(requireContext())
+
         methodsRv = v.findViewById(R.id.payment_and_delivery_rv) as RecyclerView
         methodsRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
         listOfAddress = ArrayList()
@@ -76,10 +77,36 @@ class OrderSelectPaymentAndAddress : Fragment() {
         methodsRv.adapter = AddressAdapter(listOfAddress,requireContext(),{onItemClickListener(it)}, {{}},false)
 
         if (atomicBoolean.compareAndSet(false, true)){
-            viewModelCompany.solicitPaymentMethod(user.token, companyId)
+            viewModelMethods.solicitPaymentMethod(user.token, companyId)
+        }
+        if (atomicDeliveryBoolean.compareAndSet(false, true)){
+            viewModelMethods.solicitDeliveryMethod(user.token, companyId)
+        }
+        viewModelCompany.returnCompany().observe(viewLifecycleOwner, Observer {
+            v.banner_local.local_delivery_address.text = it.address
+            v.banner_local.local_delivery_phone.text = it.phone
+        })
+
+        v.retry_in_local_switch.setOnCheckedChangeListener{_, i->
+            v.banner_local.isVisible = i
+            v.payment_and_delivery_rv.isVisible = !i
+
         }
 
-        viewModelCompany.returnPaymentMethod().observe(viewLifecycleOwner, Observer {
+        viewModelMethods.returnDeliveryMethod().observe(viewLifecycleOwner, Observer {
+            viewModelCompany.getCompanyById(user.token,companyId)
+            when (it.methods.size){
+                1 ->{
+                    if(it.methods.first() == "Retiro en el Local"){
+                        v.banner_local.isVisible = true
+                        v.payment_and_delivery_rv.isVisible = false
+                    }else{
+                        v.retry_in_local_switch.isVisible = false
+                    }
+                }
+            }
+        })
+        viewModelMethods.returnPaymentMethod().observe(viewLifecycleOwner, Observer {
             paymentMethods = it
             it.methods.forEachIndexed(){index,item->
                 val radioButton1 = RadioButton(requireContext())
@@ -99,8 +126,13 @@ class OrderSelectPaymentAndAddress : Fragment() {
                 ViewUtil.setSnackBar(v,R.color.red,"Debes seleccionar un metodo de pago")
                 return@setOnClickListener
             }
+            if(LoginUtils.getDefaultAddress(requireContext()).id == "" && !v.retry_in_local_switch.isChecked){
+                ViewUtil.setSnackBar(v,R.color.red,"Debes seleccionar una direccion de entrega")
+                return@setOnClickListener
+            }
             val arguments = arguments?:return@setOnClickListener
             arguments.putParcelable(getString(R.string.arguments_address),LoginUtils.getDefaultAddress(requireContext()))
+            arguments.putBoolean(getString(R.string.argument_retry_in_local),v.retry_in_local_switch.isChecked)
             arguments.putString(getString(R.string.arguments_method),paymentMethods.methods[radioGroup.checkedRadioButtonId])
             findNavController().navigate(R.id.action_orderSelectPaymentAndAddress_to_confirmationFragment, arguments)
 
@@ -112,4 +144,5 @@ class OrderSelectPaymentAndAddress : Fragment() {
         bundle.putParcelable("arguments_address", address)
         v.findNavController().navigate(R.id.action_orderSelectPaymentAndAddress_to_addressList, bundle)
     }
+
 }

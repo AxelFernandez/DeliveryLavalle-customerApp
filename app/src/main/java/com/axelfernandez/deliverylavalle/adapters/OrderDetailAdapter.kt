@@ -40,7 +40,7 @@ class OrderDetailAdapter(
         fun bind(item : ProductDetail, context: Context){
             description.text = item.description
             quantity.text = item.quantity
-            subtotal.text = item.subtotal
+            subtotal.text = "$%s".format(item.subtotal)
         }
     }
 

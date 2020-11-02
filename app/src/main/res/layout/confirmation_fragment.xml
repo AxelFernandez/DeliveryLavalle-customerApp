@@ -7,7 +7,7 @@
     tools:context=".ui.confirmation.ConfirmationFragment">
 
     <include layout="@layout/app_bar"/>
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_marginTop="?actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
@@ -46,12 +46,15 @@
                 android:text="@string/address_delivery"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/payment_and_delivery_rv"
+                android:id="@+id/confirmation_address_rv"
                 android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <include layout="@layout/banner_phishing"/>
+            <include
+                android:id="@+id/confirmation_banner_local"
+                android:visibility="gone"
+                layout="@layout/banner_local_delivery"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -62,9 +65,13 @@
                 android:text="@string/payment_method"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="24sp" />
-
+            <include
+                android:id="@+id/banner_phishing"
+                layout="@layout/banner_phishing"/>
             <TextView
+                android:id="@+id/confirmation_method"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
@@ -108,7 +115,7 @@
                     android:text="@string/total"
                     android:layout_width="0dp" />
                 <TextView
-                    android:id="@+id/order_detail_total"
+                    android:id="@+id/confirmation_total"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:textAlignment="textEnd"
@@ -122,14 +129,14 @@
             </LinearLayout>
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
     <Button
         android:id="@+id/order_confirmation_button"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/continue_order"
+        android:text="@string/confirm_order"
         android:textColor="@color/colorPrimary"
         android:background="@color/green"/>
 </FrameLayout>

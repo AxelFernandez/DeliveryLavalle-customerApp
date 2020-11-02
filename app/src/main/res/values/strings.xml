@@ -59,6 +59,7 @@
     <string name="quantity">Cantidad</string>
     <string name="category_of">Categorias de %s</string>
     <string name="arguments_orders">orders</string>
+    <string name="arguments_orders_grouped">ordersGrouped</string>
     <string name="arguments_company">company</string>
     <string name="arguments_address">address</string>
     <string name="arguments_method">method</string>
@@ -66,6 +67,7 @@
     <string name="order_detail_price">$%s</string>
     <string name="total">Total:</string>
     <string name="continue_order">Continuar Pedido</string>
+    <string name="confirm_order">Confirmar Pedido</string>
     <string name="description_order_empty">Ops! Al parecer tu pedido está vacio</string>
     <string name="description_order_empty_subtitle">¡Vuelve y ordena algo!</string>
     <string name="arguments_total">Total</string>
@@ -81,4 +83,24 @@
     <string name="confirm_title">Confirma tu pedido</string>
     <string name="confirm_subtitle">Revisalo bien!</string>
     <string name="products">Productos</string>
+    <string name="mercado_pago">Mercado Pago</string>
+    <string name="phishing_text_2">Te Avisaremos cuando el link de Mercado Pago esté disponible para pagar, te recomendamos no pagar hasta que tengas el producto en tus manos</string>
+    <string name="arguement_order_response">argument_order_response</string>
+    <string name="local_delivery_text">Retira tu producto en la siguiente direccion</string>
+    <string name="retry_delivery_local">Prefiero retirarlo yo mismo en el local</string>
+    <string name="argument_retry_in_local">retryInLocal</string>
+    <string name="order_listing_id">Orden #%s</string>
+    <string name="state_order_listing">Estado de tu Pedido: %s</string>
+    <string name="date_create_order_listing">Fecha del Pedido: %s</string>
+    <string name="order_detail">Detalles de tu pedido</string>
+    <string name="meli_link_available">Ya esta disponible el Link de pago, para evitar estafas te recomendamos que abras el link y pagues una vez que el vendedor este en tu domicilio o tengas el producto en tus manos</string>
+    <string name="meli_link_not_available">El vendedor aun no ha enviado el link de pago, te avisaremos cuando esté disponible</string>
+    <string name="meli_link_not_found">Al parecer no es un link valido, comunicate con el vendedor para informarle.</string>
+    <string name="order_number">Orden #</string>
+    <string name="order_listing_app_bar_1">\Pedidos \</string>
+    <string name="order_listing_app_bar_2">Actuales</string>
+    <string name="from_settings">fromSettings</string>
+    <string name="log_out">Cerrar Sesion</string>
+    <string name="terms_and_conditions">Continuando, Acepto los <a href="http://www.deliverylavalle.com.ar/terminosycondiciones">Terminos y condiciones</a></string>
+
 </resources>

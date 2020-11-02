@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -17,7 +18,8 @@ class AddressAdapter(
     var context: Context,
     val itemClickListener: (Address) -> Unit,
     val deleteItemClickListener: (Address) -> Unit,
-    val showDelete : Boolean = true
+    val showDelete : Boolean = true,
+    val showArrow : Boolean = true
 
 ) : RecyclerView.Adapter<AddressAdapter.AddressViewHolder>() {
 
@@ -34,7 +36,7 @@ class AddressAdapter(
 
     override fun onBindViewHolder(holder: AddressViewHolder, position: Int) {
         val item : Address = address[position]
-        holder.bind(item,context, itemClickListener,deleteItemClickListener, showDelete)
+        holder.bind(item,context, itemClickListener,deleteItemClickListener, showDelete, showArrow)
     }
     class AddressViewHolder (itemView : View): RecyclerView.ViewHolder(itemView){
         var streetAndNumber : TextView = itemView.findViewById(R.id.item_delivery_address_street_number) as TextView
@@ -43,22 +45,23 @@ class AddressAdapter(
         var reference : TextView = itemView.findViewById(R.id.item_delivery_address_reference) as TextView
         var frameLayout : LinearLayout =  itemView.findViewById(R.id.item_delivery_address_layout) as LinearLayout
         var delete : ImageView =  itemView.findViewById(R.id.item_delivery_address_delete) as ImageView
+        var arrowFrame : FrameLayout =  itemView.findViewById(R.id.frame_arrow) as FrameLayout
 
 
 
         fun bind(address : Address, context: Context,
                  itemClickListener: (Address) -> Unit,
                  deleteItemClickListener: (Address) -> Unit,
-                 showDelete: Boolean
+                 showDelete: Boolean,
+                 showArrow: Boolean
         ){
             streetAndNumber.text = context.getString(R.string.item_street_and_number, address.street, address.number)
             floor.text = address.floor
             district.text = context.getString(R.string.item_district, address.district)
             reference.text = context.getString(R.string.item_reference, address.reference)
             frameLayout.setOnClickListener { itemClickListener(address) }
-            if(!showDelete){
-                delete.isVisible = false
-            }
+            delete.isVisible = showDelete
+            arrowFrame.isVisible = showArrow
             delete.setOnClickListener { deleteItemClickListener(address) }
 
         }

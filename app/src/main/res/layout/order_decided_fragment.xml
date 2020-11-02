@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.orderDecided.OrderDecidedFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/decided_order_background"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            tools:background="@color/green" />
+
+            <ImageView
+                android:id="@+id/decided_order_reaction"
+                android:layout_width="80dp"
+                android:layout_marginTop="80dp"
+                android:layout_height="80dp"
+                tools:src="@drawable/goodorder"/>
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="120dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/circle_withe"/>
+        <ImageView
+            android:id="@+id/decided_order_icon"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="45dp"
+            android:layout_marginTop="135dp"
+            android:layout_height="45dp"
+            tools:src="@drawable/ic_baseline_check_24"/>
+    </FrameLayout>
+
+        <TextView
+            android:id="@+id/decided_order_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:fontFamily="sans-serif-black"
+            android:textColor="@color/colorPrimaryDark"
+            tools:text="Mensaje de Confirmacion o de Negacion"
+            />
+
+        <TextView
+            android:id="@+id/decided_order_subtitle"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-black"
+            tools:text="Podras ver tu pedido en el Menu Principal"/>
+        <LinearLayout
+            android:id="@+id/decided_order_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_bookmark_24"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Id de Pedido"/>
+            <TextView
+                android:id="@+id/decided_order_id_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                tools:text="#10002"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_shopping_basket_24"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Estado"/>
+            <TextView
+                android:id="@+id/decided_order_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                tools:text="Pendiente"/>
+        </LinearLayout>
+    </LinearLayout>
+    <Button
+        android:id="@+id/decided_return_main_menu"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Ir al Menu Principal"
+        android:textColor="@color/colorPrimary"
+        android:background="@color/green"/>
+</FrameLayout>

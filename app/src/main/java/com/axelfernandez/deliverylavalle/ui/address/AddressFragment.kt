@@ -93,6 +93,8 @@ class AddressFragment : Fragment() {
             }.addOnFailureListener {
                 Log.e("LOCATION", it.message!!)
                 ViewUtil.checkPermission(context = requireActivity());
+                ViewUtil.setSnackBar(v,R.color.orange,"Necesitamos tu ubicacion para poder ofrecerte emprendedores cerca")
+
             }
         })
         viewModel.notifyPost().observe(viewLifecycleOwner, Observer {
@@ -141,7 +143,7 @@ class AddressFragment : Fragment() {
             floor = v.floor.text.toString(),
             reference = v.reference.text.toString(),
             location = phoneLocation,
-            id = null
+            id = ""
         )
         val user = LoginUtils.getUserFromSharedPreferences(requireContext())
         viewModel.postAddress(address,user.token)

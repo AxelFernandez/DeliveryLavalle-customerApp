@@ -69,8 +69,9 @@ class OrderDetailFragment : Fragment() {
                     subtotal += product.price.toInt()
                 }
                 var productDetail = ProductDetail(
+                    id = item.value.first().id,
                     description = item.key,
-                    quantity = getString(R.string.order_detail_quantity, item.value.size.toString()),
+                    quantity = item.value.size.toString(),
                     subtotal = subtotal.toString()
                 )
                 total += subtotal
@@ -92,11 +93,11 @@ class OrderDetailFragment : Fragment() {
             Picasso.with(context).load(it.photo).into(v.order_detail_image_company)
         })
         v.order_detail_continue_button.setOnClickListener {
-            val bundleToNav = Bundle()
-            bundleToNav.putParcelableArrayList(getString(R.string.arguments_orders), productsDetails)
+            val bundleToNav = bundle
+            bundleToNav.putParcelableArrayList(getString(R.string.arguments_orders_grouped), productsDetails)
             bundleToNav.putInt(getString(R.string.arguments_total), total)
             bundleToNav.putString(getString(R.string.arguments_company), idCompany)
-            findNavController().navigate(R.id.orderSelectPaymentAndAddress, bundle)
+            findNavController().navigate(R.id.orderSelectPaymentAndAddress, bundleToNav)
         }
     }
 
