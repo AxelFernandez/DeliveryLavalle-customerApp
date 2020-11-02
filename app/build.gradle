@@ -14,6 +14,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        buildConfigField "String", "hostname", '"deliverylavalle.com.ar"'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -22,6 +23,16 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "hostname", '"deliverylavalle.com.ar"'
+
+        }
+        sandBox{
+            initWith debug
+            buildConfigField "String", "hostname", '"delivery-lavalle-sandbox.herokuapp.com"'
+        }
+        local{
+            initWith debug
+            buildConfigField "String", "hostname", '"192.168.0.7:8080"'
         }
     }
     compileOptions {

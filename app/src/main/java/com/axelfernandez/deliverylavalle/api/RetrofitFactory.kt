@@ -1,5 +1,6 @@
 package com.axelfernandez.deliverylavalle.api
 
+import com.axelfernandez.deliverylavalle.BuildConfig
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -9,7 +10,7 @@ object RetrofitFactory {
     private val client = OkHttpClient.Builder().build()
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.0.7:8080/api/") // change this IP for testing by your actual machine IP
+        .baseUrl("http://"+ BuildConfig.hostname+"/api/") // change this IP for testing in Gradle files
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()
