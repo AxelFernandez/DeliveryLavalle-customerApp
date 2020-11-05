@@ -24,6 +24,7 @@ import com.axelfernandez.deliverylavalle.models.Company
 import com.axelfernandez.deliverylavalle.models.CompanyCategoryResponse
 import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
+import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.app_bar.view.*
@@ -94,6 +95,10 @@ class HomeFragment : Fragment() {
         accessToken = user.token
 
         homeViewModel.returnCompany().observe(viewLifecycleOwner, Observer{
+            if(it == null){
+                ViewUtil.setSnackBar(root, R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             val animation: LayoutAnimationController =
                 AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_fall_down)
             companyRv.layoutAnimation = animation
@@ -113,6 +118,10 @@ class HomeFragment : Fragment() {
         })
 
         homeViewModel.returnCategory().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(root,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             categoryRv.setHasFixedSize(true)
             categoryRv.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
             categoriesAdapter = CompanyCategotyAdapter(it,requireContext()) {onClickActionItemList(it)}

@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import com.axelfernandez.deliverylavalle.*
 import com.axelfernandez.deliverylavalle.api.Api
 import com.axelfernandez.deliverylavalle.api.RetrofitFactory
 import com.axelfernandez.deliverylavalle.models.UserResponse
+import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -25,9 +27,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar.view.*
 import kotlinx.android.synthetic.main.login_fragment.*
@@ -98,15 +102,29 @@ class Login : Fragment() {
                         ) {
                             val response : UserResponse? = response.body()
 
-                            val editor = activity?.getSharedPreferences("userSession", Context.MODE_PRIVATE)?.edit()
-                            editor?.putString(getString(R.string.email),account.email)
-                            editor?.putString(getString(R.string.given_name),account.givenName)
-                            editor?.putString(getString(R.string.family_name),account.familyName)
-                            editor?.putString(getString(R.string.client_id),response?.clientId)
-                            editor?.putString(getString(R.string.token),response?.access_token)
-                            editor?.putString(getString(R.string.picture),account.photoUrl.toString().split('=').get(0))
-                            editor?.apply()
+                            val editor = activity?.getSharedPreferences("userSession", Context.MODE_PRIVATE)?.edit()?:return
+                            editor.putString(getString(R.string.email),account.email)
+                            editor.putString(getString(R.string.given_name),account.givenName)
+                            editor.putString(getString(R.string.family_name),account.familyName)
+                            editor.putString(getString(R.string.client_id),response?.clientId)
+                            editor.putString(getString(R.string.token),response?.access_token)
+                            editor.putString(getString(R.string.picture),account.photoUrl.toString().split('=').get(0))
+                            editor.apply()
 
+                            FirebaseMessaging.getInstance().token.addOnCompleteListener(
+                                OnCompleteListener { task ->
+                                    if (!task.isSuccessful) {
+                                        Log.w("TAG", "Fetching FCM registration token failed", task.exception)
+                                        return@OnCompleteListener
+                                    }
+                                    val token = task.result
+                                    editor.putString("token_firebase",token).apply()
+
+                                    val user = LoginUtils.getUserFromSharedPreferences(requireContext())
+                                    viewModel.sendFirebaseToken(user.token,token)
+
+                                    Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
+                            })
                             var bundle = bundleOf("clientId" to response?.clientId)
                             if(response?.is_new!! || response.completeRegistry){
                                 view!!.findNavController().navigate(R.id.action_login_to_cellPhoneFragment,bundle)

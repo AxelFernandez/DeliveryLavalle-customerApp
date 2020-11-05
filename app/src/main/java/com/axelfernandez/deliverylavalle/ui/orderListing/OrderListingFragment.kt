@@ -19,6 +19,7 @@ import com.axelfernandez.deliverylavalle.adapters.AddressAdapter
 import com.axelfernandez.deliverylavalle.adapters.OrderListingAdapter
 import com.axelfernandez.deliverylavalle.models.Order
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
+import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.kofigyan.stateprogressbar.StateProgressBar
 import kotlinx.android.synthetic.main.app_bar.view.*
@@ -50,6 +51,10 @@ class OrderListingFragment : Fragment() {
         orderListingViewModel.getOrders(user.token)
 
         orderListingViewModel.returnOrders().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             loadingOrders.stopShimmer()
             loadingOrders.isVisible = false
             val ordersInCurse = v.findViewById(R.id.order_listing_rv_in_course) as RecyclerView

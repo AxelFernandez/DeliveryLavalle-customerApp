@@ -102,5 +102,7 @@
     <string name="from_settings">fromSettings</string>
     <string name="log_out">Cerrar Sesion</string>
     <string name="terms_and_conditions">Continuando, Acepto los <a href="http://www.deliverylavalle.com.ar/terminosycondiciones">Terminos y condiciones</a></string>
+    <string name="no_conection">No hay conexion a internet, Vuelve a intentarlo luego</string>
+
 
 </resources>

@@ -18,7 +18,9 @@ import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.repository.LoginRepository
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebase.remoteconfig.ktx.remoteConfig
@@ -107,6 +109,10 @@ class Splash : AppCompatActivity() {
                 if(is_login_ready){
                     login.getToken(LoginUtils.getUserFromSharedPreferences(this))
                     login.returnData().observe(this, Observer {
+                        if(it == null){
+                            Toast.makeText(this,"No hay conexion a internet, intentalo de nuevo mas tarde",Toast.LENGTH_SHORT).show()
+                        }
+                        val it = it?:return@Observer
                         val user : User = LoginUtils.getUserFromSharedPreferences(this)
                         user.token = it.access_token
                         LoginUtils.putUserToSharedPreferences(this,user)

@@ -23,6 +23,7 @@ import com.axelfernandez.deliverylavalle.ui.address.AddressViewModel
 import com.axelfernandez.deliverylavalle.ui.companyDetail.DetailViewModel
 import com.axelfernandez.deliverylavalle.ui.login.Login
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
+import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.banner_local_delivery.view.*
 import kotlinx.android.synthetic.main.banner_phishing.view.*
@@ -64,6 +65,10 @@ class ConfirmationFragment : Fragment() {
         //CompanyId
         viewModelCompany.getCompanyById(user.token,companyId)
         viewModelCompany.returnCompany().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             v.order_detail_company_title.text = it.name
             v.confirmation_banner_local.local_delivery_address.text = it.address
             v.confirmation_banner_local.local_delivery_phone.text = it.phone
@@ -113,7 +118,10 @@ class ConfirmationFragment : Fragment() {
         }
 
         viewModel.returnOrders().observe(viewLifecycleOwner, Observer {
-
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             arguments.putParcelable(getString(R.string.arguement_order_response), it)
             findNavController().navigate(R.id.action_confirmationFragment_to_orderDecidedFragment, arguments)
 

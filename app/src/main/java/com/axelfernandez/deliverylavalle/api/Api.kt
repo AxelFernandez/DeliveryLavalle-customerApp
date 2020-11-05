@@ -10,6 +10,10 @@ interface Api {
     @POST("google")
     fun loginWithGoogle(@Body userData: User):Call<UserResponse>
 
+    @POST("firebase_token")
+    fun sendFirebaseToken(@Body firebaseToken: String, @Header("Authorization") token: String):Call<ConfirmationObject>
+
+
 
     @GET("client")
     fun getClient(@Query("clientId") clientId:String):Call<User>

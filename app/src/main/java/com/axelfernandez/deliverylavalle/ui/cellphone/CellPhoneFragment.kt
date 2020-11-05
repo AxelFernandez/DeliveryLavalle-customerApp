@@ -22,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.app_bar.view.*
 import kotlinx.android.synthetic.main.cell_phone_fragment.view.*
+import kotlinx.android.synthetic.main.fragment_profile.view.*
 import javax.inject.Inject
 
 
@@ -83,7 +84,8 @@ class CellPhoneFragment : Fragment() {
                 }
 
                 override fun onError() {
-                    TODO("Not yet implemented")
+                    v.phone_image.setImageDrawable(resources.getDrawable(R.drawable.no_profile))
+                    v.photo_progress_bar.visibility = GONE
                 }
 
             })

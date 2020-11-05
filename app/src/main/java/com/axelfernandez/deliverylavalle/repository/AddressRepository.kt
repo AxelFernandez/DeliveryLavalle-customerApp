@@ -23,6 +23,7 @@ class AddressRepository(
         api.postAddress(address = address, token = "Bearer %s".format(token)).enqueue(object : Callback<AddressResponse> {
             override fun onFailure(call: Call<AddressResponse>, t: Throwable) {
                 addressResponseLiveData.value = null
+                return
             }
             override fun onResponse(call: Call<AddressResponse>, response: Response<AddressResponse>) {
                 if (response.code() ==200) {
@@ -41,6 +42,8 @@ class AddressRepository(
         api.getAddress("Bearer %s".format(token)).enqueue(object : Callback<List<Address>> {
             override fun onFailure(call: Call<List<Address>>, t: Throwable) {
                 addressLiveData.value = null
+                return
+
             }
             override fun onResponse(call: Call<List<Address>>, response: Response<List<Address>>) {
                 if (response.code() ==200){
@@ -60,6 +63,8 @@ class AddressRepository(
         api.postAddressDelete(address, "Bearer %s".format(token)).enqueue(object : Callback<String> {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 addressDeleted.value = null
+                return
+
             }
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.code() ==200){

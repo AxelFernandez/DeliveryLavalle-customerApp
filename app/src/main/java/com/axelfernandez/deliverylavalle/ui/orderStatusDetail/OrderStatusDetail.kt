@@ -72,6 +72,10 @@ class OrderStatusDetail : Fragment() {
 
 
         viewModel.returnMeliLink().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             v.order_status_banner_info_2.isVisible = true
             if (it.isAvailable){
                 v.order_status_banner_info_2.banner_info_text.text= getString(R.string.meli_link_available)
@@ -89,6 +93,10 @@ class OrderStatusDetail : Fragment() {
             }
         })
         viewModel.returnOrders().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             val order = it
             val steps = viewModel.getStepName(order)
             stateProgressBar.setMaxStateNumber(viewModel.getSteps(steps.size))

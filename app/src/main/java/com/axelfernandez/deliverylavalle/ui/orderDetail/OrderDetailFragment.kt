@@ -20,6 +20,7 @@ import com.axelfernandez.deliverylavalle.models.Product
 import com.axelfernandez.deliverylavalle.models.ProductDetail
 import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
+import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.order_detail_company_item.view.*
 import kotlinx.android.synthetic.main.order_detail_fragment.view.*
@@ -63,6 +64,10 @@ class OrderDetailFragment : Fragment() {
 
         viewModel.getCompanyById(user.token,idCompany)
         viewModel.gropuped.observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             it.iterator().forEach {item ->
                 var subtotal :Int = 0
                 item.value.forEach { product ->
@@ -89,6 +94,10 @@ class OrderDetailFragment : Fragment() {
             productRv.adapter = OrderDetailAdapter(productsDetails,requireContext())
         })
         viewModel.returnCompany().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             v.order_detail_company_title.text = it.name
             Picasso.with(context).load(it.photo).into(v.order_detail_image_company)
         })

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import android.widget.Toolbar
 import androidx.appcompat.widget.ViewUtils
 import androidx.core.view.isVisible
@@ -58,6 +59,10 @@ class AddressList : Fragment() {
         token = user.token
 
         viewModel.notifyAddres().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             addresListRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
             addresListRv.adapter = AddressAdapter(it,requireContext(), {onItemClickListener(it)}, {deleteOnItemClickListener(it)})
             v.addres_list_progress_bar.isVisible = false
@@ -70,6 +75,10 @@ class AddressList : Fragment() {
         }
 
         viewModel.notifyCorrectDeleted().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             ViewUtil.setSnackBar(v,R.color.green,"Eliminado correctamente")
             viewModel.soliciteAddress(token)
         })

@@ -83,6 +83,10 @@ class OrderSelectPaymentAndAddress : Fragment() {
             viewModelMethods.solicitDeliveryMethod(user.token, companyId)
         }
         viewModelCompany.returnCompany().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             v.banner_local.local_delivery_address.text = it.address
             v.banner_local.local_delivery_phone.text = it.phone
         })
@@ -94,6 +98,10 @@ class OrderSelectPaymentAndAddress : Fragment() {
         }
 
         viewModelMethods.returnDeliveryMethod().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             viewModelCompany.getCompanyById(user.token,companyId)
             when (it.methods.size){
                 1 ->{
@@ -107,6 +115,10 @@ class OrderSelectPaymentAndAddress : Fragment() {
             }
         })
         viewModelMethods.returnPaymentMethod().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             paymentMethods = it
             it.methods.forEachIndexed(){index,item->
                 val radioButton1 = RadioButton(requireContext())

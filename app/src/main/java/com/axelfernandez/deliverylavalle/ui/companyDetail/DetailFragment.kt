@@ -22,6 +22,7 @@ import com.axelfernandez.deliverylavalle.models.ProductCategory
 import com.axelfernandez.deliverylavalle.models.ProductRequest
 import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
+import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.detail_fragment.*
 import kotlinx.android.synthetic.main.detail_fragment.view.*
@@ -70,6 +71,10 @@ class DetailFragment : Fragment() {
         viewModel.getProductByCompanyId(token,ProductRequest(idCompany,null))
         viewModel.getProductCategoryByCompanyId(token,idCompany)
         viewModel.returnCompany().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             v.text_view_company_name.text = it.name
             v.text_view_company_description.text = it.description
             v.text_view_product_of.text = getString(R.string.product_of).format(it.name)
@@ -79,6 +84,10 @@ class DetailFragment : Fragment() {
             methodsRv.adapter = PaymentDetailAdapter(it.methods,requireContext(),true)
         })
         viewModel.returnProducts().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             productRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
             productRv.adapter = ProductsAdapter(it,requireContext()) { product: Product, i: Int -> addToCartOnClickListener(product,i)}
             v.shimmer_product.isVisible = false
@@ -91,6 +100,10 @@ class DetailFragment : Fragment() {
         }
 
         viewModel.returnProductsCategory().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+            }
+            val it = it?:return@Observer
             categoryRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
             categoryRv.adapter = ProductCategoryAdapter(it,requireContext()){itemCategoryClickListener(it)}
         })

@@ -41,7 +41,7 @@ class ProfileFragment : Fragment() {
 			}
 
 			override fun onError() {
-				TODO("Not yet implemented")
+				root.settings_image.setImageDrawable(resources.getDrawable(R.drawable.no_profile))
 			}
 
 		})

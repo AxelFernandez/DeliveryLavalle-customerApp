@@ -20,3 +20,6 @@ data class UserResponse(
     val refresh_token :String
 )
 
+data class ConfirmationObject(
+    val done :Boolean
+)
