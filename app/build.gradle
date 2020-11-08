@@ -5,6 +5,14 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
+    signingConfigs {
+        Relase {
+            storeFile file('/Users/axelfernandez/Desktop/DeliveryLavalle-keystore')
+            storePassword 'californica'
+            keyAlias 'DeliveryLavalle-keystore'
+            keyPassword 'californica1'
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
@@ -14,8 +22,8 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        buildConfigField "String", "hostname", '"deliverylavalle.com.ar"'
-
+        buildConfigField "String", "hostname", '"https://deliverylavalle.com.ar"'
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -23,16 +31,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "hostname", '"deliverylavalle.com.ar"'
+            buildConfigField "String", "hostname", '"https://deliverylavalle.com.ar"'
 
-        }
-        sandBox{
-            initWith debug
-            buildConfigField "String", "hostname", '"delivery-lavalle-sandbox.herokuapp.com"'
         }
         local{
             initWith debug
-            buildConfigField "String", "hostname", '"192.168.0.7:8080"'
+            buildConfigField "String", "hostname", '"http://192.168.0.7:8080"'
         }
     }
     compileOptions {

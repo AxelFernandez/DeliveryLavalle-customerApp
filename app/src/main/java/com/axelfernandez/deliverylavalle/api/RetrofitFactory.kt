@@ -10,7 +10,7 @@ object RetrofitFactory {
     private val client = OkHttpClient.Builder().build()
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://"+ BuildConfig.hostname+"/api/") // change this IP for testing in Gradle files
+        .baseUrl( BuildConfig.hostname+"/api/") // change this IP for testing in Gradle files
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()

@@ -2,6 +2,7 @@ package com.axelfernandez.deliverylavalle.ui.profile
 
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import com.axelfernandez.deliverylavalle.MainActivity
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
-import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
@@ -64,7 +64,11 @@ class ProfileFragment : Fragment() {
 			startActivity(intent)
 			activity?.finish()
 		}
+		root.settings_terms_and_conditions.setOnClickListener {
+			val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://deliverylavalle.com.ar/terminosycondiciones/"))
+			startActivity(browserIntent)
 
+		}
 
 		return root
 	}
