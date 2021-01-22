@@ -1,146 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".ui.orderStatusDetail.OrderStatusDetail">
-    <include layout="@layout/app_bar"/>
+
+    <include layout="@layout/app_bar" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/order_status_scroll"
-        android:layout_marginTop="?actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <ImageView
                 android:id="@+id/order_status_detail_image"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                tools:src="@drawable/cooking"/>
+                tools:src="@drawable/cooking" />
+
             <TextView
                 android:id="@+id/order_status_detail_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:layout_marginBottom="20dp"
                 android:layout_gravity="center"
-                android:textColor="@color/black"
+                android:layout_marginBottom="20dp"
                 android:fontFamily="sans-serif-black"
-                tools:text = "Tu pedido esta en Preparacion"/>
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                tools:text="Tu pedido esta en Preparacion" />
 
 
             <include
                 android:id="@+id/order_status_banner_info"
-                layout="@layout/banner_info"/>
+                layout="@layout/banner_info" />
 
             <com.kofigyan.stateprogressbar.StateProgressBar
                 android:id="@+id/order_status_detail_step"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:spb_descriptionTopSpaceIncrementer="2dp"
-                app:spb_stateDescriptionSize="20sp"
                 android:layout_marginTop="20dp"
-                app:spb_stateLineThickness="10dp"
-                app:spb_stateSize="40dp"
-                app:spb_stateTextSize="15sp"
+                app:spb_animateToCurrentProgressState="true"
+                app:spb_checkStateCompleted="true"
+                app:spb_currentStateDescriptionColor="#009688"
+                app:spb_descriptionLinesSpacing="5dp"
+                app:spb_descriptionTopSpaceIncrementer="2dp"
                 app:spb_stateBackgroundColor="#BDBDBD"
+                app:spb_stateDescriptionColor="#808080"
+                app:spb_stateDescriptionSize="20sp"
                 app:spb_stateForegroundColor="#009688"
+                app:spb_stateLineThickness="10dp"
                 app:spb_stateNumberBackgroundColor="#808080"
                 app:spb_stateNumberForegroundColor="#eeeeee"
-                app:spb_currentStateDescriptionColor="#009688"
-                app:spb_stateDescriptionColor="#808080"
-                app:spb_descriptionLinesSpacing="5dp"
-                app:spb_animateToCurrentProgressState="true"
-                app:spb_checkStateCompleted="true"/>
+                app:spb_stateSize="40dp"
+                app:spb_stateTextSize="15sp" />
+
+            <LinearLayout
+                android:id="@+id/rating_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/rating_order"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <RatingBar
+                    android:id="@+id/rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:numStars="5"
+                    android:stepSize="1" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/title_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp">
+
+                    <EditText
+                        android:id="@+id/description_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/left_a_comment"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/send_review"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="20dp"
+                    android:background="@color/green"
+                    android:text="@string/send_review"
+                    android:textColor="@color/withe" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="sans-serif-black"
+                android:text="@string/order_detail"
                 android:textColor="@color/black"
-                android:text = "@string/order_detail"/>
+                android:textSize="18sp" />
 
             <include
                 android:id="@+id/order_status_company"
                 layout="@layout/order_detail_company_item"
-                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent" />
+                android:layout_marginBottom="20dp" />
 
 
             <include
-                android:visibility="gone"
                 android:id="@+id/order_status_banner_info_2"
-                layout="@layout/banner_info"/>
+                layout="@layout/banner_info"
+                android:visibility="gone" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
                 android:layout_marginStart="10dp"
                 android:fontFamily="sans-serif-black"
+                android:text="@string/payment_method"
                 android:textColor="@color/black"
-                android:text = "@string/payment_method"/>
+                android:textSize="18sp" />
+
             <TextView
                 android:id="@+id/order_status_payment_method"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif-black"
-                tools:text = "Efectivo"/>
+                android:textSize="15sp"
+                tools:text="Efectivo" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="sans-serif-black"
+                android:text="@string/products"
                 android:textColor="@color/black"
-                android:text = "@string/products"/>
+                android:textSize="18sp" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/order_status_products"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
+
             <View
                 android:id="@+id/order_detail_line_separator"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/colorPrimaryDark"/>
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/colorPrimaryDark" />
+
             <LinearLayout
                 android:id="@+id/order_detail_layout_total"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
-                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_weight="1"
                     android:fontFamily="sans-serif-black"
                     android:text="@string/total"
-                    android:layout_width="0dp" />
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp" />
+
                 <TextView
                     android:id="@+id/order_status_total"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:textAlignment="textEnd"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:textSize="24sp"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_weight="1"
                     android:fontFamily="sans-serif-black"
-                    tools:text="$850"/>
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="24sp"
+                    tools:text="$850" />
             </LinearLayout>
 
         </LinearLayout>
@@ -150,14 +214,14 @@
 
     <Button
         android:id="@+id/order_detail_open_meli"
-        android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_marginTop="10dp"
-        android:visibility="gone"
+        android:background="@color/blue"
         android:text="Link de Pago"
         android:textColor="@color/colorPrimary"
-        android:background="@color/blue"/>
+        android:visibility="gone" />
 
 
 </FrameLayout>

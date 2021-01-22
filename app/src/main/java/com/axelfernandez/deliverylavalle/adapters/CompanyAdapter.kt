@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.models.Company
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.order_status_detail_fragment.view.*
 
 class CompanyAdapter(
     var company: List<Company>  = ArrayList(),
@@ -49,13 +50,14 @@ class CompanyAdapter(
         var cardView : CardView = itemView.findViewById(R.id.company_item_cardview)
         var title : TextView = itemView.findViewById(R.id.company_item_title)
         var description : TextView = itemView.findViewById(R.id.company_item_subtitle)
+        var rating : TextView = itemView.findViewById(R.id.rating)
         var methods : RecyclerView = itemView.findViewById(R.id.methods_rv)
 
 
         fun bind(company: Company,context: Context, companyOnClickListener: (Company) -> Unit){
-            Picasso.with(context).load(company.photo).into(image)
+            Picasso.with(context).load(company.photo).placeholder(context.getDrawable(R.drawable.ic_abstract)).into(image)
             cardView.setOnClickListener { companyOnClickListener(company) }
-
+            rating.text = company.rating.toString()
             title.text = company.name
             description.text = company.description
 

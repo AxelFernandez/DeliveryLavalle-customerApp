@@ -7,8 +7,10 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
 import androidx.core.view.marginBottom
 import androidx.lifecycle.MutableLiveData
 import com.axelfernandez.deliverylavalle.R
@@ -46,7 +48,6 @@ class ViewUtil {
                 )
             }
         }
-
 
 
 

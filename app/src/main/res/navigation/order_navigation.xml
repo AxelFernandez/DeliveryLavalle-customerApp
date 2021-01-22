@@ -20,6 +20,13 @@
             app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/action_detailFragment_to_orderDetailFragment"
             app:destination="@id/orderDetailFragment" />
+        <action
+            android:id="@+id/action_detailFragment_to_reviewsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/reviewsFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderDetailFragment"
@@ -88,4 +95,13 @@
         android:name="com.axelfernandez.deliverylavalle.ui.orderDecided.OrderDecidedFragment"
         android:label="order_decided_fragment"
         tools:layout="@layout/order_decided_fragment" />
+    <fragment
+        android:id="@+id/reviewsFragment"
+        android:name="com.axelfernandez.deliverylavalle.ui.reviews.ReviewsFragment"
+        android:label="reviews_fragment"
+        tools:layout="@layout/reviews_fragment" >
+        <argument
+            android:name="company"
+            app:argType="com.axelfernandez.deliverylavalle.models.Company" />
+    </fragment>
 </navigation>

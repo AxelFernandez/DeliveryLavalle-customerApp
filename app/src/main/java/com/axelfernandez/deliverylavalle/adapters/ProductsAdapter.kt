@@ -48,7 +48,7 @@ class ProductsAdapter (
         var button: Button = itemView.findViewById(R.id.item_product_add_to_order)
 
         fun bind(product: Product,context:Context, addToCartOnClickListener: (Product, Int) -> Unit){
-            Picasso.with(context).load(product.photo).into(imageView)
+            Picasso.with(context).load(product.photo).placeholder(context.getDrawable(R.drawable.ic_abstract)).into(imageView)
             title.text = product.name
             subtitle.text = product.description
             price.text = context.resources.getString(R.string.order_detail_price, product.price)

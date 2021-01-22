@@ -103,6 +103,13 @@
     <string name="log_out">Cerrar Sesion</string>
     <string name="terms_and_conditions">Continuando, Acepto los <a href="https://www.deliverylavalle.com.ar/terminosycondiciones">Terminos y condiciones</a></string>
     <string name="no_conection">No hay conexion a internet, Vuelve a intentarlo luego</string>
+    <string name="rating_order">Califica tu pedido</string>
+    <string name="left_a_comment">Deja tu comentario</string>
+    <string name="send_review">Enviar Comentario</string>
+    <string name="must_left_at_least_a_star">Debes dejar al menos una estrella</string>
+    <string name="see_all_reviews">Ver todas las reseñas</string>
+    <string name="there_is_no_reviews">No hay reseñas de aqui</string>
+    <string name="order_something_to_add_a_review">Pide algo para añadir una reseña aqui</string>
 
 
 </resources>

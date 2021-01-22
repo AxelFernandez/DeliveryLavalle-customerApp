@@ -9,6 +9,7 @@ data class Company(
     val name :String,
     val description :String,
     val photo :String,
+    val rating :Float,
     val phone :String,
     val address :String,
     val methods :List<String>,

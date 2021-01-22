@@ -17,6 +17,7 @@ import androidx.navigation.findNavController
 import com.axelfernandez.deliverylavalle.*
 import com.axelfernandez.deliverylavalle.api.Api
 import com.axelfernandez.deliverylavalle.api.RetrofitFactory
+import com.axelfernandez.deliverylavalle.models.FirebaseToken
 import com.axelfernandez.deliverylavalle.models.UserResponse
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
@@ -121,7 +122,7 @@ class Login : Fragment() {
                                     editor.putString("token_firebase",token).apply()
 
                                     val user = LoginUtils.getUserFromSharedPreferences(requireContext())
-                                    viewModel.sendFirebaseToken(user.token,token)
+                                    viewModel.sendFirebaseToken(user.token, FirebaseToken(token))
 
                                     Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
                             })

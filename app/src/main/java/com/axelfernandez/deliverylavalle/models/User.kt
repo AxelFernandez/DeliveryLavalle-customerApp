@@ -23,3 +23,7 @@ data class UserResponse(
 data class ConfirmationObject(
     val done :Boolean
 )
+data class FirebaseToken(
+    val token: String,
+    val isSeller: Boolean = false
+)

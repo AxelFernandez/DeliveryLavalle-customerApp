@@ -87,7 +87,7 @@ class HomeFragment : Fragment() {
             bannerSubtitle.text = it
         })
         homeViewModel.banner_image_vm.observe(viewLifecycleOwner, Observer {
-            Picasso.with(context).load(it).into(bannerImage)
+            Picasso.with(context).load(it).placeholder(requireContext().getDrawable(R.drawable.ic_abstract)).into(bannerImage)
         })
 
         homeViewModel.getCategoty(user.token)

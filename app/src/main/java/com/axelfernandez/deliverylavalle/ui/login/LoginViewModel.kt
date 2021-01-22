@@ -3,6 +3,7 @@ package com.axelfernandez.deliverylavalle.ui.login
 import androidx.lifecycle.ViewModel
 import com.axelfernandez.deliverylavalle.api.Api
 import com.axelfernandez.deliverylavalle.api.RetrofitFactory
+import com.axelfernandez.deliverylavalle.models.FirebaseToken
 import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.repository.LoginRepository
 import com.axelfernandez.deliverylavalle.repository.ProductRepository
@@ -26,7 +27,7 @@ class LoginViewModel : ViewModel() {
         )
     }
 
-    fun sendFirebaseToken(token:String,firebase:String){
+    fun sendFirebaseToken(token:String,firebase:FirebaseToken){
         loginRepository.sendToken(token, firebase)
     }
 }

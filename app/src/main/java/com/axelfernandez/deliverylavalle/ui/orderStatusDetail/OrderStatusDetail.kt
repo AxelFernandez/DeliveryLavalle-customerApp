@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.adapters.OrderDetailAdapter
 import com.axelfernandez.deliverylavalle.models.Order
+import com.axelfernandez.deliverylavalle.models.Review
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.kofigyan.stateprogressbar.StateProgressBar
@@ -37,7 +38,7 @@ class OrderStatusDetail : Fragment() {
 
     private lateinit var viewModel: OrderStatusDetailViewModel
     private lateinit var meliLink: String
-
+    private lateinit var order : Order
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,6 +70,9 @@ class OrderStatusDetail : Fragment() {
         if (orderArguments.paymentMethod == getString(R.string.mercado_pago)){
             viewModel.getMeliLink(user.token,orderArguments.id)
         }
+        if(orderArguments.state == "Entregado"){
+            viewModel.fetchReview(user.token, orderArguments.id)
+        }
 
 
         viewModel.returnMeliLink().observe(viewLifecycleOwner, Observer {
@@ -97,7 +101,7 @@ class OrderStatusDetail : Fragment() {
                 ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
             }
             val it = it?:return@Observer
-            val order = it
+            order = it
             val steps = viewModel.getStepName(order)
             stateProgressBar.setMaxStateNumber(viewModel.getSteps(steps.size))
             stateProgressBar.setCurrentStateNumber(viewModel.setCurrentStepsAndStep(order.state))
@@ -112,10 +116,45 @@ class OrderStatusDetail : Fragment() {
             v.order_status_company.order_detail_company_title.text = order.company.name
             v.order_status_company.order_detail_company_adresss.text = order.company.address
             v.order_status_company.order_detail_company_phone.text = order.company.phone
-            Picasso.with(requireContext()).load(order.company.photo).into(v.order_status_company.order_detail_image_company)
+            Picasso.with(requireContext()).load(order.company.photo).placeholder(requireContext().getDrawable(R.drawable.ic_abstract)).into(v.order_status_company.order_detail_image_company)
             v.order_status_company.order_detail_company_phone.text = order.company.phone
-            v.order_status_company.isVisible = viewModel.getVisibleCompanyInfo(order)
         })
+
+        viewModel.returnReview().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+                return@Observer
+            }
+            v.rating.setRating(it.rating.toFloat())
+            v.description_field.setText(it.description?:"No dejaste ningun comentario")
+            if(it.rating.toFloat() != -1f){
+                v.rating.setIsIndicator(true)
+                v.description_field.isEnabled = false
+                v.title_description.isEnabled = false
+                v.send_review.isVisible = false
+            }
+            v.rating_layout.isVisible = true
+            v.send_review.setOnClickListener {
+                val score = v.rating.rating.toInt()
+                if (score == 0){
+                    ViewUtil.setSnackBar(v,R.color.red,getString(R.string.must_left_at_least_a_star))
+                    return@setOnClickListener
+                }
+                val rating = Review(v.description_field.text.toString(), order.id, score.toString())
+                viewModel.postReview(user.token,rating)
+            }
+        })
+
+        viewModel.returnResponseRating().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+                return@Observer
+            }else{
+                ViewUtil.setSnackBar(v,R.color.green,"Gracias por tus Comentarios")
+                v.rating_layout.isVisible = false
+            }
+        })
+
         v.order_detail_open_meli.setOnClickListener {
            try {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(meliLink))

@@ -77,8 +77,8 @@ class AddressList : Fragment() {
         viewModel.notifyCorrectDeleted().observe(viewLifecycleOwner, Observer {
             if(it == null){
                 ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
+                return@Observer
             }
-            val it = it?:return@Observer
             ViewUtil.setSnackBar(v,R.color.green,"Eliminado correctamente")
             viewModel.soliciteAddress(token)
         })

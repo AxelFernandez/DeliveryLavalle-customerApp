@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.andremion.counterfab.CounterFab
@@ -17,15 +18,14 @@ import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.adapters.PaymentDetailAdapter
 import com.axelfernandez.deliverylavalle.adapters.ProductCategoryAdapter
 import com.axelfernandez.deliverylavalle.adapters.ProductsAdapter
-import com.axelfernandez.deliverylavalle.models.Product
-import com.axelfernandez.deliverylavalle.models.ProductCategory
-import com.axelfernandez.deliverylavalle.models.ProductRequest
-import com.axelfernandez.deliverylavalle.models.User
+import com.axelfernandez.deliverylavalle.models.*
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.detail_fragment.*
 import kotlinx.android.synthetic.main.detail_fragment.view.*
+import kotlinx.android.synthetic.main.detail_fragment.view.rating
+import kotlinx.android.synthetic.main.order_status_detail_fragment.view.*
 import kotlinx.android.synthetic.main.shimer_product.view.*
 
 
@@ -42,6 +42,7 @@ class DetailFragment : Fragment() {
     private lateinit var categoryRv : RecyclerView
     private lateinit var token :String
     private lateinit var idCompany :String
+    private lateinit var company : Company
     private var orders : ArrayList<Product> = ArrayList()
 
     override fun onCreateView(
@@ -76,10 +77,12 @@ class DetailFragment : Fragment() {
             }
             val it = it?:return@Observer
             v.text_view_company_name.text = it.name
+            v.rating.text = it.rating.toString()
+            company = it
             v.text_view_company_description.text = it.description
             v.text_view_product_of.text = getString(R.string.product_of).format(it.name)
             v.text_view_category_of.text = getString(R.string.category_of).format(it.name)
-            Picasso.with(requireContext()).load(it.photo).into(v.detail_image)
+            Picasso.with(requireContext()).load(it.photo).placeholder(requireContext().getDrawable(R.drawable.ic_abstract)).into(v.detail_image)
             methodsRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
             methodsRv.adapter = PaymentDetailAdapter(it.methods,requireContext(),true)
         })
@@ -107,7 +110,11 @@ class DetailFragment : Fragment() {
             categoryRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
             categoryRv.adapter = ProductCategoryAdapter(it,requireContext()){itemCategoryClickListener(it)}
         })
-
+        v.view_all_reviews.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putParcelable("company", company)
+            findNavController().navigate(R.id.action_detailFragment_to_reviewsFragment, bundle)
+        }
     }
 
 

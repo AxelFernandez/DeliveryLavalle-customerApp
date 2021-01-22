@@ -11,7 +11,7 @@ interface Api {
     fun loginWithGoogle(@Body userData: User):Call<UserResponse>
 
     @POST("firebase_token")
-    fun sendFirebaseToken(@Body firebaseToken: String, @Header("Authorization") token: String):Call<ConfirmationObject>
+    fun sendFirebaseToken(@Body firebaseToken: FirebaseToken, @Header("Authorization") token: String):Call<ConfirmationObject>
 
 
 
@@ -73,5 +73,13 @@ interface Api {
     @POST("meli_link")
     fun getMeLiLink(@Header("Authorization") token: String, @Body orderId: String):Call<MeliLink>
 
+    @GET("rating")
+    fun getRating(@Header("Authorization") token: String, @Query("order")order : String):Call<Review>
+
+    @POST("rating")
+    fun postRating(@Header("Authorization") token: String, @Body Review : Review):Call<String>
+
+    @GET("reviews")
+    fun getReviews(@Header("Authorization") token: String, @Query("company") clientId:String):Call<List<Review>>
 
 }

@@ -13,6 +13,9 @@ class OrdersRepository (
 
 ){
     val orders = MutableLiveData<List<Order>>()
+    val rating = MutableLiveData<Review>()
+    val reviews = MutableLiveData<List<Review>>()
+    val data = MutableLiveData<String>()
     val ordersById = MutableLiveData<Order>()
     var orderPost = MutableLiveData<OrderResponse>()
     var meliLink = MutableLiveData<MeliLink>()
@@ -58,6 +61,7 @@ class OrdersRepository (
     }
 
     fun getOrdersById(orderId : String,token :String): MutableLiveData<Order> {
+
         api.getOrdersById("Bearer %s".format(token),orderId).enqueue(object : Callback<Order> {
             override fun onFailure(call: Call<Order>, t: Throwable) {
                 ordersById.value = null
@@ -86,5 +90,53 @@ class OrdersRepository (
         })
         return meliLink
 
+    }
+
+
+    fun returnRating(): LiveData<Review> {
+        return rating
+    }
+
+    fun getRating(orderId : String,token :String): MutableLiveData<Review> {
+        api.getRating("Bearer %s".format(token),orderId).enqueue(object : Callback<Review> {
+            override fun onFailure(call: Call<Review>, t: Throwable) {
+                rating.value = null
+            }
+            override fun onResponse(call: Call<Review>, response: Response<Review>) {
+                rating.value = response.body()
+            }
+        })
+        return rating
+    }
+
+    fun postRating(token :String, review:Review): MutableLiveData<String> {
+        api.postRating("Bearer %s".format(token),review).enqueue(object : Callback<String> {
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                data.value = null
+            }
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                data.value = response.body()
+            }
+        })
+        return data
+    }
+
+    fun returnResponseRating(): LiveData<String> {
+        return data
+    }
+
+    fun getReviews(token : String,companyId :String): MutableLiveData<List<Review>> {
+        api.getReviews("Bearer %s".format(token),companyId).enqueue(object : Callback<List<Review>> {
+            override fun onFailure(call: Call<List<Review>>, t: Throwable) {
+                reviews.value = null
+            }
+            override fun onResponse(call: Call<List<Review>>, response: Response<List<Review>>) {
+                reviews.value = response.body()
+            }
+        })
+        return reviews
+    }
+    fun returnReviews(): LiveData<List<Review>> {
+        return reviews
     }
 }

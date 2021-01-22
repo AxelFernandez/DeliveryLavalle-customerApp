@@ -51,7 +51,7 @@ class PaymentDetailAdapter (
                 "Mercado Pago" -> resource = R.drawable.credit_card
                 "Efectivo" -> resource = R.drawable.cash
             }
-            Picasso.with(context).load(resource).into(image)
+            Picasso.with(context).load(resource).placeholder(context.getDrawable(R.mipmap.ic_launcher_foreground)).into(image)
             description.text = item
 
         }

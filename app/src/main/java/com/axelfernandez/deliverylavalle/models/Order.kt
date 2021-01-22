@@ -28,6 +28,13 @@ data class MeliLink(
     val link:String?
 )
 
+data class Review(
+    val description :String?,
+    val order : String?,
+    val rating:String,
+    val userName:String? = null
+)
+
 @Parcelize
 data class OrderResponse(
     val dateCreated : String?,

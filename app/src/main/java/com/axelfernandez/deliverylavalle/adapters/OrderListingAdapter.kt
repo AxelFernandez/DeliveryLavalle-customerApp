@@ -43,7 +43,7 @@ class OrderListingAdapter(
         private var cardview: CardView = itemView.findViewById(R.id.item_order_listing_cardView)
 
         fun bind(order: Order, context: Context, addToCartOnClickListener: (Order) -> Unit){
-            Picasso.with(context).load(order.company.photo).into(imageView)
+            Picasso.with(context).load(order.company.photo).placeholder(context.getDrawable(R.drawable.ic_abstract)).into(imageView)
             orderId.text = context.getString(R.string.order_listing_id ,order.id)
             state.text = context.getString(R.string.state_order_listing, order.state)
             date.text = context.getString(R.string.date_create_order_listing, order.dateCreated)

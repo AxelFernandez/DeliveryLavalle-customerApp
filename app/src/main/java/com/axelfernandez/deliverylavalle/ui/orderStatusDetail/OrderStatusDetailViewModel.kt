@@ -8,6 +8,7 @@ import com.axelfernandez.deliverylavalle.api.Api
 import com.axelfernandez.deliverylavalle.api.RetrofitFactory
 import com.axelfernandez.deliverylavalle.models.MeliLink
 import com.axelfernandez.deliverylavalle.models.Order
+import com.axelfernandez.deliverylavalle.models.Review
 import com.axelfernandez.deliverylavalle.repository.OrdersRepository
 import com.kofigyan.stateprogressbar.StateProgressBar
 import javax.inject.Inject
@@ -130,6 +131,20 @@ class OrderStatusDetailViewModel : ViewModel() {
 
     fun getVisibleCompanyInfo(order: Order): Boolean {
         return order.state != "Entregado"
+    }
+
+    fun fetchReview(token:String, order:String){
+        orderRepository.getRating(order, token)
+    }
+    fun returnReview(): LiveData<Review> {
+        return orderRepository.returnRating()
+    }
+
+    fun postReview(token: String, review: Review){
+        orderRepository.postRating(token,review)
+    }
+    fun returnResponseRating(): LiveData<String> {
+        return orderRepository.returnResponseRating()
     }
 
 }

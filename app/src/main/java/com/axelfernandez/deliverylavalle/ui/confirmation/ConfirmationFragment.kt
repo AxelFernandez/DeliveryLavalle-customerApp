@@ -72,7 +72,7 @@ class ConfirmationFragment : Fragment() {
             v.order_detail_company_title.text = it.name
             v.confirmation_banner_local.local_delivery_address.text = it.address
             v.confirmation_banner_local.local_delivery_phone.text = it.phone
-            Picasso.with(context).load(it.photo).into(v.order_detail_image_company)
+            Picasso.with(context).load(it.photo).placeholder(requireContext().getDrawable(R.drawable.ic_abstract)).into(v.order_detail_image_company)
         })
 
         //Address RV

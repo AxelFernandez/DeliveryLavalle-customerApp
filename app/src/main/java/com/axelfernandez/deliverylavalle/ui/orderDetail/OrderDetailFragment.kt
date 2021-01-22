@@ -99,7 +99,7 @@ class OrderDetailFragment : Fragment() {
             }
             val it = it?:return@Observer
             v.order_detail_company_title.text = it.name
-            Picasso.with(context).load(it.photo).into(v.order_detail_image_company)
+            Picasso.with(context).load(it.photo).placeholder(requireContext().getDrawable(R.drawable.ic_abstract)).into(v.order_detail_image_company)
         })
         v.order_detail_continue_button.setOnClickListener {
             val bundleToNav = bundle
