@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat
 import com.axelfernandez.deliverylavalle.HomeActivity
 import com.axelfernandez.deliverylavalle.MainActivity
 import com.axelfernandez.deliverylavalle.R
+import com.axelfernandez.deliverylavalle.Splash
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -38,14 +39,14 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun showNotification(title: String?, body: String?) {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, Splash::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent,
             PendingIntent.FLAG_ONE_SHOT)
 
         val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this,"other").apply {
-            setSmallIcon(R.mipmap.ic_launcher)
+            setSmallIcon(R.drawable.ic_notification)
             setContentTitle(title)
             setContentText(body)
             setAutoCancel(true)
@@ -61,6 +62,7 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
                 "otherChannel",
                 NotificationManager.IMPORTANCE_HIGH
             )
+            notificationBuilder.setSmallIcon(R.drawable.ic_notification)
             notificationManager.createNotificationChannel(channel)
             notificationBuilder.setChannelId(channelId)
         }

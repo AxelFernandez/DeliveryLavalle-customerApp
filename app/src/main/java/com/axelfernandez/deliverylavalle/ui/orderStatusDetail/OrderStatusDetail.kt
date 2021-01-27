@@ -126,7 +126,7 @@ class OrderStatusDetail : Fragment() {
                 return@Observer
             }
             v.rating.setRating(it.rating.toFloat())
-            v.description_field.setText(it.description?:"No dejaste ningun comentario")
+            v.description_field.setText(it.description?:" ")
             if(it.rating.toFloat() != -1f){
                 v.rating.setIsIndicator(true)
                 v.description_field.isEnabled = false

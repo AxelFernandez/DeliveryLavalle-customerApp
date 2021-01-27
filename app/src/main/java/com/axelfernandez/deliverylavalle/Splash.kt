@@ -82,6 +82,10 @@ class Splash : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        startLogin()
+    }
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
@@ -89,9 +93,11 @@ class Splash : AppCompatActivity() {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100)
+    }
 
+    private fun startLogin() {
         var editor = getSharedPreferences("userSession", Context.MODE_PRIVATE)
-        val is_login_ready = editor.getBoolean(getString(R.string.is_login_ready),false)
+        val is_login_ready = editor.getBoolean(getString(R.string.is_login_ready), false)
         var remoteConfig = Firebase.remoteConfig
         val configSettings = remoteConfigSettings {
             minimumFetchIntervalInSeconds = 3600
@@ -106,22 +112,26 @@ class Splash : AppCompatActivity() {
                 } else {
                     Log.e("TAG", "Can't Connect to Firebase")
                 }
-                if(is_login_ready){
+                if (is_login_ready) {
                     login.getToken(LoginUtils.getUserFromSharedPreferences(this))
                     login.returnData().observe(this, Observer {
-                        if(it == null){
-                            Toast.makeText(this,"No hay conexion a internet, intentalo de nuevo mas tarde",Toast.LENGTH_SHORT).show()
+                        if (it == null) {
+                            Toast.makeText(
+                                this,
+                                "No hay conexion a internet, intentalo de nuevo mas tarde",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        val it = it?:return@Observer
-                        val user : User = LoginUtils.getUserFromSharedPreferences(this)
+                        val it = it ?: return@Observer
+                        val user: User = LoginUtils.getUserFromSharedPreferences(this)
                         user.token = it.access_token
-                        LoginUtils.putUserToSharedPreferences(this,user)
+                        LoginUtils.putUserToSharedPreferences(this, user)
                         val intent = Intent(this, HomeActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                         finish()
                     })
-                }else{
+                } else {
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
