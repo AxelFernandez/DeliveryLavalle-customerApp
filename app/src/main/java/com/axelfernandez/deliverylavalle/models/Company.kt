@@ -11,6 +11,7 @@ data class Company(
     val photo :String,
     val rating :Float,
     val phone :String,
+    val isOpen :Boolean,
     val address :String,
     val methods :List<String>,
     val category :String?

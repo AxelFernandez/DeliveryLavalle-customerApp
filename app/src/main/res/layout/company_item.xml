@@ -87,6 +87,18 @@
         </LinearLayout>
 
     </LinearLayout>
-
+        <TextView
+            android:id="@+id/is_open_signal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:padding="5dp"
+            android:fontFamily="sans-serif-black"
+            android:text="Cerrado"
+            android:layout_gravity="right"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            android:background="@color/orange"/>
     </androidx.cardview.widget.CardView>
 </FrameLayout>

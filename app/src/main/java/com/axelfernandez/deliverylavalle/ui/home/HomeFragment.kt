@@ -140,10 +140,15 @@ class HomeFragment : Fragment() {
         //companyAdapter.notifyDataSetChanged()
 
     }
-    fun companyOnClickListener(item: Company){
-        val intent = Intent(context, OrderActivity::class.java)
-        intent.putExtra(getString(R.string.company_id),item.id)
-        startActivity(intent)
+
+    private fun companyOnClickListener(item: Company){
+        if (item.isOpen){
+            val intent = Intent(context, OrderActivity::class.java)
+            intent.putExtra(getString(R.string.company_id),item.id)
+            startActivity(intent)
+        }else{
+            ViewUtil.setSnackBar(view?:return, R.color.orange,"Este lugar esta cerrado, vuelve luego")
+        }
     }
 
 }

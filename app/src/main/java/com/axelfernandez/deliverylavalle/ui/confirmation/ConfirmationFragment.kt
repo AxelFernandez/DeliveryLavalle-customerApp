@@ -15,10 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.adapters.AddressAdapter
 import com.axelfernandez.deliverylavalle.adapters.OrderDetailAdapter
-import com.axelfernandez.deliverylavalle.models.Address
-import com.axelfernandez.deliverylavalle.models.Order
-import com.axelfernandez.deliverylavalle.models.OrderPost
-import com.axelfernandez.deliverylavalle.models.ProductDetail
+import com.axelfernandez.deliverylavalle.models.*
 import com.axelfernandez.deliverylavalle.ui.address.AddressViewModel
 import com.axelfernandez.deliverylavalle.ui.companyDetail.DetailViewModel
 import com.axelfernandez.deliverylavalle.ui.login.Login
@@ -40,7 +37,7 @@ class ConfirmationFragment : Fragment() {
 
     private lateinit var viewModel: ConfirmationViewModel
     private lateinit var viewModelCompany: DetailViewModel
-    private lateinit var viewModelAddress: AddressViewModel
+    private lateinit var company: Company
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,6 +66,7 @@ class ConfirmationFragment : Fragment() {
                 ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
             }
             val it = it?:return@Observer
+            company = it
             v.order_detail_company_title.text = it.name
             v.confirmation_banner_local.local_delivery_address.text = it.address
             v.confirmation_banner_local.local_delivery_phone.text = it.phone
@@ -110,6 +108,10 @@ class ConfirmationFragment : Fragment() {
 
         //Confirm Order
         v.order_confirmation_button.setOnClickListener {
+            if(!company.isOpen){
+                ViewUtil.setSnackBar(v, R.color.orange,"Este lugar acaba de cerrar, vuelve luego!")
+                return@setOnClickListener
+            }
             val address = LoginUtils.getDefaultAddress(requireContext())
             // TODO: Possible security problem, replace this Total for a logic in Server
             val order: OrderPost = OrderPost(companyId,address.id, method, total,products,retryInLocal)

@@ -111,7 +111,7 @@
                     android:layout_margin="20dp"
                     android:background="@color/green"
                     android:text="@string/send_review"
-                    android:textColor="@color/withe" />
+                    android:textColor="@color/white" />
             </LinearLayout>
 
             <TextView

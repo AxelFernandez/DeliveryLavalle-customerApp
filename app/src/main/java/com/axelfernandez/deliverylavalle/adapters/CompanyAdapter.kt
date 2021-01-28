@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout.HORIZONTAL
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelfernandez.deliverylavalle.R
@@ -50,6 +51,7 @@ class CompanyAdapter(
         var cardView : CardView = itemView.findViewById(R.id.company_item_cardview)
         var title : TextView = itemView.findViewById(R.id.company_item_title)
         var description : TextView = itemView.findViewById(R.id.company_item_subtitle)
+        var isOpen : TextView = itemView.findViewById(R.id.is_open_signal)
         var rating : TextView = itemView.findViewById(R.id.rating)
         var methods : RecyclerView = itemView.findViewById(R.id.methods_rv)
 
@@ -60,6 +62,7 @@ class CompanyAdapter(
             rating.text = company.rating.toString()
             title.text = company.name
             description.text = company.description
+            if (!company.isOpen) isOpen.isVisible = true
 
 
         }
