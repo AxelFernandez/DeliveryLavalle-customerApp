@@ -8,7 +8,7 @@ interface Api {
 
     @Headers("Content-Type: application/json")
     @POST("google")
-    fun loginWithGoogle(@Body userData: User):Call<UserResponse>
+    fun loginWithGoogle(@Body googleToken: String):Call<UserResponse>
 
     @POST("firebase_token")
     fun sendFirebaseToken(@Body firebaseToken: FirebaseToken, @Header("Authorization") token: String):Call<ConfirmationObject>

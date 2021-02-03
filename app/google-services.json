@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "53044701658-9956ofd43j8brtbv7ktbq5n8v7uilpv8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.axelfernandez.deliverylavalle",
+            "certificate_hash": "adc66fadc3b8971b303c7a08862275876825c105"
+          }
+        },
+        {
+          "client_id": "53044701658-d66t1tr6f169n6nosc8ut5bvms3gret4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.axelfernandez.deliverylavalle",
+            "certificate_hash": "e6c09cde7ddda97fc0efce9932b52bf7329f7b70"
+          }
+        },
+        {
           "client_id": "53044701658-ghbnnsi2rto6o0ffedc6c10so8kig8mq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -30,13 +46,64 @@
       "api_key": [
         {
           "current_key": "AIzaSyAAOsoCYtrP6BzMNPtmih5_1hNBrXJgmW4"
+        },
+        {
+          "current_key": "AIzaSyC_kK5bpsBWJJkpe5AMGUohTNJaUdDdpIE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com",
+              "client_id": "53044701658-0om8q1mb78ojfdd29fq30cpbc5h33ppr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53044701658:android:e658713fe35e1cf63838e3",
+        "android_client_info": {
+          "package_name": "com.axelfernandez.deliverylavallevendedores"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53044701658-bd5k4ljsi86jfivr39pcc1o0hi9e8mcr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.axelfernandez.deliverylavallevendedores",
+            "certificate_hash": "8a8909874645a43d2603282355bcc01aa4bf3478"
+          }
+        },
+        {
+          "client_id": "53044701658-rlsskfaeaj6elrr8sagihi9j7d2m3c70.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.axelfernandez.deliverylavallevendedores",
+            "certificate_hash": "bfe7a3f7ee18e9f0800a230a8f68293f5fc74b60"
+          }
+        },
+        {
+          "client_id": "53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAOsoCYtrP6BzMNPtmih5_1hNBrXJgmW4"
+        },
+        {
+          "current_key": "AIzaSyC_kK5bpsBWJJkpe5AMGUohTNJaUdDdpIE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53044701658-0om8q1mb78ojfdd29fq30cpbc5h33ppr.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

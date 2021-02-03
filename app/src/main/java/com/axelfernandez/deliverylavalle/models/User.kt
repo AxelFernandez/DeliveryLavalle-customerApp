@@ -17,7 +17,8 @@ data class UserResponse(
     val clientId :String,
     val username :String,
     val access_token :String,
-    val refresh_token :String
+    val refresh_token :String,
+    val user : User
 )
 
 data class ConfirmationObject(

@@ -14,6 +14,17 @@ import retrofit2.Response
 class LoginUtils {
     companion object{
 
+        fun saveTokenFirebase(token: String, context: Context){
+            val editor :SharedPreferences.Editor = context.getSharedPreferences("userSession", Context.MODE_PRIVATE).edit()
+            editor.putString("token_firebase", token).apply()
+        }
+
+        fun saveLoginReady(context: Context){
+            val editor :SharedPreferences.Editor = context.getSharedPreferences("userSession", Context.MODE_PRIVATE).edit()
+            editor.putBoolean(context.getString(R.string.is_login_ready), true).apply()
+        }
+
+
         fun getUserFromSharedPreferences(context: Context):User{
             var sharedPreferences : SharedPreferences = context.getSharedPreferences("userSession", Context.MODE_PRIVATE)
             return User(
@@ -41,6 +52,10 @@ class LoginUtils {
             editor.apply()
 
 
+        }
+        fun saveSessionToken(token:String, context: Context){
+            val editor :SharedPreferences.Editor = context.getSharedPreferences("userSession", Context.MODE_PRIVATE).edit()
+            editor.putString("token", token).apply()
         }
 
         fun saveDefaultAddress(context: Context,address:Address){

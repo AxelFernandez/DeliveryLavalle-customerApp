@@ -17,15 +17,14 @@ import com.axelfernandez.deliverylavalle.api.RetrofitFactory
 import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.repository.LoginRepository
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
-import com.axelfernandez.deliverylavalle.utils.ViewUtil
-import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import javax.inject.Inject
+
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -113,7 +112,16 @@ class Splash : AppCompatActivity() {
                     Log.e("TAG", "Can't Connect to Firebase")
                 }
                 if (is_login_ready) {
-                    login.getToken(LoginUtils.getUserFromSharedPreferences(this))
+                    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(getString(R.string.token_client_id))
+                            .requestEmail()
+                            .requestProfile()
+                            .build()
+                    val googleSignInClient = GoogleSignIn.getClient(this, gso)
+                    googleSignInClient.silentSignIn().addOnCompleteListener {
+                        val account: GoogleSignInAccount? = it.result
+                        login.getToken(account?.idToken?:return@addOnCompleteListener)
+                    }
                     login.returnData().observe(this, Observer {
                         if (it == null) {
                             Toast.makeText(
