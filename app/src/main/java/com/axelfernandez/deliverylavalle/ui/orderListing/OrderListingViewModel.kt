@@ -1,5 +1,6 @@
 package com.axelfernandez.deliverylavalle.ui.orderListing
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,11 +14,15 @@ import javax.inject.Inject
 
 class OrderListingViewModel : ViewModel() {
 
-    @Inject
-    private val orderRepository = OrdersRepository(RetrofitFactory.buildService(Api::class.java))
 
-    fun getOrders(token : String){
-        orderRepository.getOrders(token)
+    private lateinit var orderRepository :OrdersRepository
+    fun getRepository(context: Context){
+        orderRepository = OrdersRepository(RetrofitFactory.buildService(Api::class.java,context))
+    }
+
+
+    fun getOrders(){
+        orderRepository.getOrder()
     }
 
     fun returnOrders():LiveData<List<Order>>{

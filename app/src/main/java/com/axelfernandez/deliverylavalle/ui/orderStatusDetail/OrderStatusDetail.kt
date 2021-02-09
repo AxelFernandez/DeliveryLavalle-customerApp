@@ -49,11 +49,11 @@ class OrderStatusDetail : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(OrderStatusDetailViewModel::class.java)
+        viewModel.getRepository(requireContext())
         val v = view?:return
         val arguments = arguments?:return
         val orderArguments = arguments.getParcelable<Order>(getString(R.string.arguments_orders))?:return
-        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
-        viewModel.getOrders(user.token,orderArguments.id)
+        viewModel.getOrders(orderArguments.id)
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
@@ -68,10 +68,10 @@ class OrderStatusDetail : Fragment() {
             actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
         }
         if (orderArguments.paymentMethod == getString(R.string.mercado_pago)){
-            viewModel.getMeliLink(user.token,orderArguments.id)
+            viewModel.getMeliLink(orderArguments.id)
         }
         if(orderArguments.state == "Entregado"){
-            viewModel.fetchReview(user.token, orderArguments.id)
+            viewModel.fetchReview(orderArguments.id)
         }
 
 
@@ -141,7 +141,7 @@ class OrderStatusDetail : Fragment() {
                     return@setOnClickListener
                 }
                 val rating = Review(v.description_field.text.toString(), order.id, score.toString())
-                viewModel.postReview(user.token,rating)
+                viewModel.postReview(rating)
             }
         })
 

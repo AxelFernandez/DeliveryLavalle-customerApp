@@ -19,8 +19,8 @@ class CompanyRepository (
         val deliveryMethods = MutableLiveData<PaymentMethods>()
 
 
-        fun getCategory(token :String): MutableLiveData<List<CompanyCategoryResponse>> {
-            api.getCompanyCategories("Bearer %s".format(token)).enqueue(object : Callback<List<CompanyCategoryResponse>> {
+        fun getCategory(): MutableLiveData<List<CompanyCategoryResponse>> {
+            api.getCompanyCategories().enqueue(object : Callback<List<CompanyCategoryResponse>> {
                 override fun onFailure(call: Call<List<CompanyCategoryResponse>>, t: Throwable) {
                     data.value = null
                 }
@@ -37,8 +37,8 @@ class CompanyRepository (
         }
 
 
-    fun getCompany(token : String,location : Location): MutableLiveData<List<Company>>{
-        api.getCompany("Bearer %s".format(token),location).enqueue(object : Callback<List<Company>>{
+    fun getCompany(location : Location): MutableLiveData<List<Company>>{
+        api.getCompany(location).enqueue(object : Callback<List<Company>>{
             override fun onFailure(call: Call<List<Company>>, t: Throwable) {
                 company.value = null
             }
@@ -55,8 +55,8 @@ class CompanyRepository (
     }
 
 
-    fun getCompanyById(token : String,id : String): MutableLiveData<Company>{
-        api.getCompanyById("Bearer %s".format(token),id).enqueue(object : Callback<Company>{
+    fun getCompanyById(id : String): MutableLiveData<Company>{
+        api.getCompanyById(id).enqueue(object : Callback<Company>{
             override fun onFailure(call: Call<Company>, t: Throwable) {
                 companyDetail.value = null
             }
@@ -73,8 +73,8 @@ class CompanyRepository (
     }
 
 
-    fun getPaymentMethodByCompanyId(token : String,id : String): MutableLiveData<PaymentMethods>{
-        api.getPaymentMethodByCompanyId("Bearer %s".format(token),id).enqueue(object : Callback<PaymentMethods>{
+    fun getPaymentMethodByCompanyId(id : String): MutableLiveData<PaymentMethods>{
+        api.getPaymentMethodByCompanyId(id).enqueue(object : Callback<PaymentMethods>{
             override fun onFailure(call: Call<PaymentMethods>, t: Throwable) {
                 paymentMethods.value = null
             }
@@ -90,8 +90,8 @@ class CompanyRepository (
         return paymentMethods
     }
 
-    fun getDeliveryMethodByCompanyId(token : String,id : String): MutableLiveData<PaymentMethods>{
-        api.getDeliveryMethodByCompanyId("Bearer %s".format(token),id).enqueue(object : Callback<PaymentMethods>{
+    fun getDeliveryMethodByCompanyId(id : String): MutableLiveData<PaymentMethods>{
+        api.getDeliveryMethodByCompanyId(id).enqueue(object : Callback<PaymentMethods>{
             override fun onFailure(call: Call<PaymentMethods>, t: Throwable) {
                 deliveryMethods.value = null
             }

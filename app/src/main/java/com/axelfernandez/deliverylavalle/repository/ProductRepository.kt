@@ -18,8 +18,8 @@ class ProductRepository(
     val productCategory = MutableLiveData<List<ProductCategory>>()
 
 
-    fun getProduct(token :String,productRequest: ProductRequest): MutableLiveData<List<Product>> {
-        api.getProductByCompanyId("Bearer %s".format(token), productRequest).enqueue(object :
+    fun getProduct(productRequest: ProductRequest): MutableLiveData<List<Product>> {
+        api.getProductByCompanyId(productRequest).enqueue(object :
             Callback<List<Product>> {
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
                 data.value = null
@@ -37,8 +37,8 @@ class ProductRepository(
         return data
     }
 
-    fun getProductCategoryByCompany(token :String,companyId: String): MutableLiveData<List<ProductCategory>> {
-        api.getProductCategoriesByCompanyId("Bearer %s".format(token), companyId).enqueue(object :
+    fun getProductCategoryByCompany(companyId: String): MutableLiveData<List<ProductCategory>> {
+        api.getProductCategoriesByCompanyId(companyId).enqueue(object :
             Callback<List<ProductCategory>> {
             override fun onFailure(call: Call<List<ProductCategory>>, t: Throwable) {
                 productCategory.value = null

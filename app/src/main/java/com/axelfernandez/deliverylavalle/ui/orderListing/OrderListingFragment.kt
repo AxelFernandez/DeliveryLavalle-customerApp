@@ -34,6 +34,7 @@ class OrderListingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         orderListingViewModel = ViewModelProviders.of(this).get(OrderListingViewModel::class.java)
+        orderListingViewModel.getRepository(requireContext())
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
 
         return root
@@ -41,14 +42,13 @@ class OrderListingFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
         val v = view?:return
         val loadingOrders = v.findViewById(R.id.order_listing_shimmer) as ShimmerFrameLayout
         loadingOrders.isVisible = true
         loadingOrders.startShimmer()
         v.app_bar_1.text = getString(R.string.order_listing_app_bar_1)
         v.app_bar_2.text = getString(R.string.order_listing_app_bar_2)
-        orderListingViewModel.getOrders(user.token)
+        orderListingViewModel.getOrders()
 
         orderListingViewModel.returnOrders().observe(viewLifecycleOwner, Observer {
             if(it == null){

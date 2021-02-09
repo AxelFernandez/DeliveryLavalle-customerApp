@@ -111,6 +111,8 @@
     <string name="there_is_no_reviews">No hay reseñas de aqui</string>
     <string name="order_something_to_add_a_review">Pide algo para añadir una reseña aqui</string>
     <string name="token_client_id">53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com</string>
+    <string name="in_onboarding">InOnboarding</string>
+    <string name="skip">Omitir</string>
 
 
 </resources>

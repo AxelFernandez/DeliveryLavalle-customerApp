@@ -1,17 +1,15 @@
 package com.axelfernandez.deliverylavalle.ui.address
 
-import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -19,10 +17,10 @@ import androidx.navigation.findNavController
 import com.axelfernandez.deliverylavalle.HomeActivity
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.models.Address
+import com.axelfernandez.deliverylavalle.models.Location
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.address_fragment.view.*
 import kotlinx.android.synthetic.main.app_bar.view.*
 
@@ -37,7 +35,10 @@ class AddressFragment : Fragment() {
     private lateinit var viewModel: AddressViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var address: Address
-    private var phoneLocation: String = ""
+    private lateinit var phoneLocation: String
+    lateinit var resultLocation : Location
+    lateinit var locationRequest : LocationRequest
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +51,9 @@ class AddressFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(AddressViewModel::class.java)
+        viewModel.getRepository(requireContext())
+        createLocationRequest()
+        val isOnBoarding = arguments?.getBoolean(getString(R.string.in_onboarding),false)?:false
         val mustReturn = arguments?.getBoolean(getString(R.string.argument_must_return),false)?:false
         v.app_bar_1.text = "Agregar "
         v.app_bar_2.text = "Dirección"
@@ -64,34 +68,34 @@ class AddressFragment : Fragment() {
                 return@setOnMenuItemClickListener true
             }
         }
+        if (isOnBoarding){
+            toolbar.inflateMenu(R.menu.skip_menu)
+            toolbar.setOnMenuItemClickListener {
+                if (it.itemId == R.id.item_skip_menu){
+                    LoginUtils.saveLoginReady(requireContext()) //Warning! Possible Bug
+                    val intent = Intent(context, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    activity?.finish()
+                }
+                return@setOnMenuItemClickListener true
+            }
+        }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(v.context!!)
         v.get_location.setOnClickListener(View.OnClickListener {
-            if (ActivityCompat.checkSelfPermission(
-                    v.context,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    v.context,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-
-            }
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(v.context)
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                if (location != null) {
+                if(location == null) {
+                    startLocationUpdates(requireActivity())
+
+                }else{
                     phoneLocation = "%s,%s".format(location.latitude, location.longitude)
                     ViewUtil.setSnackBar(v,R.color.orange,"Localizacion recuperada correctamente")
                     v.get_location.setImageResource(R.drawable.ic_baseline_check_circle_24)
                 }
 
             }.addOnFailureListener {
-                Log.e("LOCATION", it.message!!)
+                Log.e("LOCATION", it.message?:"Error in Line 95 Address Fragment")
                 ViewUtil.checkPermission(context = requireActivity());
                 ViewUtil.setSnackBar(v,R.color.orange,"Necesitamos tu ubicacion para poder ofrecerte emprendedores cerca")
 
@@ -99,9 +103,7 @@ class AddressFragment : Fragment() {
         })
         viewModel.notifyPost().observe(viewLifecycleOwner, Observer {
             if(it != null){
-                var editor = activity?.getSharedPreferences("userSession", Context.MODE_PRIVATE)?.edit()
-                editor?.putBoolean(getString(R.string.is_login_ready),true)
-                editor?.apply()
+                LoginUtils.saveLoginReady(requireContext())
                 ViewUtil.setSnackBar(v,R.color.orange,"Direccion Guardada Correctamente")
                 address.id = it.addressId
                 LoginUtils.saveDefaultAddress(requireContext(),address)
@@ -132,8 +134,6 @@ class AddressFragment : Fragment() {
 
         }
 
-
-
     }
 
     private fun continuePost() {
@@ -145,10 +145,36 @@ class AddressFragment : Fragment() {
             location = phoneLocation,
             id = ""
         )
-        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
-        viewModel.postAddress(address,user.token)
+        viewModel.postAddress(address)
     }
 
+    fun createLocationRequest() {
+        locationRequest = LocationRequest.create()?.apply {
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }?:return
+    }
+    private fun startLocationUpdates(activity: Activity) {
+        ViewUtil.checkPermission(activity)
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+            locationCallback,
+            Looper.getMainLooper())
+    }
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult?) {
+            locationResult ?: return
+            for (location in locationResult.locations){
+                Log.e("LOCATION", "Get location successful!")
+                phoneLocation = "%s,%s".format(location.latitude, location.longitude)
+                ViewUtil.setSnackBar(v,R.color.orange,"Localizacion recuperada correctamente")
+                v.get_location.setImageResource(R.drawable.ic_baseline_check_circle_24)
+                fusedLocationClient.removeLocationUpdates(this)
+
+            }
+        }
+    }
 }
 
 

@@ -50,7 +50,8 @@ class Login : Fragment() {
 			.requestProfile()
 			.requestEmail()
 			.build()
-		mGoogleSignInClient = GoogleSignIn.getClient(activity?.application!!, mGoogleSignInOptions)
+		mGoogleSignInClient = GoogleSignIn.getClient(requireActivity().application, mGoogleSignInOptions)
+
 		v.app_bar_1.text = "Delivery "
 		v.app_bar_2.text = "Lavalle"
 		v.google_button_sigin.setOnClickListener {
@@ -71,6 +72,7 @@ class Login : Fragment() {
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
 		viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+		viewModel.getRepository(requireContext())
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -78,7 +80,7 @@ class Login : Fragment() {
 		if (requestCode == RC_SIGN_IN) {
 			val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
 			try {
-				val account = task.getResult(ApiException::class.java)!!
+				val account = task.getResult(ApiException::class.java)
 				val googleToken = account.idToken ?: return
 				viewModel.loginWithGoogle(googleToken)
 				viewModel.returnToken().observe(viewLifecycleOwner, Observer {
@@ -120,8 +122,7 @@ class Login : Fragment() {
 				}
 				val token = task.result
 				LoginUtils.saveTokenFirebase(token, requireContext())
-				val user = LoginUtils.getUserFromSharedPreferences(requireContext())
-				viewModel.sendFirebaseToken(user.token, FirebaseToken(token))
+				viewModel.sendFirebaseToken(FirebaseToken(token))
 			})
 	}
 

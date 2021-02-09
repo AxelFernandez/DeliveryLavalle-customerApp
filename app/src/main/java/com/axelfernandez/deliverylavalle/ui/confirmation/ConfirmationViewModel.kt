@@ -1,5 +1,6 @@
 package com.axelfernandez.deliverylavalle.ui.confirmation
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.axelfernandez.deliverylavalle.api.Api
@@ -13,11 +14,14 @@ import javax.inject.Inject
 
 class ConfirmationViewModel : ViewModel() {
 
-    @Inject
-    private val orderRepository = OrdersRepository(RetrofitFactory.buildService(Api::class.java))
+    lateinit var orderRepository :OrdersRepository
 
-    fun postOrder(order: OrderPost, token : String){
-        orderRepository.postOrder(order,token)
+    fun getRepository(context: Context){
+        orderRepository = OrdersRepository(RetrofitFactory.buildService(Api::class.java,context))
+    }
+
+    fun postOrder(order: OrderPost){
+        orderRepository.postOrder(order)
     }
 
     fun returnOrders():LiveData<OrderResponse>{

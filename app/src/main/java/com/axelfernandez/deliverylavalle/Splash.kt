@@ -20,6 +20,7 @@ import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -34,8 +35,7 @@ class Splash : AppCompatActivity() {
     private lateinit var fullscreenContent: TextView
     private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler()
-    @Inject
-    val login = LoginRepository(RetrofitFactory.buildService(Api::class.java))
+    lateinit var login :LoginRepository
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
@@ -98,6 +98,7 @@ class Splash : AppCompatActivity() {
         var editor = getSharedPreferences("userSession", Context.MODE_PRIVATE)
         val is_login_ready = editor.getBoolean(getString(R.string.is_login_ready), false)
         var remoteConfig = Firebase.remoteConfig
+        login = LoginRepository(RetrofitFactory.buildService(Api::class.java,baseContext))
         val configSettings = remoteConfigSettings {
             minimumFetchIntervalInSeconds = 3600
         }
@@ -106,10 +107,9 @@ class Splash : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val updated = task.result
-                    Log.d("TAG", "Config params updated: $updated")
-
+                    FirebaseCrashlytics.getInstance().log("Config params updated: $updated")
                 } else {
-                    Log.e("TAG", "Can't Connect to Firebase")
+                    FirebaseCrashlytics.getInstance().log("Can't Connect to Firebase")
                 }
                 if (is_login_ready) {
                     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -119,8 +119,8 @@ class Splash : AppCompatActivity() {
                             .build()
                     val googleSignInClient = GoogleSignIn.getClient(this, gso)
                     googleSignInClient.silentSignIn().addOnCompleteListener {
-                        val account: GoogleSignInAccount? = it.result
-                        login.getToken(account?.idToken?:return@addOnCompleteListener)
+                        val account: GoogleSignInAccount = it.result
+                        login.getToken(account.idToken?:return@addOnCompleteListener)
                     }
                     login.returnData().observe(this, Observer {
                         if (it == null) {

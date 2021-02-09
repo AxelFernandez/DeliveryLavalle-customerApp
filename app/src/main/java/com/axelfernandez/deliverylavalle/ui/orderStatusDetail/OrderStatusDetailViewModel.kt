@@ -1,6 +1,7 @@
 package com.axelfernandez.deliverylavalle.ui.orderStatusDetail
 
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.axelfernandez.deliverylavalle.R
@@ -15,8 +16,11 @@ import javax.inject.Inject
 
 class OrderStatusDetailViewModel : ViewModel() {
 
-    @Inject
-    private val orderRepository = OrdersRepository(RetrofitFactory.buildService(Api::class.java))
+
+    private lateinit var orderRepository : OrdersRepository
+    fun getRepository(context: Context){
+        orderRepository  = OrdersRepository(RetrofitFactory.buildService(Api::class.java,context))
+    }
 
     fun getStepName(order: Order): ArrayList<String> {
         var result  = ArrayList<String>()
@@ -65,8 +69,8 @@ class OrderStatusDetailViewModel : ViewModel() {
     }
 
 
-    fun getOrders(token : String, orderId: String){
-        orderRepository.getOrdersById(orderId, token)
+    fun getOrders(orderId: String){
+        orderRepository.getOrdersById(orderId)
     }
 
     fun returnOrders(): LiveData<Order> {
@@ -122,8 +126,8 @@ class OrderStatusDetailViewModel : ViewModel() {
         }
     }
 
-    fun getMeliLink(token: String,order: String){
-        orderRepository.getMeliLinkByOrderId(order,token)
+    fun getMeliLink(order: String){
+        orderRepository.getMeliLinkByOrderId(order)
     }
     fun returnMeliLink(): LiveData<MeliLink> {
         return orderRepository.returnMeliLink()
@@ -133,15 +137,15 @@ class OrderStatusDetailViewModel : ViewModel() {
         return order.state != "Entregado"
     }
 
-    fun fetchReview(token:String, order:String){
-        orderRepository.getRating(order, token)
+    fun fetchReview(order:String){
+        orderRepository.getRating(order)
     }
     fun returnReview(): LiveData<Review> {
         return orderRepository.returnRating()
     }
 
-    fun postReview(token: String, review: Review){
-        orderRepository.postRating(token,review)
+    fun postReview(review: Review){
+        orderRepository.postRating(review)
     }
     fun returnResponseRating(): LiveData<String> {
         return orderRepository.returnResponseRating()

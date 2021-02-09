@@ -1,5 +1,6 @@
 package com.axelfernandez.deliverylavalle.ui.login
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.axelfernandez.deliverylavalle.api.Api
@@ -13,13 +14,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import javax.inject.Inject
 
 class LoginViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
-    @Inject
-    private val loginRepository = LoginRepository(RetrofitFactory.buildService(Api::class.java))
 
+    lateinit var loginRepository :LoginRepository
 
-    fun sendFirebaseToken(token:String,firebase:FirebaseToken){
-        loginRepository.sendToken(token, firebase)
+    fun getRepository(context: Context){
+        loginRepository =  LoginRepository(RetrofitFactory.buildService(Api::class.java,context))
+    }
+
+    fun sendFirebaseToken(firebase:FirebaseToken){
+        loginRepository.sendToken(firebase)
     }
 
     fun loginWithGoogle(token: String){

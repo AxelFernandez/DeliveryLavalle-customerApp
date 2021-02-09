@@ -39,8 +39,8 @@ class ClientRepository (
         return data
     }
 
-    fun updatePhone(user :User, token: String):MutableLiveData<User>{
-        api.updatePhone(userData = user,token = "Bearer %s".format(token)).enqueue(object : Callback<User>{
+    fun updatePhone(user :User):MutableLiveData<User>{
+        api.updatePhone(userData = user).enqueue(object : Callback<User>{
             override fun onFailure(call: Call<User>, t: Throwable) {
                 data.value = null
             }

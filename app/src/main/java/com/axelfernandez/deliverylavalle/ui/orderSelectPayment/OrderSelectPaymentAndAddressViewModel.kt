@@ -1,5 +1,6 @@
 package com.axelfernandez.deliverylavalle.ui.orderSelectPayment
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.axelfernandez.deliverylavalle.api.Api
@@ -10,19 +11,23 @@ import javax.inject.Inject
 
 class OrderSelectPaymentAndAddressViewModel : ViewModel() {
 
-    @Inject
-    private val companyRepository = CompanyRepository(RetrofitFactory.buildService(Api::class.java))
 
-    fun solicitPaymentMethod(token:String, id :String){
-        companyRepository.getPaymentMethodByCompanyId(token, id)
+    private lateinit var companyRepository : CompanyRepository
+
+    fun getRepository(context: Context){
+        companyRepository  = CompanyRepository(RetrofitFactory.buildService(Api::class.java, context))
+    }
+
+    fun solicitPaymentMethod(id :String){
+        companyRepository.getPaymentMethodByCompanyId(id)
     }
 
     fun returnPaymentMethod(): LiveData<PaymentMethods> {
         return companyRepository.returnPaymentMethod()
     }
 
-    fun solicitDeliveryMethod(token:String, id :String){
-        companyRepository.getDeliveryMethodByCompanyId(token, id)
+    fun solicitDeliveryMethod(id :String){
+        companyRepository.getDeliveryMethodByCompanyId(id)
     }
 
     fun returnDeliveryMethod(): LiveData<PaymentMethods> {

@@ -19,8 +19,8 @@ class AddressRepository(
     val addressResponseLiveData = MutableLiveData<AddressResponse>()
 
 
-    fun postAddress(address :Address, token: String): MutableLiveData<AddressResponse> {
-        api.postAddress(address = address, token = "Bearer %s".format(token)).enqueue(object : Callback<AddressResponse> {
+    fun postAddress(address :Address): MutableLiveData<AddressResponse> {
+        api.postAddress(address = address).enqueue(object : Callback<AddressResponse> {
             override fun onFailure(call: Call<AddressResponse>, t: Throwable) {
                 addressResponseLiveData.value = null
                 return
@@ -38,8 +38,8 @@ class AddressRepository(
         return addressResponseLiveData
     }
 
-    fun getAllAddress(token: String): MutableLiveData<List<Address>> {
-        api.getAddress("Bearer %s".format(token)).enqueue(object : Callback<List<Address>> {
+    fun getAllAddress(): MutableLiveData<List<Address>> {
+        api.getAddress().enqueue(object : Callback<List<Address>> {
             override fun onFailure(call: Call<List<Address>>, t: Throwable) {
                 addressLiveData.value = null
                 return
@@ -59,8 +59,8 @@ class AddressRepository(
 
     }
 
-    fun deleteAddress(token: String,address: Address): MutableLiveData<String> {
-        api.postAddressDelete(address, "Bearer %s".format(token)).enqueue(object : Callback<String> {
+    fun deleteAddress(address: Address): MutableLiveData<String> {
+        api.postAddressDelete(address).enqueue(object : Callback<String> {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 addressDeleted.value = null
                 return

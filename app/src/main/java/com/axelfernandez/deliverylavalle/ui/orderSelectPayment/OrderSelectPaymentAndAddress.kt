@@ -61,11 +61,13 @@ class OrderSelectPaymentAndAddress : Fragment() {
         viewModel = ViewModelProviders.of(this).get(AddressViewModel::class.java)
         viewModelMethods = ViewModelProviders.of(this).get(OrderSelectPaymentAndAddressViewModel::class.java)
         viewModelCompany = ViewModelProviders.of(this).get(DetailViewModel::class.java)
+        viewModelCompany.getRepository(requireContext())
+        viewModel.getRepository(requireContext())
+        viewModelMethods.getRepository(requireContext())
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
         v.phishing_text.text = getString(R.string.phishing_text_1)
-        val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
         val bundle = arguments?:return
         val companyId = bundle.getString(getString(R.string.arguments_company))?:return
         val address = LoginUtils.getDefaultAddress(requireContext())
@@ -77,10 +79,10 @@ class OrderSelectPaymentAndAddress : Fragment() {
         methodsRv.adapter = AddressAdapter(listOfAddress,requireContext(),{onItemClickListener(it)}, {{}},false)
 
         if (atomicBoolean.compareAndSet(false, true)){
-            viewModelMethods.solicitPaymentMethod(user.token, companyId)
+            viewModelMethods.solicitPaymentMethod(companyId)
         }
         if (atomicDeliveryBoolean.compareAndSet(false, true)){
-            viewModelMethods.solicitDeliveryMethod(user.token, companyId)
+            viewModelMethods.solicitDeliveryMethod(companyId)
         }
         viewModelCompany.returnCompany().observe(viewLifecycleOwner, Observer {
             if(it == null){
@@ -102,7 +104,7 @@ class OrderSelectPaymentAndAddress : Fragment() {
                 ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
             }
             val it = it?:return@Observer
-            viewModelCompany.getCompanyById(user.token,companyId)
+            viewModelCompany.getCompanyById(companyId)
             when (it.methods.size){
                 1 ->{
                     if(it.methods.first() == "Retiro en el Local"){
@@ -157,4 +159,9 @@ class OrderSelectPaymentAndAddress : Fragment() {
         v.findNavController().navigate(R.id.action_orderSelectPaymentAndAddress_to_addressList, bundle)
     }
 
+    override fun onPause() {
+        super.onPause()
+        atomicBoolean.set(false)
+        atomicDeliveryBoolean.set(false)
+    }
 }

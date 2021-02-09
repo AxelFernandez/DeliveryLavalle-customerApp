@@ -51,6 +51,7 @@ class CellPhoneFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CellPhoneViewModel::class.java)
+        viewModel.getRepository(requireContext())
         val user = viewModel.getUserData(v.context)
         val arguments = arguments?:return
         val fromSettings = arguments.getBoolean(getString(R.string.from_settings),false)
@@ -96,7 +97,9 @@ class CellPhoneFragment : Fragment() {
                     if (fromSettings){
                        v.findNavController().popBackStack()
                     }else{
-                        v.findNavController().navigate(R.id.action_cellPhoneFragment_to_addressFragment)
+                        val bundle = Bundle()
+                        bundle.putBoolean(resources.getString(R.string.in_onboarding), true)
+                        v.findNavController().navigate(R.id.action_cellPhoneFragment_to_addressFragment,bundle)
                     }
                 }
             }else{
@@ -111,8 +114,7 @@ class CellPhoneFragment : Fragment() {
                 v.tilo_cellphone.error = getString(R.string.required)
             }else{
                 must_redirect = true
-                viewModel.startUpdatePhone(v.context,field.text.toString(),
-                viewModel.getUserData(requireContext()).token)
+                viewModel.startUpdatePhone(v.context,field.text.toString())
 
             }
         })

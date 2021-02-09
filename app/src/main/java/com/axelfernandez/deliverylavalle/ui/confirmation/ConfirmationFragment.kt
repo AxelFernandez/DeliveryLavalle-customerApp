@@ -16,9 +16,7 @@ import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.adapters.AddressAdapter
 import com.axelfernandez.deliverylavalle.adapters.OrderDetailAdapter
 import com.axelfernandez.deliverylavalle.models.*
-import com.axelfernandez.deliverylavalle.ui.address.AddressViewModel
 import com.axelfernandez.deliverylavalle.ui.companyDetail.DetailViewModel
-import com.axelfernandez.deliverylavalle.ui.login.Login
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.squareup.picasso.Picasso
@@ -26,7 +24,6 @@ import kotlinx.android.synthetic.main.banner_local_delivery.view.*
 import kotlinx.android.synthetic.main.banner_phishing.view.*
 import kotlinx.android.synthetic.main.confirmation_fragment.view.*
 import kotlinx.android.synthetic.main.order_detail_company_item.view.*
-import kotlinx.android.synthetic.main.order_select_payment_and_adress_fragment.view.*
 
 class ConfirmationFragment : Fragment() {
 
@@ -49,18 +46,19 @@ class ConfirmationFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ConfirmationViewModel::class.java)
+        viewModel.getRepository(requireContext())
         viewModelCompany = ViewModelProviders.of(this).get(DetailViewModel::class.java)
+        viewModelCompany.getRepository(requireContext())
         val v = view?:return
         val arguments = arguments?:return
         val companyId = arguments.getString(resources.getString(R.string.arguments_company))?:return
-        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
         val retryInLocal: Boolean = arguments.getBoolean(getString(R.string.argument_retry_in_local))
 
         //CompanyId
-        viewModelCompany.getCompanyById(user.token,companyId)
+        viewModelCompany.getCompanyById(companyId)
         viewModelCompany.returnCompany().observe(viewLifecycleOwner, Observer {
             if(it == null){
                 ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
@@ -116,7 +114,7 @@ class ConfirmationFragment : Fragment() {
             // TODO: Possible security problem, replace this Total for a logic in Server
             val order: OrderPost = OrderPost(companyId,address.id, method, total,products,retryInLocal)
             val user = LoginUtils.getUserFromSharedPreferences(requireContext())
-            viewModel.postOrder(order,user.token)
+            viewModel.postOrder(order)
         }
 
         viewModel.returnOrders().observe(viewLifecycleOwner, Observer {

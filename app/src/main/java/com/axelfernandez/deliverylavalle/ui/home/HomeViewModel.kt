@@ -2,6 +2,7 @@ package com.axelfernandez.deliverylavalle.ui.home
 
 import android.app.Activity
 import android.content.Context
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
@@ -19,8 +20,7 @@ import com.axelfernandez.deliverylavalle.repository.CompanyRepository
 import com.axelfernandez.deliverylavalle.repository.LoginRepository
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -32,10 +32,15 @@ import kotlin.math.log
 
 class HomeViewModel : ViewModel() {
 
+    lateinit var fusedLocationClient :FusedLocationProviderClient
+    lateinit var companyCategoryResponse :CompanyRepository
 
-    @Inject
-    val companyCategoryResponse = CompanyRepository(RetrofitFactory.buildService(Api::class.java))
+    lateinit var resultLocation : Location
+    lateinit var locationRequest : LocationRequest
 
+    fun getRepository(context: Context){
+        companyCategoryResponse = CompanyRepository(RetrofitFactory.buildService(Api::class.java,context))
+    }
 
 
     private val banner_title = MutableLiveData<String>().apply {
@@ -55,8 +60,8 @@ class HomeViewModel : ViewModel() {
 
 
 
-    fun getCategoty(token:String){
-        companyCategoryResponse.getCategory(token)
+    fun getCategoty(){
+        companyCategoryResponse.getCategory()
 
     }
     fun returnCategory(): LiveData<List<CompanyCategoryResponse>> {
@@ -65,8 +70,8 @@ class HomeViewModel : ViewModel() {
     }
 
 
-    fun getCompany(token:String,location: Location){
-        companyCategoryResponse.getCompany(token,location)
+    fun getCompany(location: Location){
+        companyCategoryResponse.getCompany(location)
 
     }
     fun returnCompany(): LiveData<List<Company>> {
@@ -74,21 +79,53 @@ class HomeViewModel : ViewModel() {
 
     }
 
-    fun getLocationAndGetCompany(activity: Activity,token: String, category : String?,v : View){
-        var fusedLocationClient : FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
+
+    fun getLocationAndGetCompany(activity: Activity, category : String?,v : View){
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            var location = Location(location.latitude.toString(),location.longitude.toString(), category)
-            Log.e("LOCATION", "Get location successful!")
-            getCompany(token,location)
+            if (location == null){
+                startLocationUpdates(activity)
+            }else{
+                resultLocation = Location(location.latitude.toString(),location.longitude.toString(), category)
+                Log.e("LOCATION", "Get location successful!")
+                getCompany(resultLocation)
+            }
+
 
         }.addOnFailureListener {
-            Log.e("LOCATION", it.message!!)
-            ViewUtil.checkPermission(context = activity);
+            Log.e("LOCATION", it.message?:"Error en Home View Model Ln 87")
+            ViewUtil.checkPermission(context = activity)
             ViewUtil.setSnackBar(v, R.color.orange,"No hay Permisos para acceder a la Ubicacion, revisalos!")
             return@addOnFailureListener
         }
 
+
+    }
+    fun createLocationRequest() {
+         locationRequest = LocationRequest.create()?.apply {
+             interval = 10000
+             fastestInterval = 5000
+             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+         }?:return
+    }
+    private fun startLocationUpdates(activity: Activity) {
+        ViewUtil.checkPermission(activity)
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+            locationCallback,
+            Looper.getMainLooper())
     }
 
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult?) {
+            locationResult ?: return
+            for (location in locationResult.locations){
+                resultLocation = Location(location.latitude.toString(),location.longitude.toString(), null)
+                Log.e("LOCATION", "Get location successful!")
+                getCompany(resultLocation)
+                fusedLocationClient.removeLocationUpdates(this)
+
+            }
+        }
+    }
 
 }

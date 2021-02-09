@@ -53,16 +53,16 @@ class OrderDetailFragment : Fragment() {
         var total :Int = 0
         val productsDetails : ArrayList<ProductDetail> = ArrayList()
         val bundle : Bundle = arguments?:return
-        val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
         viewModel = ViewModelProviders.of(this).get(OrderDetailViewModel::class.java)
-        viewModel.initial(requireContext(),bundle)
+        viewModel.getRepository(requireContext())
+        viewModel.initial(bundle)
         idCompany = bundle.getString(getString(R.string.arguments_company),"null")
         productRv = v.findViewById(R.id.rv_order_detail) as RecyclerView
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
 
-        viewModel.getCompanyById(user.token,idCompany)
+        viewModel.getCompanyById(idCompany)
         viewModel.gropuped.observe(viewLifecycleOwner, Observer {
             if(it == null){
                 ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))

@@ -56,8 +56,8 @@ class DetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(DetailViewModel::class.java)
+        viewModel.getRepository(requireContext())
         idCompany = requireActivity().intent.getStringExtra(getString(R.string.company_id))?:return
-        val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
 
         val counterFab = v.findViewById(R.id.counter_fab) as CounterFab
 
@@ -67,10 +67,9 @@ class DetailFragment : Fragment() {
         methodsRv = v.findViewById(R.id.method_available) as RecyclerView
         productRv = v.findViewById(R.id.product_rv) as RecyclerView
         categoryRv = v.findViewById(R.id.category_rv) as RecyclerView
-        token = user.token
-        viewModel.getCompanyById(token, idCompany)
-        viewModel.getProductByCompanyId(token,ProductRequest(idCompany,null))
-        viewModel.getProductCategoryByCompanyId(token,idCompany)
+        viewModel.getCompanyById(idCompany)
+        viewModel.getProductByCompanyId(ProductRequest(idCompany,null))
+        viewModel.getProductCategoryByCompanyId(idCompany)
         viewModel.returnCompany().observe(viewLifecycleOwner, Observer {
             if(it == null){
                 ViewUtil.setSnackBar(v,R.color.red,getString(R.string.no_conection))
@@ -125,7 +124,7 @@ class DetailFragment : Fragment() {
         }
     }
     private fun itemCategoryClickListener(productCategory: ProductCategory){
-        viewModel.getProductByCompanyId(token,ProductRequest(idCompany,productCategory.description))
+        viewModel.getProductByCompanyId(ProductRequest(idCompany,productCategory.description))
         v.text_view_product_of.text = getString(R.string.product_of).format(productCategory.description)
         v.shimmer_product.isVisible = true
 

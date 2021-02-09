@@ -20,22 +20,26 @@ import javax.inject.Inject
 class OrderDetailViewModel : ViewModel() {
 
 
-    @Inject
-    private val companyRepository = CompanyRepository(RetrofitFactory.buildService(Api::class.java))
+
+    lateinit var companyRepository : CompanyRepository
+
+    fun getRepository(context: Context){
+        companyRepository = CompanyRepository(RetrofitFactory.buildService(Api::class.java,context))
+    }
 
     private val _gropuped = MutableLiveData<Map<String,List<Product>>>()
     val gropuped: LiveData<Map<String,List<Product>>> = _gropuped
 
 
-    fun initial(context: Context,bundle: Bundle){
+    fun initial(bundle: Bundle){
         var array: ArrayList<Product>? = bundle.get("orders") as ArrayList<Product>?
         _gropuped.value =  array?.groupBy { it.name }
 
     }
 
 
-    fun getCompanyById(token:String, id :String){
-        companyRepository.getCompanyById(token, id)
+    fun getCompanyById(token:String){
+        companyRepository.getCompanyById(token)
     }
 
     fun returnCompany(): LiveData<Company> {

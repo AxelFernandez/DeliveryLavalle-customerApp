@@ -21,8 +21,8 @@ class OrdersRepository (
     var meliLink = MutableLiveData<MeliLink>()
 
 
-    fun getOrders(token :String): MutableLiveData<List<Order>> {
-        api.getOrders("Bearer %s".format(token)).enqueue(object : Callback<List<Order>> {
+    fun getOrder(): MutableLiveData<List<Order>> {
+        api.getOrders().enqueue(object : Callback<List<Order>> {
             override fun onFailure(call: Call<List<Order>>, t: Throwable) {
                 orders.value = null
             }
@@ -42,8 +42,8 @@ class OrdersRepository (
         return orderPost
     }
 
-    fun postOrder(order : OrderPost, token: String): MutableLiveData<OrderResponse> {
-        api.postOrder("Bearer %s".format(token),order).enqueue(object :
+    fun postOrder(order : OrderPost): MutableLiveData<OrderResponse> {
+        api.postOrder(order).enqueue(object :
             Callback<OrderResponse> {
             override fun onFailure(call: Call<OrderResponse>, t: Throwable) {
                 orderPost.value = null
@@ -60,9 +60,8 @@ class OrdersRepository (
         return ordersById
     }
 
-    fun getOrdersById(orderId : String,token :String): MutableLiveData<Order> {
-
-        api.getOrdersById("Bearer %s".format(token),orderId).enqueue(object : Callback<Order> {
+    fun getOrdersById(orderId : String): MutableLiveData<Order> {
+        api.getOrdersById(orderId).enqueue(object : Callback<Order> {
             override fun onFailure(call: Call<Order>, t: Throwable) {
                 ordersById.value = null
             }
@@ -79,8 +78,8 @@ class OrdersRepository (
         return meliLink
     }
 
-    fun getMeliLinkByOrderId(orderId : String,token :String): MutableLiveData<MeliLink> {
-        api.getMeLiLink("Bearer %s".format(token),orderId).enqueue(object : Callback<MeliLink> {
+    fun getMeliLinkByOrderId(orderId : String): MutableLiveData<MeliLink> {
+        api.getMeLiLink(orderId).enqueue(object : Callback<MeliLink> {
             override fun onFailure(call: Call<MeliLink>, t: Throwable) {
                 meliLink.value = null
             }
@@ -97,8 +96,8 @@ class OrdersRepository (
         return rating
     }
 
-    fun getRating(orderId : String,token :String): MutableLiveData<Review> {
-        api.getRating("Bearer %s".format(token),orderId).enqueue(object : Callback<Review> {
+    fun getRating(orderId : String): MutableLiveData<Review> {
+        api.getRating(orderId).enqueue(object : Callback<Review> {
             override fun onFailure(call: Call<Review>, t: Throwable) {
                 rating.value = null
             }
@@ -109,8 +108,8 @@ class OrdersRepository (
         return rating
     }
 
-    fun postRating(token :String, review:Review): MutableLiveData<String> {
-        api.postRating("Bearer %s".format(token),review).enqueue(object : Callback<String> {
+    fun postRating(review:Review): MutableLiveData<String> {
+        api.postRating(review).enqueue(object : Callback<String> {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 data.value = null
             }
@@ -125,8 +124,8 @@ class OrdersRepository (
         return data
     }
 
-    fun getReviews(token : String,companyId :String): MutableLiveData<List<Review>> {
-        api.getReviews("Bearer %s".format(token),companyId).enqueue(object : Callback<List<Review>> {
+    fun getReviews(companyId :String): MutableLiveData<List<Review>> {
+        api.getReviews(companyId).enqueue(object : Callback<List<Review>> {
             override fun onFailure(call: Call<List<Review>>, t: Throwable) {
                 reviews.value = null
             }

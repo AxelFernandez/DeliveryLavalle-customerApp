@@ -9,6 +9,7 @@ import com.axelfernandez.deliverylavalle.models.FirebaseToken
 import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.models.UserResponse
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +25,8 @@ class LoginRepository (
         api.loginWithGoogle(googleToken).enqueue(object : Callback<UserResponse> {
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 data.value = null
-
+                FirebaseCrashlytics.getInstance().recordException(t)
+                FirebaseCrashlytics.getInstance().log("API Connection ERROR to ${call.request().url()} Exception : ${t.message}")
             }
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 data.value = response.body()
@@ -41,8 +43,8 @@ class LoginRepository (
 
     val tokenLiveData = MutableLiveData<ConfirmationObject>()
 
-    fun sendToken(token: String, firebaseToken:FirebaseToken): MutableLiveData<ConfirmationObject> {
-        api.sendFirebaseToken(firebaseToken, "Bearer %s".format(token)).enqueue(object : Callback<ConfirmationObject> {
+    fun sendToken(firebaseToken:FirebaseToken): MutableLiveData<ConfirmationObject> {
+        api.sendFirebaseToken(firebaseToken).enqueue(object : Callback<ConfirmationObject> {
             override fun onFailure(call: Call<ConfirmationObject>, t: Throwable) {
                 tokenLiveData.value = null
 

@@ -34,7 +34,6 @@ class AddressList : Fragment() {
     private lateinit var addresListRv: RecyclerView
     private lateinit var v: View
     private lateinit var viewModel: AddressViewModel
-    private lateinit var token: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,15 +47,14 @@ class AddressList : Fragment() {
         super.onActivityCreated(savedInstanceState)
         addresListRv = v.findViewById(R.id.rv_addresses) as RecyclerView
         viewModel = ViewModelProviders.of(this).get(AddressViewModel::class.java)
-        val user: User = LoginUtils.getUserFromSharedPreferences(requireContext())
+        viewModel.getRepository(requireContext())
         v.app_bar_1.text = "Selecciona "
         v.app_bar_2.text = "Una Direccion"
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
 
-        viewModel.soliciteAddress(user.token)
-        token = user.token
+        viewModel.soliciteAddress()
 
         viewModel.notifyAddres().observe(viewLifecycleOwner, Observer {
             if(it == null){
@@ -80,7 +78,7 @@ class AddressList : Fragment() {
                 return@Observer
             }
             ViewUtil.setSnackBar(v,R.color.green,"Eliminado correctamente")
-            viewModel.soliciteAddress(token)
+            viewModel.soliciteAddress()
         })
     }
     private fun onItemClickListener(address: Address) {
@@ -92,6 +90,6 @@ class AddressList : Fragment() {
         if(savedAddress.street == address.street){
             LoginUtils.removeAddress(requireContext())
         }
-        viewModel.deleteAddress(address, token)
+        viewModel.deleteAddress(address)
     }
 }

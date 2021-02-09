@@ -16,33 +16,33 @@ import javax.inject.Inject
 class DetailViewModel : ViewModel() {
 
 
-    @Inject
-    private val productRepository = ProductRepository(RetrofitFactory.buildService(Api::class.java))
-    @Inject
-    private val companyRepository = CompanyRepository(RetrofitFactory.buildService(Api::class.java))
 
+    lateinit var productRepository :ProductRepository
+    lateinit var companyRepository : CompanyRepository
 
+    fun getRepository(context: Context){
+        productRepository  = ProductRepository(RetrofitFactory.buildService(Api::class.java, context))
+        companyRepository  = CompanyRepository(RetrofitFactory.buildService(Api::class.java, context))
+    }
 
-
-
-    fun getProductCategoryByCompanyId(token:String, companyId: String){
-        productRepository.getProductCategoryByCompany(token, companyId)
+    fun getProductCategoryByCompanyId(companyId: String){
+        productRepository.getProductCategoryByCompany(companyId)
     }
 
     fun returnProductsCategory(): LiveData<List<ProductCategory>> {
         return productRepository.returnProductCategory()
     }
 
-    fun getProductByCompanyId(token:String, productRequest: ProductRequest){
-        productRepository.getProduct(token, productRequest)
+    fun getProductByCompanyId(productRequest: ProductRequest){
+        productRepository.getProduct(productRequest)
     }
 
     fun returnProducts(): LiveData<List<Product>> {
         return productRepository.returnData()
     }
 
-    fun getCompanyById(token:String, id :String){
-        companyRepository.getCompanyById(token, id)
+    fun getCompanyById(id :String){
+        companyRepository.getCompanyById(id)
     }
 
     fun returnCompany(): LiveData<Company> {

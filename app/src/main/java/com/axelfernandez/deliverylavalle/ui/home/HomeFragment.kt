@@ -1,7 +1,11 @@
 package com.axelfernandez.deliverylavalle.ui.home
 
+import android.content.Context
 import android.content.Intent
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -26,6 +30,7 @@ import com.axelfernandez.deliverylavalle.models.User
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
 import com.axelfernandez.deliverylavalle.utils.ViewUtil
 import com.facebook.shimmer.ShimmerFrameLayout
+import com.google.android.gms.location.LocationListener
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.app_bar.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -42,7 +47,6 @@ class HomeFragment : Fragment() {
     lateinit var companyRv : RecyclerView
     lateinit var categoriesAdapter : CompanyCategotyAdapter
     lateinit var companyAdapter : CompanyAdapter
-    var accessToken : String = ""
 
     companion object {
         fun newInstance() =
@@ -51,6 +55,7 @@ class HomeFragment : Fragment() {
 
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,7 +63,7 @@ class HomeFragment : Fragment() {
     ): View? {
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
-
+        homeViewModel.getRepository(requireContext())
         root = inflater.inflate(R.layout.fragment_home, container, false)
         return root
     }
@@ -68,7 +73,6 @@ class HomeFragment : Fragment() {
         val bannerTitle: TextView = root.findViewById(R.id.banner_title)
         val bannerSubtitle: TextView = root.findViewById(R.id.banner_subtitle)
         val bannerImage: ImageView = root.findViewById(R.id.banner_image)
-        val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
         val view = view?:return
         categoryRv = root.findViewById(R.id.company_category_rv) as RecyclerView
         companyRv = root.findViewById(R.id.company_rv) as RecyclerView
@@ -90,15 +94,13 @@ class HomeFragment : Fragment() {
             Picasso.with(context).load(it).placeholder(requireContext().getDrawable(R.drawable.ic_abstract)).into(bannerImage)
         })
 
-        homeViewModel.getCategoty(user.token)
-        homeViewModel.getLocationAndGetCompany(requireActivity(), user.token, null,view)
-        accessToken = user.token
+        homeViewModel.getCategoty()
 
         homeViewModel.returnCompany().observe(viewLifecycleOwner, Observer{
             if(it == null){
                 ViewUtil.setSnackBar(root, R.color.red,getString(R.string.no_conection))
+                return@Observer
             }
-            val it = it?:return@Observer
             val animation: LayoutAnimationController =
                 AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_fall_down)
             companyRv.layoutAnimation = animation
@@ -130,14 +132,14 @@ class HomeFragment : Fragment() {
 
 
         })
+        homeViewModel.createLocationRequest()
     }
     fun onClickActionItemList(item: CompanyCategoryResponse) {
         root.text_view_feed_company.text = getString(R.string.company_near_category).format(item.description)
-        homeViewModel.getLocationAndGetCompany(requireActivity(), accessToken, item.description,view?:return)
+        homeViewModel.getLocationAndGetCompany(requireActivity(), item.description,view?:return)
         root.shimmer_company.visibility = View.VISIBLE
         companyRv.visibility = View.GONE
         root.no_company_found_feed.visibility = GONE
-        //companyAdapter.notifyDataSetChanged()
 
     }
 
@@ -151,4 +153,9 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.getLocationAndGetCompany(requireActivity(), null,requireView())
+
+    }
 }

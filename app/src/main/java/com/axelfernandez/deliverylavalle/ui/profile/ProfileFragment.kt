@@ -14,6 +14,10 @@ import androidx.navigation.fragment.findNavController
 import com.axelfernandez.deliverylavalle.MainActivity
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.utils.LoginUtils
+import com.axelfernandez.deliverylavalle.utils.ViewUtil
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
@@ -26,25 +30,7 @@ class ProfileFragment : Fragment() {
 		val root = inflater.inflate(R.layout.fragment_profile, container, false)
 		val user = LoginUtils.getUserFromSharedPreferences(requireContext())
 
-		Picasso.with(requireContext()).load(user.photo).into(root.settings_image, object: com.squareup.picasso.Callback {
-			override fun onSuccess() {
-				val imageBitmap =
-					(root.settings_image.getDrawable() as BitmapDrawable).bitmap
-				val imageDrawable =
-					RoundedBitmapDrawableFactory.create(resources, imageBitmap)
-				imageDrawable.isCircular = true
-				imageDrawable.cornerRadius = Math.max(
-					imageBitmap.width,
-					imageBitmap.height
-				) / 2.0f
-				root.settings_image.setImageDrawable(imageDrawable)
-			}
-
-			override fun onError() {
-				root.settings_image.setImageDrawable(resources.getDrawable(R.drawable.no_profile))
-			}
-
-		})
+		Picasso.with(requireContext()).load(user.photo).error(R.drawable.no_profile).into(root.settings_image)
 
 		root.settings_name.text = user.givenName + user.familyName
 		root.settings_email.text = user.email
@@ -58,11 +44,24 @@ class ProfileFragment : Fragment() {
 		}
 		root.settings_logout.setOnClickListener {
 			//TODO: Refactor to use Navigation Component
-			LoginUtils.removeUserData(requireContext())
-			val intent = Intent(context, MainActivity::class.java)
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-			startActivity(intent)
-			activity?.finish()
+			val mGoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+				.requestIdToken(getString(R.string.token_client_id))
+				.requestProfile()
+				.requestEmail()
+				.build()
+			val mGoogleSignInClient = GoogleSignIn.getClient(requireActivity().application, mGoogleSignInOptions)
+			mGoogleSignInClient.signOut().addOnSuccessListener {
+				LoginUtils.removeUserData(requireContext())
+				val intent = Intent(context, MainActivity::class.java)
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+				startActivity(intent)
+				activity?.finish()
+			}.addOnFailureListener {
+				ViewUtil.setSnackBar(requireView(),R.color.orange,"Hubo un problema para desloguear, vuelve a intentarlo")
+				FirebaseCrashlytics.getInstance().recordException(it)
+			}
+
+
 		}
 		root.settings_terms_and_conditions.setOnClickListener {
 			val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://deliverylavalle.com.ar/terminosycondiciones/"))
