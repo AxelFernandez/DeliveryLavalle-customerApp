@@ -41,14 +41,6 @@ class AddressViewModel : ViewModel() {
         return addressRepository.notifyAddress()
     }
 
-    fun notifyPost():LiveData<AddressResponse>{
-        return addressRepository.notifyPost()
-    }
-
-    fun postAddress(address: Address){
-        addressRepository.postAddress(address = address)
-    }
-
     fun deleteAddress(address: Address){
         addressRepository.deleteAddress(address)
     }
@@ -57,5 +49,31 @@ class AddressViewModel : ViewModel() {
         return addressRepository.addressDeleted
     }
 
+    fun buildAddress(v:View,address: Address? = null): Address {
 
+        if (address != null) {
+            return address.copy(
+                street = v.street.text.toString(), number = v.number.text.toString(),
+                district = v.district.text.toString(),
+                floor = v.floor.text.toString(),
+                reference = v.reference.text.toString()
+            )
+        }else{
+            return Address(
+                street = v.street.text.toString(), number = v.number.text.toString(),
+                district = v.district.text.toString(),
+                floor = v.floor.text.toString(),
+                reference = v.reference.text.toString(),
+                location = null
+            )
+        }
+    }
+    fun fillAddressView(address: Address, v :View){
+        v.street.setText(address.street)
+        v.number.setText(address.number)
+        v.district.setText(address.district)
+        v.floor.setText(address.floor)
+        v.reference.setText(address.reference)
+
+    }
 }

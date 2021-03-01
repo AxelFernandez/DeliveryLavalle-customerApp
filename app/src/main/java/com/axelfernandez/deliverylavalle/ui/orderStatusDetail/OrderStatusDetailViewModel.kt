@@ -121,7 +121,7 @@ class OrderStatusDetailViewModel : ViewModel() {
             "En Camino" -> "El repartidor estará en tu domicilio en breve"
             "Listo para Retirar" -> "El vendedor ha informado que poder ir a retirarlo a la siguiente direccion %s, tambien podes comunicarte con el vendedor al siguiente numero de telefono %s".format(order.company.address,order.company.phone)
             "Entregado" -> "Esperamos que hayas disfrutado de tu pedido!"
-            "Cancelado" -> "El vendedor puede cancelar tu pedido si no tiene disponible lo que pediste, o porque no pudo atender tu pedido, te pedimos disculpas, y vuelve a intentarlo en otro momento"
+            "Cancelado" -> "El vendedor puede cancelar tu pedido si no tiene disponible lo que pediste, o porque no pudo atender tu pedido. Te pedimos disculpas. Vuelve a intentarlo en otro momento."
             else -> ""
         }
     }

@@ -13,6 +13,9 @@ interface Api {
     @POST("firebase_token")
     fun sendFirebaseToken(@Body firebaseToken: FirebaseToken):Call<ConfirmationObject>
 
+    @PUT("firebase_token")
+    fun deleteFirebaseToken(@Body firebaseToken: FirebaseToken):Call<ConfirmationObject>
+
 
 
     @GET("client")

@@ -18,7 +18,8 @@ class AddressAdapter(
     var context: Context,
     val itemClickListener: (Address) -> Unit,
     val deleteItemClickListener: (Address) -> Unit,
-    val showDelete : Boolean = true,
+    val editItemClickListener: (Address) -> Unit,
+    val showEditables : Boolean = true,
     val showArrow : Boolean = true
 
 ) : RecyclerView.Adapter<AddressAdapter.AddressViewHolder>() {
@@ -36,7 +37,7 @@ class AddressAdapter(
 
     override fun onBindViewHolder(holder: AddressViewHolder, position: Int) {
         val item : Address = address[position]
-        holder.bind(item,context, itemClickListener,deleteItemClickListener, showDelete, showArrow)
+        holder.bind(item,context, itemClickListener,deleteItemClickListener, editItemClickListener, showEditables, showArrow)
     }
     class AddressViewHolder (itemView : View): RecyclerView.ViewHolder(itemView){
         var streetAndNumber : TextView = itemView.findViewById(R.id.item_delivery_address_street_number) as TextView
@@ -45,6 +46,7 @@ class AddressAdapter(
         var reference : TextView = itemView.findViewById(R.id.item_delivery_address_reference) as TextView
         var frameLayout : LinearLayout =  itemView.findViewById(R.id.item_delivery_address_layout) as LinearLayout
         var delete : ImageView =  itemView.findViewById(R.id.item_delivery_address_delete) as ImageView
+        var edit : ImageView =  itemView.findViewById(R.id.item_delivery_address_edit) as ImageView
         var arrowFrame : FrameLayout =  itemView.findViewById(R.id.frame_arrow) as FrameLayout
 
 
@@ -52,7 +54,8 @@ class AddressAdapter(
         fun bind(address : Address, context: Context,
                  itemClickListener: (Address) -> Unit,
                  deleteItemClickListener: (Address) -> Unit,
-                 showDelete: Boolean,
+                 editItemClickListener: (Address) -> Unit,
+                 showEditables: Boolean,
                  showArrow: Boolean
         ){
             streetAndNumber.text = context.getString(R.string.item_street_and_number, address.street, address.number)
@@ -60,10 +63,11 @@ class AddressAdapter(
             district.text = context.getString(R.string.item_district, address.district)
             reference.text = context.getString(R.string.item_reference, address.reference)
             frameLayout.setOnClickListener { itemClickListener(address) }
-            delete.isVisible = showDelete
+            delete.isVisible = showEditables
+            edit.isVisible = showEditables
             arrowFrame.isVisible = showArrow
             delete.setOnClickListener { deleteItemClickListener(address) }
-
+            edit.setOnClickListener { editItemClickListener(address) }
         }
     }
 }

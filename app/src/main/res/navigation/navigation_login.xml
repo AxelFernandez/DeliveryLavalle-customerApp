@@ -44,5 +44,19 @@
         android:id="@+id/addressFragment"
         android:name="com.axelfernandez.deliverylavalle.ui.address.AddressFragment"
         android:label="address_fragment"
-        tools:layout="@layout/address_fragment" />
-</navigation>
+        tools:layout="@layout/address_fragment" >
+        <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            android:id="@+id/action_addressFragment2_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.axelfernandez.deliverylavalle.ui.map.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" >
+
+    </fragment></navigation>

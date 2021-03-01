@@ -1,52 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.orderListing.OrderListingFragment" >
+    tools:context=".ui.orderListing.OrderListingFragment">
 
-    <include layout="@layout/app_bar"/>
+    <include layout="@layout/app_bar" />
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif-black"
+                android:text="En Curso"
                 android:textColor="@color/black"
-                android:text = "En Curso"/>
+                android:textSize="18sp" />
+
             <include
                 android:id="@+id/order_listing_shimmer"
                 layout="@layout/shimer_order_listing"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/order_listing_rv_in_course"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/shape_border">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/order_listing_rv_in_course"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif-black"
+                android:text="Completadas"
                 android:textColor="@color/black"
-                android:text = "Completadas"/>
+                android:textSize="18sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/order_listing_rv_completed"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/shape_border">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/order_listing_rv_completed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import com.axelfernandez.deliverylavalle.BuildConfig
 import com.axelfernandez.deliverylavalle.HomeActivity
 import com.axelfernandez.deliverylavalle.R
 import com.axelfernandez.deliverylavalle.models.FirebaseToken
@@ -46,7 +47,7 @@ class Login : Fragment() {
 	): View? {
 		val v = inflater.inflate(R.layout.login_fragment, container, false)
 		mGoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-			.requestIdToken(getString(R.string.token_client_id))
+			.requestIdToken(BuildConfig.tokenGoogleClient)
 			.requestProfile()
 			.requestEmail()
 			.build()

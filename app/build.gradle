@@ -21,8 +21,8 @@ android {
         applicationId "com.axelfernandez.deliverylavalle"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 3
-        versionName "1.2"
+        versionCode 4
+        versionName "1.3"
         buildConfigField "String", "hostname", '"https://deliverylavalle.com.ar"'
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -33,14 +33,20 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.Release
+            buildConfigField "String", "tokenGoogleClient", '"53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com"'
+            debuggable true
         }
         local{
             initWith debug
-            buildConfigField "String", "hostname", '"http://192.168.0.16:8080"'
+            buildConfigField "String", "hostname", '"http://192.168.0.13:8080"'
+            buildConfigField "String", "tokenGoogleClient", '"53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com"'
+
         }
-        live{
+        QA{
             initWith debug
-            buildConfigField "String", "hostname", '"https://deliverylavalle.com.ar"'
+            buildConfigField "String", "hostname", '"https://delivery-lavalle.herokuapp.com"'
+            buildConfigField "String", "tokenGoogleClient", '"53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com"'
+
         }
     }
     compileOptions {
@@ -90,6 +96,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 
     implementation 'com.facebook.shimmer:shimmer:0.5.0'

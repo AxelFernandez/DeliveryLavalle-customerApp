@@ -1,7 +1,6 @@
 package com.axelfernandez.deliverylavalle.ui.address
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Looper
@@ -27,154 +26,139 @@ import kotlinx.android.synthetic.main.app_bar.view.*
 
 class AddressFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = AddressFragment()
-    }
+	companion object {
+		fun newInstance() = AddressFragment()
+	}
 
-    private lateinit var v: View
-    private lateinit var viewModel: AddressViewModel
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var address: Address
-    private lateinit var phoneLocation: String
-    lateinit var resultLocation : Location
-    lateinit var locationRequest : LocationRequest
+	private lateinit var v: View
+	private lateinit var viewModel: AddressViewModel
+	private lateinit var fusedLocationClient: FusedLocationProviderClient
+	private var address: Address? = null
+	lateinit var locationRequest: LocationRequest
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        v = inflater.inflate(R.layout.address_fragment, container, false)
-        return v
-    }
+	override fun onCreateView(
+		inflater: LayoutInflater, container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? {
+		v = inflater.inflate(R.layout.address_fragment, container, false)
+		return v
+	}
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AddressViewModel::class.java)
-        viewModel.getRepository(requireContext())
-        createLocationRequest()
-        val isOnBoarding = arguments?.getBoolean(getString(R.string.in_onboarding),false)?:false
-        val mustReturn = arguments?.getBoolean(getString(R.string.argument_must_return),false)?:false
-        v.app_bar_1.text = "Agregar "
-        v.app_bar_2.text = "Dirección"
-        val toolbar = v.findViewById(R.id.toolbar) as Toolbar
-        if (mustReturn){
-            toolbar.inflateMenu(R.menu.trash_menu)
-            toolbar.setOnMenuItemClickListener {
-                if (it.itemId == R.id.trash_icon){
-                    it.isCheckable
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
+		viewModel = ViewModelProviders.of(this).get(AddressViewModel::class.java)
+		viewModel.getRepository(requireContext())
+		createLocationRequest()
+		val arguments = arguments ?: return
+		val isOnBoarding = arguments.getBoolean(getString(R.string.in_onboarding), false)
+		val mustReturn = arguments.getBoolean(getString(R.string.argument_must_return), false)
+		val addressToFill = arguments.getParcelable<Address>(getString(R.string.arguments_address))
+		if (addressToFill != null) {
+			address = addressToFill
+		}
+		addressToFill?.let {
+			viewModel.fillAddressView(it, v)
+		}
+		v.app_bar_1.text = "Agregar "
+		v.app_bar_2.text = "Dirección"
+		val toolbar = v.findViewById(R.id.toolbar) as Toolbar
+		if (mustReturn) {
+			val toolbar = v.findViewById(R.id.toolbar) as Toolbar
+			toolbar.setNavigationIcon(R.drawable.ic_back_button)
+			toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
+		}
+		if (isOnBoarding) {
+			toolbar.inflateMenu(R.menu.skip_menu)
+			toolbar.setOnMenuItemClickListener {
+				if (it.itemId == R.id.item_skip_menu) {
+					LoginUtils.saveLoginReady(requireContext()) //Warning! Possible Bug
+					val intent = Intent(context, HomeActivity::class.java)
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+					startActivity(intent)
+					activity?.finish()
+				}
+				return@setOnMenuItemClickListener true
+			}
+		}
 
-                }
-                return@setOnMenuItemClickListener true
-            }
-        }
-        if (isOnBoarding){
-            toolbar.inflateMenu(R.menu.skip_menu)
-            toolbar.setOnMenuItemClickListener {
-                if (it.itemId == R.id.item_skip_menu){
-                    LoginUtils.saveLoginReady(requireContext()) //Warning! Possible Bug
-                    val intent = Intent(context, HomeActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                    activity?.finish()
-                }
-                return@setOnMenuItemClickListener true
-            }
-        }
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(v.context!!)
-        v.get_location.setOnClickListener(View.OnClickListener {
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(v.context)
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                if(location == null) {
-                    startLocationUpdates(requireActivity())
+		fusedLocationClient = LocationServices.getFusedLocationProviderClient(v.context)
 
-                }else{
-                    phoneLocation = "%s,%s".format(location.latitude, location.longitude)
-                    ViewUtil.setSnackBar(v,R.color.orange,"Localizacion recuperada correctamente")
-                    v.get_location.setImageResource(R.drawable.ic_baseline_check_circle_24)
-                }
 
-            }.addOnFailureListener {
-                Log.e("LOCATION", it.message?:"Error in Line 95 Address Fragment")
-                ViewUtil.checkPermission(context = requireActivity());
-                ViewUtil.setSnackBar(v,R.color.orange,"Necesitamos tu ubicacion para poder ofrecerte emprendedores cerca")
 
-            }
-        })
-        viewModel.notifyPost().observe(viewLifecycleOwner, Observer {
-            if(it != null){
-                LoginUtils.saveLoginReady(requireContext())
-                ViewUtil.setSnackBar(v,R.color.orange,"Direccion Guardada Correctamente")
-                address.id = it.addressId
-                LoginUtils.saveDefaultAddress(requireContext(),address)
-                if(mustReturn){
-                    v.findNavController().popBackStack()
-                }else{
-                    val intent = Intent(context, HomeActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                    activity?.finish()
-                }
-            }else{
-                ViewUtil.setSnackBar(v,R.color.red,"Ops! Hubo un problema, intenta luego nuevamente")
-            }
+		v.save_direction.setOnClickListener {
+			when {
+				v.street?.text.isNullOrEmpty() -> v.layout_street.error =
+					getString(R.string.required)
+				v.number?.text.isNullOrEmpty() -> v.layout_number.error =
+					getString(R.string.required)
+				v.district?.text.isNullOrEmpty() -> v.layout_district.error =
+					getString(R.string.required)
+				else -> continuePost()
+			}
 
-        })
+		}
 
-        v.save_direction.setOnClickListener {
-            when {
-                v.street?.text.isNullOrEmpty() -> v.layout_street.error =
-                    getString(R.string.required)
-                v.number?.text.isNullOrEmpty() -> v.layout_number.error =
-                    getString(R.string.required)
-                v.district?.text.isNullOrEmpty() -> v.layout_district.error =
-                    getString(R.string.required)
-                else -> continuePost()
-            }
+	}
 
-        }
+	private fun continuePost() {
 
-    }
+		address = viewModel.buildAddress(v,address)
 
-    private fun continuePost() {
-        address = Address(
-            street = v.street.text.toString(), number = v.number.text.toString(),
-            district = v.district.text.toString(),
-            floor = v.floor.text.toString(),
-            reference = v.reference.text.toString(),
-            location = phoneLocation,
-            id = ""
-        )
-        viewModel.postAddress(address)
-    }
+		fusedLocationClient = LocationServices.getFusedLocationProviderClient(v.context)
+		fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+			if (location == null) {
+				startLocationUpdates(requireActivity())
 
-    fun createLocationRequest() {
-        locationRequest = LocationRequest.create()?.apply {
-            interval = 10000
-            fastestInterval = 5000
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }?:return
-    }
-    private fun startLocationUpdates(activity: Activity) {
-        ViewUtil.checkPermission(activity)
-        fusedLocationClient.requestLocationUpdates(locationRequest,
-            locationCallback,
-            Looper.getMainLooper())
-    }
+			} else {
+				ViewUtil.setSnackBar(v, R.color.orange, "Localizacion recuperada correctamente")
+				val mapBundle = arguments?:return@addOnSuccessListener
+				mapBundle.putParcelable(getString(R.string.arguments_address), address)
+				mapBundle.putParcelable(getString(R.string.argument_location), location)
+				v.findNavController()
+					.navigate(R.id.action_addressFragment2_to_mapsFragment, mapBundle)
+			}
 
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult?) {
-            locationResult ?: return
-            for (location in locationResult.locations){
-                Log.e("LOCATION", "Get location successful!")
-                phoneLocation = "%s,%s".format(location.latitude, location.longitude)
-                ViewUtil.setSnackBar(v,R.color.orange,"Localizacion recuperada correctamente")
-                v.get_location.setImageResource(R.drawable.ic_baseline_check_circle_24)
-                fusedLocationClient.removeLocationUpdates(this)
+		}.addOnFailureListener {
+			Log.e("LOCATION", it.message ?: "Error in Line 95 Address Fragment")
+			ViewUtil.checkPermission(context = requireActivity());
+			ViewUtil.setSnackBar(
+				v,
+				R.color.orange,
+				"Necesitamos tu ubicacion para poder ofrecerte emprendedores cerca"
+			)
+		}
+	}
 
-            }
-        }
-    }
+
+	fun createLocationRequest() {
+		locationRequest = LocationRequest.create()?.apply {
+			interval = 10000
+			fastestInterval = 5000
+			priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+		} ?: return
+	}
+
+	private fun startLocationUpdates(activity: Activity) {
+		ViewUtil.checkPermission(activity)
+		fusedLocationClient.requestLocationUpdates(
+			locationRequest,
+			locationCallback,
+			Looper.getMainLooper()
+		)
+	}
+
+	private val locationCallback = object : LocationCallback() {
+		override fun onLocationResult(locationResult: LocationResult?) {
+			locationResult ?: return
+			for (location in locationResult.locations) {
+				Log.e("LOCATION", "Get location successful!")
+				address?.location = "%s,%s".format(location.latitude, location.longitude)
+				ViewUtil.setSnackBar(v, R.color.orange, "Localizacion recuperada correctamente")
+				fusedLocationClient.removeLocationUpdates(this)
+			}
+		}
+	}
 }
 
 

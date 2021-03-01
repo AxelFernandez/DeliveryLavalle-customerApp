@@ -62,7 +62,8 @@ class AddressList : Fragment() {
             }
             val it = it?:return@Observer
             addresListRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
-            addresListRv.adapter = AddressAdapter(it,requireContext(), {onItemClickListener(it)}, {deleteOnItemClickListener(it)})
+            addresListRv.adapter = AddressAdapter(it,requireContext(), {onItemClickListener(it)}, {deleteOnItemClickListener(it)},
+                { onEditClickListener(it) })
             v.addres_list_progress_bar.isVisible = false
 
         })
@@ -91,5 +92,11 @@ class AddressList : Fragment() {
             LoginUtils.removeAddress(requireContext())
         }
         viewModel.deleteAddress(address)
+    }
+    private fun onEditClickListener(address: Address) {
+        val bundle = Bundle()
+        bundle.putBoolean(getString(R.string.argument_must_return),true)
+        bundle.putParcelable(getString(R.string.arguments_address), address)
+        v.findNavController().navigate(R.id.action_addressList_to_addressFragment2, bundle)
     }
 }

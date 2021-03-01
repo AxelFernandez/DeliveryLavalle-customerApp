@@ -78,7 +78,7 @@ class ConfirmationFragment : Fragment() {
         methodsRv.isVisible = !retryInLocal
         val listOfAddress = ArrayList<Address>()
         listOfAddress.add(LoginUtils.getDefaultAddress(requireContext()))
-        methodsRv.adapter = AddressAdapter(listOfAddress,requireContext(),{}, {}, showDelete = false, showArrow = false)
+        methodsRv.adapter = AddressAdapter(listOfAddress,requireContext(),{}, {}, {}, showEditables = false, showArrow = false)
 
         //Banner Retry In Local
         v.confirmation_banner_local.isVisible = retryInLocal
@@ -112,8 +112,7 @@ class ConfirmationFragment : Fragment() {
             }
             val address = LoginUtils.getDefaultAddress(requireContext())
             // TODO: Possible security problem, replace this Total for a logic in Server
-            val order: OrderPost = OrderPost(companyId,address.id, method, total,products,retryInLocal)
-            val user = LoginUtils.getUserFromSharedPreferences(requireContext())
+            val order: OrderPost = OrderPost(companyId,address.id?:return@setOnClickListener, method, total,products,retryInLocal)
             viewModel.postOrder(order)
         }
 

@@ -43,10 +43,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-
-    <string name="title_activity_splash">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="google_maps_key">AIzaSyAAOsoCYtrP6BzMNPtmih5_1hNBrXJgmW4</string>
     <string name="company_near_feed">Emprendedores cerca tuyo</string>
     <string name="company_near_category">Emprendedores de %s</string>
     <string name="company_id">idCompany</string>
@@ -110,9 +107,10 @@
     <string name="see_all_reviews">Ver todas las reseñas</string>
     <string name="there_is_no_reviews">No hay reseñas de aqui</string>
     <string name="order_something_to_add_a_review">Pide algo para añadir una reseña aqui</string>
-    <string name="token_client_id">53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com</string>
     <string name="in_onboarding">InOnboarding</string>
     <string name="skip">Omitir</string>
+    <string name="save_location">Guardar Ubicación</string>
+    <string name="argument_location">argument_location</string>
 
 
 </resources>

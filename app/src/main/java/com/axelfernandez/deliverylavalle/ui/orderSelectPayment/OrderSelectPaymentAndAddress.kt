@@ -76,7 +76,7 @@ class OrderSelectPaymentAndAddress : Fragment() {
         methodsRv.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
         listOfAddress = ArrayList()
         listOfAddress.add(address)
-        methodsRv.adapter = AddressAdapter(listOfAddress,requireContext(),{onItemClickListener(it)}, {{}},false)
+        methodsRv.adapter = AddressAdapter(listOfAddress,requireContext(),{onItemClickListener(it)}, {{}},{{}},false)
 
         if (atomicBoolean.compareAndSet(false, true)){
             viewModelMethods.solicitPaymentMethod(companyId)

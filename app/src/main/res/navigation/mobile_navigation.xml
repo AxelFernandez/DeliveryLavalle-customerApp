@@ -65,6 +65,10 @@
         tools:layout="@layout/address_list_fragment" >
         <action
             android:id="@+id/action_addressList_to_addressFragment2"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             app:destination="@id/addressFragment3"
             app:popUpTo="@id/addressList2" />
     </fragment>
@@ -72,5 +76,28 @@
         android:id="@+id/addressFragment3"
         android:name="com.axelfernandez.deliverylavalle.ui.address.AddressFragment"
         android:label="address_fragment"
-        tools:layout="@layout/address_fragment" />
+        tools:layout="@layout/address_fragment" >
+        <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            android:id="@+id/action_addressFragment2_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.axelfernandez.deliverylavalle.ui.map.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_addressFragment3"
+            app:destination="@id/addressList2"
+            app:popUpTo="@id/addressFragment3"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

@@ -58,6 +58,10 @@
         <action
             android:id="@+id/action_orderSelectPaymentAndAddress_to_confirmationFragment"
             app:destination="@id/confirmationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/orderSelectPaymentAndAddress" />
     </fragment>
     <fragment
@@ -78,7 +82,15 @@
         android:id="@+id/addressFragment2"
         android:name="com.axelfernandez.deliverylavalle.ui.address.AddressFragment"
         android:label="address_fragment"
-        tools:layout="@layout/address_fragment" />
+        tools:layout="@layout/address_fragment" >
+        <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            android:id="@+id/action_addressFragment2_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/confirmationFragment"
         android:name="com.axelfernandez.deliverylavalle.ui.confirmation.ConfirmationFragment"
@@ -87,6 +99,10 @@
         <action
             android:id="@+id/action_confirmationFragment_to_orderDecidedFragment"
             app:destination="@id/orderDecidedFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/mobile_navigation"
             app:popUpToInclusive="false" />
     </fragment>
@@ -104,4 +120,18 @@
             android:name="company"
             app:argType="com.axelfernandez.deliverylavalle.models.Company" />
     </fragment>
-</navigation>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.axelfernandez.deliverylavalle.ui.map.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_addressFragment3"
+            app:destination="@id/addressList"
+            app:popUpTo="@id/addressFragment3"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpToInclusive="true" />
+    </fragment></navigation>
