@@ -21,8 +21,8 @@ android {
         applicationId "com.axelfernandez.deliverylavalle"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 4
-        versionName "1.3"
+        versionCode 5
+        versionName "1.3.1"
         buildConfigField "String", "hostname", '"https://deliverylavalle.com.ar"'
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -34,7 +34,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.Release
             buildConfigField "String", "tokenGoogleClient", '"53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com"'
-            debuggable true
         }
         local{
             initWith debug

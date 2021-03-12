@@ -113,7 +113,7 @@ class Splash : AppCompatActivity() {
 				}
 				if (is_login_ready) {
 					val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
-					if (googleSignInAccount?.idToken != null) {
+					if (googleSignInAccount?.isExpired == false) {
 						login.getToken(googleSignInAccount.idToken?:return@addOnCompleteListener)
 					}else{
 						val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
